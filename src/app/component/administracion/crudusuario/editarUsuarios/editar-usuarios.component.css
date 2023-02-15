@@ -1,0 +1,72 @@
+.example-card {
+  width: 650px;
+  margin: 0.5% auto;
+}
+.example-card-two{
+  width: 95%;
+  margin: 0.5% auto;
+}
+
+.example-header-image {
+  background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+  background-size: cover;
+}
+
+.textarea {
+
+  height: 100%;
+  width: 100%;
+  background: white;
+
+}
+
+mat-grid-tile{
+  text-align: start;
+}
+mat-form-field{
+  height: 100%;
+  width: 100%;
+}
+mat-label{
+  color: black;
+}
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+.example-margin {
+  margin: 1vh 10px;
+}
+.ubicacion{
+  margin: 0 1vh;
+}
+table {
+  width: 100%;
+}
+
+.input {
+  background: #FFFFFF;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+td, th {
+  width: 10%;
+}
+
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 15px 0;
+  align-items: flex-start;
+}
+
+.example-radio-button {
+  margin: 5px;
+}

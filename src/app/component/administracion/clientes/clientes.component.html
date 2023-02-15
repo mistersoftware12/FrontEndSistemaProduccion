@@ -1,0 +1,242 @@
+<mat-tab-group  (selectedIndexChange)="selected.setValue($event)"  [selectedIndex]="selected.value" mat-align-tabs="center" backgroundColor="primary" color="warn">
+  <mat-tab label="NUEVO CLIENTE">
+    <mat-card class="example-card">
+      <form [formGroup]="formGrupos" *ngIf="loaderCargar==false">
+        <mat-card-content>
+          <mat-grid-list cols="2" rowHeight="5:0.9">
+            <mat-progress-bar *ngIf="loaderGuardar"  mode="indeterminate"></mat-progress-bar>
+            <h3>CLIENTES</h3>
+            <h4>DATOS DEL CLIENTE</h4>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>Cédula</mat-label>
+                <input matInput formControlName="cedula">
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>Estado Civil</mat-label>
+                <mat-select formControlName="estadoCivil">
+                  <mat-option value="SOLTERO">SOLTERO/A</mat-option>
+                  <mat-option value="CASADO">CASADO/A</mat-option>
+                  <mat-option value="DIVORSIADO">DIVORSIADO/A</mat-option>
+                  <mat-option value="VIUDO">VIUDO/A</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>Nombres</mat-label>
+                <input matInput formControlName="nombres">
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>Fecha de nacimiento</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" [max]="fecha">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>Apellidos</mat-label>
+                <input matInput formControlName="apellidos">
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="telefono">
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <mat-form-field appearance="outline">
+                <mat-label>E-mail</mat-label>
+                <input matInput formControlName="email">
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile>
+              <section class="example-section">
+                <label class="example-margin">Discapacidad:</label>
+                <mat-radio-group formControlName="discapacidad">
+                  <mat-radio-button class="example-margin" [value]="true">SI</mat-radio-button>
+                  <mat-radio-button class="example-margin" [value]="false">NO</mat-radio-button>
+                </mat-radio-group>
+              </section>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+              <section class="example-section">
+                <label class="example-margin">Género:</label>
+                <mat-radio-group formControlName="genero">
+                  <mat-radio-button class="example-margin" value="MASCULINO">MASCULINO</mat-radio-button>
+                  <mat-radio-button class="example-margin" value="FEMENINO">FEMENINO</mat-radio-button>
+                  <mat-radio-button class="example-margin" value="OTROS">OTROS</mat-radio-button>
+                </mat-radio-group>
+              </section>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">Ubicación:
+              <mat-form-field class="ubicacion" appearance="outline">
+                <mat-label>Provincia</mat-label>
+                <mat-select formControlName="idProvincia" (selectionChange)="selectProvincia($event.value)">
+                  <mat-option *ngFor="let provincia of provicias"
+                              [value]="provincia.id">{{provincia.provincia}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="ubicacion" appearance="outline">
+                <mat-label>Cantón</mat-label>
+                <mat-select formControlName="idCanton" (selectionChange)="selectCanton($event.value)">
+                  <mat-option *ngFor="let cantones of cantonFiltrado"
+                              [value]="cantones.id">{{cantones.canton}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+              <mat-form-field class="ubicacion" appearance="outline">
+                <mat-label>Parroquia</mat-label>
+                <mat-select formControlName="idParroquia">
+                  <mat-option *ngFor="let parroquia of parroquiaFiltrado"
+                              [value]="parroquia.id">{{parroquia.parroquia}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-form-field class="ubicacion" appearance="outline">
+                <mat-label>Barrio</mat-label>
+                <mat-select formControlName="idBarrio">
+                  <mat-option *ngFor="let barrio of barrios" [value]="barrio.id">{{barrio.barrio}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-flat-button color="primary" (click)="agregarBarrios()">
+                <mat-icon>add</mat-icon>
+              </button>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+              <mat-divider></mat-divider>
+              Representante:
+              <mat-form-field class="ubicacion" appearance="outline">
+                <mat-label>Nombres</mat-label>
+                <input matInput formControlName="nombreResponsable">
+              </mat-form-field>
+              <mat-form-field class="ubicacion" appearance="outline">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="telefonoResponsbale">
+              </mat-form-field>
+            </mat-grid-tile>
+          </mat-grid-list>
+
+        </mat-card-content>
+        <button mat-flat-button color="warn" [disabled]="formGrupos.invalid" (click)="guardarCliente()">GUARDAR</button>
+      </form>
+
+      <div *ngIf="loaderCargar">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    </mat-card>
+  </mat-tab>
+  <mat-tab label="VER CLIENTES">
+    <mat-card class="example-card-two">
+      <button mat-raised-button color="primary" (click)="generatePDF()">
+        <mat-icon>arrow_downward</mat-icon>
+        <mat-icon>picture_as_pdf</mat-icon>
+      </button>
+      <button mat-raised-button color="warn" style="margin-left: 1vh" (click)="exportToExcel()">
+        <mat-icon>arrow_downward</mat-icon>
+        <mat-icon>insert_drive_file</mat-icon>
+      </button>
+      <button mat-raised-button color="accent" style="margin-left: 1vh" (click)="listarClientes()">
+        <mat-icon>update</mat-icon>
+      </button>
+    </mat-card>
+    <mat-card class="example-card-two">
+      <mat-progress-bar *ngIf="loaderActualizar" mode="indeterminate"></mat-progress-bar>
+      <mat-card-content>
+        <mat-form-field appearance="standard">
+          <mat-label>Filter</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Mia" #input>
+        </mat-form-field>
+
+        <div class="mat-elevation-z8">
+          <table mat-table [dataSource]="dataSource" matSort id="table">
+
+            <!-- ID Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> ID</th>
+              <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="cedula">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> CEDULA</th>
+              <td mat-cell *matCellDef="let row"><strong>{{row.cedula}} </strong></td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="nombres">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRES</th>
+              <td mat-cell *matCellDef="let row"> {{row.nombres}} </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="apellidos">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> APELLIDOS</th>
+              <td mat-cell *matCellDef="let row"> {{row.apellidos}} </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="edad">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> EDAD</th>
+              <td mat-cell *matCellDef="let row"> {{row.edad}} </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="genero">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> GENERO</th>
+              <td mat-cell *matCellDef="let row"> {{row.genero}} </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> CORREO</th>
+              <td mat-cell *matCellDef="let row"> {{row.email}} </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="telefono">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> TELEFONO</th>
+              <td mat-cell *matCellDef="let row"> {{row.telefono}} </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="discapacidad">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> DISCAPACIDAD</th>
+              <td mat-cell *matCellDef="let row">
+                <strong *ngIf="row.discapacidad==true">SI</strong>
+                <strong *ngIf="row.discapacidad==false">NO</strong>
+              </td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="editar">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header> EDITAR</th>
+              <td mat-cell *matCellDef="let row">
+                <button mat-flat-button color="accent"
+                        (click)="actualizarCliente(row.id)">EDITAR
+                </button>
+              </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+              <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+            </tr>
+          </table>
+
+          <mat-paginator [pageSizeOptions]="[10, 25, 100, 1000]" aria-label="Select page of users"></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </mat-tab>
+</mat-tab-group>

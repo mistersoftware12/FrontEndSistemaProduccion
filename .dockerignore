@@ -1,0 +1,15 @@
+.get
+
+.firebase
+
+.editorconfig
+
+/node_modules
+
+/docs
+
+/gitingnore
+
+*.zip
+
+*.nd

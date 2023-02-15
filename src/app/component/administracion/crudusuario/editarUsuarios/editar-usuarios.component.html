@@ -1,0 +1,68 @@
+<mat-card class="example-card" *ngIf="loaderCargar==false" style="background: #f7f2dc">
+  <form [formGroup]="formGrupos">
+    <mat-card-content style="background: #f7f2dc">
+      <mat-grid-list cols="2" rowHeight="5:0.9">
+        <mat-progress-bar *ngIf="loaderGuardar"  mode="indeterminate"></mat-progress-bar>
+        <h3>USUARIOS</h3>
+        <h4>DATOS DEL USUARIO</h4>
+        <div>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Cédula</mat-label>
+              <input matInput formControlName="cedula">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Nombres</mat-label>
+              <input matInput formControlName="nombres">
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Apellidos</mat-label>
+              <input matInput formControlName="apellidos">
+            </mat-form-field>
+          </mat-grid-tile>
+
+        </div>
+
+        <div>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Email</mat-label>
+              <input matInput formControlName="email">
+            </mat-form-field>
+          </mat-grid-tile><mat-grid-tile>
+          <mat-form-field appearance="outline">
+            <mat-label>Clave</mat-label>
+            <input matInput formControlName="clave">
+          </mat-form-field>
+        </mat-grid-tile>
+          <mat-grid-tile>
+            <mat-form-field appearance="outline">
+              <mat-label>Rol</mat-label>
+              <mat-select formControlName="idRol">
+                <mat-option [value]="2">GESTION</mat-option>
+                <mat-option [value]="3">INCRIPCION Y USO</mat-option>
+                <mat-option [value]="4">REPORTES</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </mat-grid-tile>
+          <mat-grid-tile rowspan="2">
+            <mat-form-field appearance="outline">
+              <mat-label>Télefono</mat-label>
+              <input matInput formControlName="telefono">
+            </mat-form-field>
+          </mat-grid-tile>
+        </div>
+      </mat-grid-list>
+    </mat-card-content>
+    <button mat-flat-button color="warn" [disabled]="formGrupos.invalid" (click)="guardarUsuarios()">REGISTRAR
+    </button>
+  </form>
+</mat-card>
+
+<div *ngIf="loaderCargar">
+  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+</div>

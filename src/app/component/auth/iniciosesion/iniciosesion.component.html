@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+<mat-card class="example-card">
+  <form [formGroup]="formGroup">
+  <mat-card-content>
+    <div class="header">
+      <h2>KADAPA FLORES & CHOCOLATES</h2>
+      <h3>INICIO DE SESION</h3>
+      <h3>INGRESE LAS CREDENCIALES</h3>
+    </div>
+    <div class="content">
+        <mat-form-field appearance="outline">
+          <mat-label>CEDULA:</mat-label>
+          <input matInput placeholder="ex.0136524598" formControlName="cedula">
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>CONTRASEÑA:</mat-label>
+          <input matInput [type]="hide ? 'password' : 'text'" formControlName="clave">
+          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+          </button>
+        </mat-form-field>
+      <mat-progress-bar *ngIf="iniciobar" mode="indeterminate"></mat-progress-bar>
+    </div>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button color="primary" [disabled]="formGroup.invalid" (click)="iniciarsesion()">INICIAR SESION</button>
+  </mat-card-actions>
+  </form>
+</mat-card>
+</body>
+</html>
+<ng-container *ngIf="issloading">
+  <div class="bss-loader">
+    <img src="assets/images/rolling.gif" alt="">
+  </div>
+</ng-container>
