@@ -1,0 +1,125 @@
+<section>
+    <div *ngIf="sectionCrudDatos==true">
+        <mat-card class="example-card" style="background: #f7f2dc">
+            <form [formGroup]="formGrupos">
+                <mat-card-content style="background: #f7f2dc">
+
+                    <mat-grid-list cols="2" rowHeight="5:0.9">
+                        <h3>CLIENTES</h3>
+                        <h4>DATOS DEL CLIENTE</h4>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Cédula</mat-label>
+                                    <input matInput formControlName="cedula">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombres</mat-label>
+                                    <input matInput formControlName="nombres">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Apellidos</mat-label>
+                                    <input matInput formControlName="apellidos">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Télefono</mat-label>
+                                    <input matInput formControlName="telefono">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="email">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Dirección</mat-label>
+                                    <input matInput formControlName="direccion">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
+
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Fecha Nacimiento</mat-label>
+                                    <input matInput [matDatepicker]="picker" formControlName="fecha">
+                                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                    <mat-datepicker #picker></mat-datepicker>
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                    </mat-grid-list>
+                </mat-card-content>
+
+                <button mat-flat-button color="primary" [disabled]="formGrupos.invalid">REGISTRAR
+                </button>
+
+                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales"  (click)="mostrarLista()">
+                    CANCELAR
+                </button>
+
+            </form>
+            
+        </mat-card>
+    </div>
+</section>
+
+
+<!---------------------------------------LISTAR----------------------------------------->
+
+<section *ngIf="sectionTablaLista==true">
+    <mat-card class="borde2">
+
+        <div class="tituloSeccion">
+            <strong>USUARIOS</strong>
+        </div>
+
+        <mat-progress-bar *ngIf="loaderActualizar" mode="indeterminate"></mat-progress-bar>
+        <mat-card-content>
+
+            <div>
+                <button mat-raised-button style="background-color: #689F38;color: #FFFFFF;" class="buttonprincipales"
+                    (click)="mostrarNuevo()">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo
+                </button>
+                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales">
+                    <mat-icon>insert_drive_file</mat-icon>
+                    PDF
+                </button>
+            </div>
+            <br>
+
+
+        </mat-card-content>
+    </mat-card>
+</section>

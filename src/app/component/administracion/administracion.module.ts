@@ -1,16 +1,14 @@
-import {LOCALE_ID, NgModule} from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BienvenidaComponent } from './bienvenida/bienvenida.component';
 import { MaterialModule } from "../../../material/material.module";
 import { RouterModule, Routes } from "@angular/router";
-import { ClientesComponent } from './clientes/clientes.component';
 import { ReactiveFormsModule } from "@angular/forms";
 import { CrudusuarioComponent } from './crudusuario/crudusuario.component';
-import { nuevoClienteComponent } from './clientes/nuevoCliente/nuevoCliente.component';
-import { EditarClientesComponent } from './clientes/editarClientes/editar-clientes.component';
 import { EditarUsuariosComponent } from './crudusuario/editarUsuarios/editar-usuarios.component';
 import localeEs from '@angular/common/locales/es';
-import {registerLocaleData} from "@angular/common";
+import { registerLocaleData } from "@angular/common";
+import { CrudClientesComponent } from './personas/CrudClientes/crud-clientes.component';
 registerLocaleData(localeEs, 'es')
 
 
@@ -22,21 +20,17 @@ const routes: Routes = [
     path: 'bienvenida',
     component: BienvenidaComponent
   },
-  {
-    path: 'administracionclientes',
-    component: ClientesComponent
-  },
-  
+
   {
     path: 'crudusuario',
     component: CrudusuarioComponent
   },
- 
 
   {
-    path: 'editarcliente/:id',
-    component: EditarClientesComponent
+    path: 'administracionClientes',
+    component: CrudClientesComponent
   },
+
   {
     path: 'administracionusuarios',
     component: CrudusuarioComponent
@@ -52,11 +46,10 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     BienvenidaComponent,
-    ClientesComponent,
-    nuevoClienteComponent,
     CrudusuarioComponent,
-    EditarClientesComponent,
     EditarUsuariosComponent,
+
+    CrudClientesComponent
   ],
   imports: [
     CommonModule,
@@ -65,7 +58,7 @@ const routes: Routes = [
     ReactiveFormsModule,
 
   ],
-  providers: [{provide: LOCALE_ID,useValue: 'es'}]
+  providers: [{ provide: LOCALE_ID, useValue: 'es' }]
 })
 export class AdministracionModule {
 }

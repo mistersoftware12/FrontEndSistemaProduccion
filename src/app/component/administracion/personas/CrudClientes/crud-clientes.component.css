@@ -1,0 +1,113 @@
+.example-card {
+    width: 650px;
+    margin: 0.5% auto;
+  }
+  .example-card-two{
+    width: 95%;
+    margin: 0.5% auto;
+  }
+  
+  .example-header-image {
+    background-image: url('https://material.angular.io/assets/img/examples/shiba1.jpg');
+    background-size: cover;
+  }
+  
+  .textarea {
+  
+    height: 100%;
+    width: 100%;
+    background: white;
+  
+  }
+  
+  mat-grid-tile{
+    text-align: start;
+  }
+  mat-form-field{
+    height: 100%;
+    width: 100%;
+  }
+  mat-label{
+    color: black;
+  }
+  .example-section {
+    display: flex;
+    align-content: center;
+    align-items: center;
+    height: 60px;
+  }
+  .example-margin {
+    margin: 1vh 10px;
+  }
+  .ubicacion{
+    margin: 0 1vh;
+  }
+  table {
+    width: 100%;
+  }
+  
+  .input {
+    background: #FFFFFF;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  td, th {
+    width: 15%;
+  }
+  
+  .table2 {
+    width: 100%;
+    margin: 1%;
+    background-color: #f7f2dc;
+  }
+  
+  .opcionfd{
+  
+    background-color: #f47f16;
+  }
+  
+  .opcion1fd{
+    text-align: center;
+  
+  }
+  
+  .botonmenu{
+    background-color: #f47f16;
+    padding: 6px;
+    border-color: transparent;
+    color: #803f00
+    ;
+  }
+  
+  
+  .borde2 {
+    background-color: #f7f2dc;
+    margin: 0.5% auto;
+    width: 95%;
+  }
+  
+  .borde3{
+    background-color: transparent;
+    width: 95%;
+    float: left;
+    margin-bottom: 10px;
+    border: 2px solid #f7f2dc;
+    overflow: hidden;
+    writing-mode: horizontal-tb;
+    padding: 1rem;
+    text-align: center;
+    left: 20px;
+  }
+  
+  .bordeFiltro {
+    width: 100%;
+  
+  }
+  
+  .textoInicio{
+    text-align: left;
+  }
