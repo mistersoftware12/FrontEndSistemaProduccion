@@ -8,8 +8,6 @@ import {LayoutComponent} from './component/layout/layout.component';
 import {AppRoutingModule} from "./app-routing.module";
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from "@angular/common/http";
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @NgModule({
   declarations: [
@@ -23,8 +21,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
     AppRoutingModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatNativeDateModule,
-    MatDatepickerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

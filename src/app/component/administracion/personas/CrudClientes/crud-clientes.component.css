@@ -62,7 +62,7 @@
   .table2 {
     width: 100%;
     margin: 1%;
-    background-color: #f7f2dc;
+    background-color: #F2F1E9;
   }
   
   .opcionfd{
@@ -85,7 +85,7 @@
   
   
   .borde2 {
-    background-color: #f7f2dc;
+    background-color: #F2F1E9;
     margin: 0.5% auto;
     width: 95%;
   }
@@ -95,7 +95,7 @@
     width: 95%;
     float: left;
     margin-bottom: 10px;
-    border: 2px solid #f7f2dc;
+    border: 2px solid #F2F1E9;
     overflow: hidden;
     writing-mode: horizontal-tb;
     padding: 1rem;
@@ -110,4 +110,27 @@
   
   .textoInicio{
     text-align: left;
+  }
+
+  .buttonprincipales{
+    width: 100px;
+    margin-left: 1vh;
+  }
+
+  .buttonguardar{
+    width: 100px;
+    margin-left: 3vh;
+  }
+
+  .tituloSeccion{
+    margin-bottom: 10px;
+    font-size: x-large;
+    margin-left: 1vh;
+  }
+
+ 
+  
+  .opcion1fd{
+    text-align: center;
+  
   }

@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import {environment} from "../../environments/environment";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {FormControl, ɵFormGroupRawValue, ɵTypedOrUntyped} from "@angular/forms";
-import {map, Observable} from "rxjs";
-import {PersonaCliente} from "../models/personaCliente";
+import {map, Observable} from "rxjs";;
 import {PersonaUsuario} from "../models/personaUsuario";
 
 @Injectable({

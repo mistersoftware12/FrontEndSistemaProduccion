@@ -5,7 +5,6 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import { UsuarioService } from "../../../services/usuario.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { PersonaCliente } from "../../../models/personaCliente";
 import { PersonaUsuario } from "../../../models/personaUsuario";
 
 @Component({

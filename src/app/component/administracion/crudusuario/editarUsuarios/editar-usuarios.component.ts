@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {ClienteService} from "../../../../services/cliente.service";
 import {ActivatedRoute} from "@angular/router";
 import {UsuarioService} from "../../../../services/usuario.service";
-import {PersonaCliente} from "../../../../models/personaCliente";
 import {PersonaUsuario} from "../../../../models/personaUsuario";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
