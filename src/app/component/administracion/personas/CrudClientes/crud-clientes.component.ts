@@ -29,6 +29,8 @@ export class CrudClientesComponent implements OnInit {
   public botonParaGuardar: Boolean = true;
   public botonParaEditar: Boolean = false;
 
+
+
   public numeroControl: number = 1;
 
   loaderActualizar: boolean;
@@ -49,7 +51,7 @@ export class CrudClientesComponent implements OnInit {
   })
 
 
-  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'observacion', 'telefono', 'nacimiento',  'correo', 'documento'];
+  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'observacion', 'telefono', 'nacimiento', 'correo', 'documento'];
   dataSource: MatTableDataSource<Cliente>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -72,7 +74,7 @@ export class CrudClientesComponent implements OnInit {
 
 
   public mostrarNuevo() {
-    
+
 
     if (this.numeroControl == 3) {
       this.vaciarFormulario();
@@ -93,13 +95,13 @@ export class CrudClientesComponent implements OnInit {
     this.sectionCrudDatos = false;
   }
 
-  public botonCancelarRegistro(){
+  public botonCancelarRegistro() {
 
     this.mostrarLista();
     this.vaciarFormulario();
-      this.botonParaGuardar = true;
-      this.botonParaEditar = false;
-      this.numeroControl = 1;
+    this.botonParaGuardar = true;
+    this.botonParaEditar = false;
+    this.numeroControl = 1;
 
   }
 
@@ -129,7 +131,7 @@ export class CrudClientesComponent implements OnInit {
 
       this.clienteLista = value;
 
-      
+
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -141,7 +143,7 @@ export class CrudClientesComponent implements OnInit {
 
   applyFilter(event: Event) {
 
-    
+
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
 
@@ -183,7 +185,7 @@ export class CrudClientesComponent implements OnInit {
     this.botonParaEditar = true;
 
 
-    
+
     for (var k = 0; k < this.clienteLista.length; k++) {
       if (this.clienteLista[k].id == id) {
 
@@ -191,12 +193,12 @@ export class CrudClientesComponent implements OnInit {
         this.formGrupos.setValue({
           cedula: this.clienteLista[k].cedula,
           nombres: this.clienteLista[k].nombres,
-          apellidos:this.clienteLista[k].apellidos,
+          apellidos: this.clienteLista[k].apellidos,
           telefono: this.clienteLista[k].telefono,
           email: this.clienteLista[k].email,
-          direccion:this.clienteLista[k].direccion,
+          direccion: this.clienteLista[k].direccion,
           fecha: this.clienteLista[k].fechaNacimiento,
-    
+
         })
         this.mostrarNuevo();
         this.numeroControl = 3;
@@ -207,53 +209,53 @@ export class CrudClientesComponent implements OnInit {
   }
 
 
-  public guardarEditarInformacion(){
-
- 
-
-      this.clienteListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
-      this.clienteListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
-      this.clienteListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
-      this.clienteListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
-      this.clienteListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
-      this.clienteListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
-      this.clienteListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
-      this.clienteListaGuardar.id = this.idPersona;
-  
-  
-      console.log("Datos Actualizar");
-      console.log(this.clienteListaGuardar);
-  
-
-      this.clienteService.putCliente(this.clienteListaGuardar).subscribe(value => {
-        this._snackBar.open('Cliente Actualizado', 'ACEPTAR');
-        this.vaciarFormulario();
-        this.botonParaGuardar = true;
-        this.botonParaEditar = false;
-        //this.listarEventoSinParticipantes();
-        this.mostrarLista();
-       
-
-      }, error => {
-        this._snackBar.open(error.error.message+' OCURRIO UN ERROR', 'ACEPTAR');
-        //this.loaderGuardar=false
-      })
-  
-  
-    }
+  public guardarEditarInformacion() {
 
 
 
+    this.clienteListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
+    this.clienteListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
+    this.clienteListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
+    this.clienteListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
+    this.clienteListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
+    this.clienteListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
+    this.clienteListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
+    this.clienteListaGuardar.id = this.idPersona;
 
-    //Exportaciones de documento
 
-    exportToExcel(): void {
-      let element = document.getElementById('table');
-      const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
-      const book: XLSX.WorkBook = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
-  
-      XLSX.writeFile(book, 'Lista de Clientes.xlsx');
-    }
+    console.log("Datos Actualizar");
+    console.log(this.clienteListaGuardar);
+
+
+    this.clienteService.putCliente(this.clienteListaGuardar).subscribe(value => {
+      this._snackBar.open('Cliente Actualizado', 'ACEPTAR');
+      this.vaciarFormulario();
+      this.botonParaGuardar = true;
+      this.botonParaEditar = false;
+      //this.listarEventoSinParticipantes();
+      this.mostrarLista();
+
+
+    }, error => {
+      this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+      //this.loaderGuardar=false
+    })
+
+
+  }
+
+
+
+
+  //Exportaciones de documento
+
+  exportToExcel(): void {
+    let element = document.getElementById('table');
+    const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+    const book: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
+
+    XLSX.writeFile(book, 'Lista de Clientes.xlsx');
+  }
 
 }

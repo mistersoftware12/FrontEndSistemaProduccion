@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { map, Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { FormControl, ɵFormGroupRawValue, ɵTypedOrUntyped } from "@angular/forms";
 import { environment } from 'src/environments/environment';
-import { Reporte } from '../models/reporte';
 import { Cliente } from '../models/cliente';
 
 @Injectable({

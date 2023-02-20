@@ -9,6 +9,10 @@ import { EditarUsuariosComponent } from './crudusuario/editarUsuarios/editar-usu
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from "@angular/common";
 import { CrudClientesComponent } from './personas/CrudClientes/crud-clientes.component';
+import { CrudAlmacenComponent } from './empresa/CrudAlmacen/crud-almacen.component';
+import { CrudBodegaComponent } from './empresa/CrudBodega/crud-bodega.component';
+import { CrudSucursalComponent } from './empresa/CrudSucursal/crud-sucursal.component';
+import { CrudTallerComponent } from './empresa/CrudTaller/crud-taller.component';
 registerLocaleData(localeEs, 'es')
 
 
@@ -26,10 +30,6 @@ const routes: Routes = [
     component: CrudusuarioComponent
   },
 
-  {
-    path: 'administracionClientes',
-    component: CrudClientesComponent
-  },
 
   {
     path: 'administracionusuarios',
@@ -38,7 +38,32 @@ const routes: Routes = [
   {
     path: 'editarusuarios/:id',
     component: EditarUsuariosComponent
-  }
+  },
+
+  {
+    path: 'administracionClientes',
+    component: CrudClientesComponent
+  },
+
+  {
+    path: 'administracionAlmacen',
+    component: CrudAlmacenComponent
+  },
+
+  {
+    path: 'administracionBodega',
+    component: CrudBodegaComponent
+  },
+
+  {
+    path: 'administracionSucursal',
+    component: CrudSucursalComponent
+  },
+
+  {
+    path: 'administracionTaller',
+    component: CrudTallerComponent
+  },
 
 
 ]
@@ -49,7 +74,11 @@ const routes: Routes = [
     CrudusuarioComponent,
     EditarUsuariosComponent,
 
-    CrudClientesComponent
+    CrudClientesComponent,
+    CrudAlmacenComponent,
+    CrudBodegaComponent,
+    CrudSucursalComponent,
+    CrudTallerComponent,
   ],
   imports: [
     CommonModule,
