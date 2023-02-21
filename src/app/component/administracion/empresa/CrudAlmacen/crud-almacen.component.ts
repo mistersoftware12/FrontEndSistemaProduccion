@@ -42,7 +42,7 @@ export class CrudAlmacenComponent implements OnInit {
 
 
   formGrupos = new FormGroup({
-    nombres: new FormControl<String>('', [Validators.required, Validators.pattern(/^[a-z\s\u00E0-\u00FC\u00f1]*$/i)]),
+    nombres: new FormControl<String>('', [Validators.required]),
     direccion: new FormControl<String>(null, [Validators.required]),
     telefono: new FormControl<String>('', [Validators.required, Validators.pattern("[0-9]+")]),
     email: new FormControl<String>('', [Validators.required, Validators.email]),
@@ -306,7 +306,7 @@ export class CrudAlmacenComponent implements OnInit {
     const book: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
 
-    XLSX.writeFile(book, 'Lista de Clientes.xlsx');
+    XLSX.writeFile(book, 'Lista de Almacenes.xlsx');
   }
 
 

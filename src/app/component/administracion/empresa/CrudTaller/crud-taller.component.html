@@ -1,1 +1,259 @@
-Taller
+<br>
+<section>
+    <div *ngIf="sectionCrudDatos==true">
+        <mat-card class="example-card" style="background: #F2F1E9">
+            <form [formGroup]="formGrupos">
+                <mat-card-content style="background: #F2F1E9">
+
+                    <mat-grid-list cols="2" rowHeight="5:0.9">
+
+
+                        <div>
+                            <div class="opcion1fd">
+                                <h3> <strong>TALLER</strong></h3>
+                            </div>
+                        </div>
+
+                        <h4>DATOS DE TALLER</h4>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="nombres">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Dirección</mat-label>
+                                    <input matInput formControlName="direccion">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Responsable</mat-label>
+                                    <input matInput formControlName="responsable">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+                        
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Telefono</mat-label>
+                                    <input matInput formControlName="telefono">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Email</mat-label>
+                                    <input matInput formControlName="email">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                       
+
+                        <div>
+                            <mat-grid-tile>
+
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Seleccione Sucursal</mat-label>
+                                    <mat-select formControlName="sucursal">
+                                        <mat-option *ngFor="let option of sucursalLista"
+                                            [value]="option.id">{{option.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Seleccione Estado</mat-label>
+                                    <mat-select formControlName="estado">
+                                        <mat-option *ngFor="let option2 of estadoLista"
+                                            [value]="option2.id">{{option2.nombres}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </mat-grid-tile>
+                        </div>
+
+                    </mat-grid-list>
+                </mat-card-content>
+
+                <div>
+                    <div class="opcion1fd">
+
+
+                        <button *ngIf="botonParaGuardar==true" mat-flat-button color="warn"
+                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()"
+                            class=".buttonguardar">REGISTRAR
+                        </button>
+
+                        <button *ngIf="botonParaEditar==true" mat-flat-button color="warn"
+                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()"
+                            class="buttonguardar">ACTUALIZAR
+                        </button>
+
+
+                        <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;"
+                            class="buttonprincipales" (click)="botonCancelarRegistro()" class="buttonguardar">
+                            CANCELAR
+                        </button>
+                    </div>
+                </div>
+
+
+
+
+            </form>
+
+        </mat-card>
+    </div>
+</section>
+
+
+<!---------------------------------------LISTAR----------------------------------------->
+
+<section *ngIf="sectionTablaLista==true">
+    <mat-card class="borde2">
+
+        <div class="tituloSeccion">
+            <strong>TALLERES</strong>
+        </div>
+
+        <mat-progress-bar *ngIf="loaderActualizar" mode="indeterminate"></mat-progress-bar>
+        <mat-card-content>
+
+            <div>
+                <button mat-raised-button style="background-color: #689F38;color: #FFFFFF;" class="buttonprincipales"
+                    (click)="mostrarNuevo()">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo
+                </button>
+                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales">
+                    <mat-icon>insert_drive_file</mat-icon>
+                    PDF
+                </button>
+
+                <button mat-raised-button style="background-color: #022661; color: #FFFFFF;" class="buttonprincipales"
+                    (click)="exportToExcel()">
+                    <mat-icon>insert_drive_file</mat-icon>
+                    EXCEL
+                </button>
+
+            </div>
+            <br>
+
+            <mat-form-field appearance="outline" class="bordeFiltro">
+                <mat-label>Buscar Taller</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cuenca" #input>
+                <mat-icon matSuffix>find_in_page</mat-icon>
+            </mat-form-field>
+
+
+
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort id="table" style="background-color: #F2F1E9;">
+
+
+
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:10px;">ID</th>
+                        <td mat-cell *matCellDef="let row" style="width: 10px;"> {{row.idTaller}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> ESTADO</th>
+                        <td mat-cell *matCellDef="let row"> 
+                            <div *ngIf="row.estado==false">Inactivo</div>
+                            <div *ngIf="row.estado==true">Activo</div>
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Progress Column -->
+                    <ng-container matColumnDef="direccion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> DIRECCIÓN</th>
+                        <td mat-cell *matCellDef="let row">{{row.direccion}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="nombre">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRES</th>
+                        <td mat-cell *matCellDef="let row"><strong>{{row.nombre}}</strong> </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="responsable">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> RESPONSABLE</th>
+                        <td mat-cell *matCellDef="let row"> {{row.responsable}} </td>
+                    </ng-container>
+
+
+
+
+                    <ng-container matColumnDef="telefono">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> TELÉFONO</th>
+                        <td mat-cell *matCellDef="let row"> {{row.telefono}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="sucursal">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> SUCURSAL</th>
+                        <td mat-cell *matCellDef="let row"> {{row.nombreSucursal}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="correo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> EMAIL</th>
+                        <td mat-cell *matCellDef="let row"> {{row.correo}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="documento">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:10px;">ACCIÓN</th>
+                        <td mat-cell *matCellDef="let row" style="width:10px;"
+                            (click)="editarInformacion(row.idTaller)">
+                            <button mat-flat-button color="primary">EDITAR</button>
+                        </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No hay datos que coincidan con el filtro "{{input.value}}"</td>
+                    </tr>
+                </table>
+
+                <mat-paginator style="background-color: #F2F1E9;" [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page of users"></mat-paginator>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</section>

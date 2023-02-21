@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Cliente } from '../models/cliente';
 import { Almacen } from '../models/almacen';
 import { Sucursal } from '../models/sucursal';
+import { Bodega, Taller } from '../models/empresa';
 
 @Injectable({
   providedIn: 'root'
@@ -23,13 +24,22 @@ export class EmpresaService {
 
   
 
+  createSucursal(sucursal: Sucursal): Observable<Sucursal> {
+    return this.http.post(environment.URL_APP + "/empresa/registrarSucursal", sucursal, { headers: this.httpHeaders })
+  }
+
   createAlmacen(almacen: Almacen): Observable<Almacen> {
     return this.http.post(environment.URL_APP + "/empresa/registrarAlmacen", almacen, { headers: this.httpHeaders })
   }
 
-  createSucursal(sucursal: Sucursal): Observable<Sucursal> {
-    return this.http.post(environment.URL_APP + "/empresa/registrarSucursal", sucursal, { headers: this.httpHeaders })
+  createBodega(bodega: Bodega): Observable<Bodega> {
+    return this.http.post(environment.URL_APP + "/empresa/registrarBodega", bodega, { headers: this.httpHeaders })
   }
+
+  createTaller(taller: Taller): Observable<Taller> {
+    return this.http.post(environment.URL_APP + "/empresa/registrarTaller", taller, { headers: this.httpHeaders })
+  }
+
 
 
   getSucursalAll(): Observable<Sucursal[]> {
@@ -40,6 +50,14 @@ export class EmpresaService {
     return this.http.get(environment.URL_APP + "/empresa/allAlmacen", {headers: this.httpHeaders}).pipe(map(Response => Response as Almacen[]))
   }
 
+  getBodegaAll(): Observable<Bodega[]> {
+    return this.http.get(environment.URL_APP + "/empresa/allBodega", {headers: this.httpHeaders}).pipe(map(Response => Response as Bodega[]))
+  }
+
+  getTallerAll(): Observable<Taller[]> {
+    return this.http.get(environment.URL_APP + "/empresa/allTaller", {headers: this.httpHeaders}).pipe(map(Response => Response as Taller[]))
+  }
+
   
 
   putSucursal(sucursal: Sucursal): Observable<Sucursal> {
@@ -48,6 +66,14 @@ export class EmpresaService {
 
   putAlmacen(almacen: Almacen): Observable<Almacen> {
     return this.http.put(environment.URL_APP + "/empresa/updateAlmacen", almacen, {headers: this.httpHeaders})
+  }
+
+  putBodega(bodega: Bodega): Observable<Bodega> {
+    return this.http.put(environment.URL_APP + "/empresa/updateBodega", bodega, {headers: this.httpHeaders})
+  }
+
+  putTaller(taller: Taller): Observable<Taller> {
+    return this.http.put(environment.URL_APP + "/empresa/updateTaller", taller, {headers: this.httpHeaders})
   }
  
 
