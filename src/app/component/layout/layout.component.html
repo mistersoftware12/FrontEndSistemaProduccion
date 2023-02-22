@@ -13,6 +13,7 @@
   <mat-menu #animals="matMenu">
     <button mat-menu-item [matMenuTriggerFor]="vertebrates">Empresa</button>
     <button mat-menu-item [matMenuTriggerFor]="invertebrates">Personas</button>
+    <button mat-menu-item [matMenuTriggerFor]="mas">Mas</button>
   </mat-menu>
 
   <mat-menu #vertebrates="matMenu">
@@ -22,7 +23,7 @@
   </mat-menu>
 
   <mat-menu #invertebrates="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionusuarios'">Usuarios</button>
+    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionusuarios'"> Usuarios</button>
     <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionClientes'">Clientes</button>
   </mat-menu>
 
@@ -32,11 +33,17 @@
     <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionTaller'">Taller</button>
   </mat-menu>
 
+  <mat-menu #mas="matMenu">
+    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCatalogo'">Catalogo</button>
+    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCategoria'">Categoria</button>
+  </mat-menu>
+
+
 
 
 
   <button mat-button (click)="logout()">CERRAR SESION</button>
-
+<button>{{persona.nombres}} {{persona.apellidos}}</button>
 
 </div>
 
