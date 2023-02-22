@@ -4,6 +4,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {FormControl, ɵFormGroupRawValue, ɵTypedOrUntyped} from "@angular/forms";
 import {map, Observable} from "rxjs";;
 import {PersonaUsuario} from "../models/personaUsuario";
+import { Usuario } from '../models/persona';
 
 @Injectable({
   providedIn: 'root'
@@ -34,4 +35,30 @@ export class UsuarioService {
   getAllUsuarios(): Observable<PersonaUsuario[]> {
     return this.http.get(this.urlEndPoint + "/persona/allUsuarios", { headers: this.httpHeaders }).pipe(map(Response => Response as PersonaUsuario[]))
   }
+
+
+  /////////////////////////////////
+
+  createUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.post(environment.URL_APP + "/persona/registroUsuario", usuario, { headers: this.httpHeaders })
+  }
+
+  putUsuario(usuario: Usuario): Observable<Usuario> {
+    return this.http.put(environment.URL_APP + "/persona/updateUsuario", usuario, {headers: this.httpHeaders})
+  }
+  /*
+
+   createCliente(cliente: Cliente): Observable<Cliente> {
+    return this.http.post(environment.URL_APP + "/persona/registroCliente", cliente, { headers: this.httpHeaders })
+  }
+
+
+  getClientesAll(): Observable<Cliente[]> {
+    return this.http.get(environment.URL_APP + "/persona/allClientes", {headers: this.httpHeaders}).pipe(map(Response => Response as Cliente[]))
+  }
+
+  putCliente(evento: Cliente): Observable<Cliente> {
+    return this.http.put(environment.URL_APP + "/persona/updateCliente", evento, {headers: this.httpHeaders})
+  }
+*/
 }

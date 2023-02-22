@@ -10,11 +10,11 @@
 
                         <div>
                             <div class="opcion1fd">
-                                <h3> <strong>CLIENTES</strong></h3>
+                                <h3> <strong>USUARIOS</strong></h3>
                             </div>
                         </div>
 
-                        <h4>DATOS DEL CLIENTE</h4>
+                        <h4>DATOS DEL USUARIO</h4>
 
                         <div>
                             <mat-grid-tile>
@@ -74,6 +74,15 @@
                         </div>
 
                         <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Clave</mat-label>
+                                    <input matInput formControlName="clave">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </div>
+
+                        <div>
 
                             <mat-grid-tile>
                                 <mat-form-field appearance="outline">
@@ -84,6 +93,38 @@
                                 </mat-form-field>
                             </mat-grid-tile>
                         </div>
+
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Rol</mat-label>
+                                  <mat-select formControlName="idRol">
+                                    <mat-option [value]="2">GESTION</mat-option>
+                                    <mat-option [value]="3">INCRIPCION Y USO</mat-option>
+                                    <mat-option [value]="4">REPORTES</mat-option>
+                                  </mat-select>
+                                </mat-form-field>
+                              </mat-grid-tile>
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Seleccione Sucursal</mat-label>
+                                    <mat-select formControlName="sucursal">
+                                        <mat-option *ngFor="let option of sucursalLista"
+                                            [value]="option.id">{{option.nombre}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </mat-grid-tile>
+                        </div>
+
+                        
 
                     </mat-grid-list>
                 </mat-card-content>
@@ -124,7 +165,7 @@
     <mat-card class="borde2">
 
         <div class="tituloSeccion">
-            <strong>CLIENTES</strong>
+            <strong>USUARIOS</strong>
         </div>
 
         <mat-progress-bar *ngIf="loaderActualizar" mode="indeterminate"></mat-progress-bar>
@@ -150,7 +191,7 @@
             <br>
 
             <mat-form-field appearance="outline" class="bordeFiltro">
-                <mat-label>Buscar Clientes</mat-label>
+                <mat-label>Buscar Usuarios</mat-label>
                 <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Franklin Dominguez" #input>
                 <mat-icon matSuffix>find_in_page</mat-icon>
             </mat-form-field>
@@ -168,7 +209,17 @@
                         <td mat-cell *matCellDef="let row" style="width: 10px;"> {{row.id}} </td>
                     </ng-container>
 
-                   
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="sucursal">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> SUCURSAL</th>
+                        <td mat-cell *matCellDef="let row"> {{row.nombreSucursal}} </td>
+                    </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="rol">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> ROL</th>
+                        <td mat-cell *matCellDef="let row"> {{row.nombreRol}} </td>
+                    </ng-container>
 
                     <!-- Progress Column -->
                     <ng-container matColumnDef="cedula">
@@ -195,8 +246,6 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> TELÉFONO</th>
                         <td mat-cell *matCellDef="let row"> {{row.telefono}} </td>
                     </ng-container>
-
-                    
 
                     <ng-container matColumnDef="nacimiento">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> NACIMIENTO</th>

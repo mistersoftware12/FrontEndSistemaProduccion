@@ -13,6 +13,7 @@ import { CrudAlmacenComponent } from './empresa/CrudAlmacen/crud-almacen.compone
 import { CrudBodegaComponent } from './empresa/CrudBodega/crud-bodega.component';
 import { CrudSucursalComponent } from './empresa/CrudSucursal/crud-sucursal.component';
 import { CrudTallerComponent } from './empresa/CrudTaller/crud-taller.component';
+import { CrudUsuariosComponent } from './personas/CrudUsuario/crud-usuario.component';
 registerLocaleData(localeEs, 'es')
 
 
@@ -25,15 +26,12 @@ const routes: Routes = [
     component: BienvenidaComponent
   },
 
-  {
-    path: 'crudusuario',
-    component: CrudusuarioComponent
-  },
+ 
 
 
   {
     path: 'administracionusuarios',
-    component: CrudusuarioComponent
+    component: CrudUsuariosComponent
   },
   {
     path: 'editarusuarios/:id',
@@ -74,7 +72,9 @@ const routes: Routes = [
     CrudusuarioComponent,
     EditarUsuariosComponent,
 
+    
     CrudClientesComponent,
+    CrudUsuariosComponent,
     CrudAlmacenComponent,
     CrudBodegaComponent,
     CrudSucursalComponent,

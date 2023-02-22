@@ -7,20 +7,23 @@ import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
 import * as XLSX from 'xlsx';
+import { Sucursal } from 'src/app/models/sucursal';
+import { EmpresaService } from 'src/app/services/empresa.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { Usuario } from 'src/app/models/persona';
 
 
 @Component({
-  selector: 'app-crud-clientes',
-  templateUrl: './crud-clientes.component.html',
-  styleUrls: ['./crud-clientes.component.css'],
+    selector: 'app-crud-usurio',
+    templateUrl: './crud-usuario.component.html',
+    styleUrls: ['./crud-usuario.component.css'],
+    
+ 
+  })
 
+  export class CrudUsuariosComponent implements OnInit{
 
-})
-
-export class CrudClientesComponent implements OnInit {
-
-
-  //Control de pantallas
+     //Control de pantallas
   public sectionTablaLista: Boolean = true;
   public sectionCrudDatos: Boolean = false;
 
@@ -36,8 +39,11 @@ export class CrudClientesComponent implements OnInit {
   loaderActualizar: boolean;
 
 
-  public clienteListaGuardar: Cliente = new Cliente();
-  public clienteLista: Cliente[] = [];
+  public UsuarioListaGuardar: Usuario = new Usuario();
+  public UsuarioLista: Usuario[] = [];
+
+  public sucursalLista: Sucursal[] = [];
+
 
 
   formGrupos = new FormGroup({
@@ -48,10 +54,14 @@ export class CrudClientesComponent implements OnInit {
     email: new FormControl<String>('', [Validators.required, Validators.email]),
     direccion: new FormControl<String>(null, [Validators.required]),
     fecha: new FormControl<String>('', [Validators.required]),
+    clave: new FormControl<String>('', [Validators.required]),
+    sucursal: new FormControl<String>('', [Validators.required]),
+    idRol: new FormControl<Number>(null, [Validators.required]),
+    
   })
 
 
-  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos',  'telefono', 'nacimiento', 'correo', 'documento'];
+  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'sucursal','rol', 'telefono', 'nacimiento', 'correo', 'documento'];
   dataSource: MatTableDataSource<Cliente>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -63,12 +73,15 @@ export class CrudClientesComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private clienteService: ClienteService,
+    private empresaService: EmpresaService,
+    private usuarioService: UsuarioService,
   ) {
 
   }
 
   ngOnInit(): void {
     this.listarInformacion();
+    this.listarSucursal();
 
   }
 
@@ -117,7 +130,9 @@ export class CrudClientesComponent implements OnInit {
       email: "",
       direccion: "",
       fecha: null,
-
+      sucursal: "",
+      idRol: null,
+      clave:"",
     })
 
   }
@@ -126,15 +141,26 @@ export class CrudClientesComponent implements OnInit {
   //LISTAR
 
   public listarInformacion() {
-    this.clienteService.getClientesAll().subscribe(value => {
+    this.usuarioService.getAllUsuarios().subscribe(value => {
 
-
-      this.clienteLista = value;
-
+      this.UsuarioLista = value;
 
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+
+    })
+
+
+  }
+
+  public listarSucursal() {
+
+
+
+    this.empresaService.getSucursalAll().subscribe(value => {
+
+      this.sucursalLista = value;
 
     })
 
@@ -155,18 +181,22 @@ export class CrudClientesComponent implements OnInit {
 
 
   public guardarInformacion() {
-    this.clienteListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
-    this.clienteListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
-    this.clienteListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
-    this.clienteListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
-    this.clienteListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
-    this.clienteListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
-    this.clienteListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
 
-    this.clienteService.createCliente(this.clienteListaGuardar).subscribe(value => {
-      this._snackBar.open('Cliente registrado', 'ACEPTAR');
+    this.UsuarioListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
+    this.UsuarioListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
+    this.UsuarioListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
+    this.UsuarioListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
+    this.UsuarioListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
+    this.UsuarioListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
+    this.UsuarioListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
+    this.UsuarioListaGuardar.clave = Object.values(this.formGrupos.getRawValue())[7];
+    this.UsuarioListaGuardar.idSucursal = Object.values(this.formGrupos.getRawValue())[8];
+    this.UsuarioListaGuardar.idRol = Object.values(this.formGrupos.getRawValue())[9];
+   
+   this.usuarioService.createUsuario(this.UsuarioListaGuardar).subscribe(value => {
+      this._snackBar.open('Usuario registrado', 'ACEPTAR');
       this.vaciarFormulario();
-      //this.listarEventoSinParticipantes();
+    
       this.mostrarLista();
     }, error => {
       this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
@@ -180,24 +210,31 @@ export class CrudClientesComponent implements OnInit {
   ////Editar
 
   editarInformacion(id: any) {
+
+    
     this.idPersona = id;
     this.botonParaGuardar = false;
     this.botonParaEditar = true;
 
 
 
-    for (var k = 0; k < this.clienteLista.length; k++) {
-      if (this.clienteLista[k].id == id) {
+    for (var k = 0; k < this.UsuarioLista.length; k++) {
+      if (this.UsuarioLista[k].id == id) {
 
 
         this.formGrupos.setValue({
-          cedula: this.clienteLista[k].cedula,
-          nombres: this.clienteLista[k].nombres,
-          apellidos: this.clienteLista[k].apellidos,
-          telefono: this.clienteLista[k].telefono,
-          email: this.clienteLista[k].email,
-          direccion: this.clienteLista[k].direccion,
-          fecha: this.clienteLista[k].fechaNacimiento,
+          cedula: this.UsuarioLista[k].cedula,
+          nombres: this.UsuarioLista[k].nombres,
+          apellidos: this.UsuarioLista[k].apellidos,
+          telefono: this.UsuarioLista[k].telefono,
+          email: this.UsuarioLista[k].email,
+          direccion: this.UsuarioLista[k].direccion,
+          fecha: this.UsuarioLista[k].fechaNacimiento,
+          sucursal:this.UsuarioLista[k].idSucursal,
+
+          idRol: this.UsuarioLista[k].idRol,
+          clave: "",
+
 
         })
         this.mostrarNuevo();
@@ -212,33 +249,35 @@ export class CrudClientesComponent implements OnInit {
   public guardarEditarInformacion() {
 
 
-
-    this.clienteListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
-    this.clienteListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
-    this.clienteListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
-    this.clienteListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
-    this.clienteListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
-    this.clienteListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
-    this.clienteListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
-    this.clienteListaGuardar.id = this.idPersona;
+    this.UsuarioListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
+    this.UsuarioListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
+    this.UsuarioListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
+    this.UsuarioListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
+    this.UsuarioListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
+    this.UsuarioListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
+    this.UsuarioListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
+    this.UsuarioListaGuardar.clave = Object.values(this.formGrupos.getRawValue())[7];
+    this.UsuarioListaGuardar.idSucursal = Object.values(this.formGrupos.getRawValue())[8];
+    this.UsuarioListaGuardar.idRol = Object.values(this.formGrupos.getRawValue())[9];
+    this.UsuarioListaGuardar.id = this.idPersona;
 
 
     console.log("Datos Actualizar");
-    console.log(this.clienteListaGuardar);
+    console.log(this.UsuarioListaGuardar);
 
 
-    this.clienteService.putCliente(this.clienteListaGuardar).subscribe(value => {
-      this._snackBar.open('Cliente Actualizado', 'ACEPTAR');
+    this.usuarioService.putUsuario( this.UsuarioListaGuardar).subscribe(value => {
+      this._snackBar.open('Usuario Actualizado', 'ACEPTAR');
       this.vaciarFormulario();
       this.botonParaGuardar = true;
       this.botonParaEditar = false;
-      //this.listarEventoSinParticipantes();
+     
       this.mostrarLista();
 
 
     }, error => {
       this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
-      //this.loaderGuardar=false
+     
     })
 
 
@@ -255,7 +294,7 @@ export class CrudClientesComponent implements OnInit {
     const book: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
 
-    XLSX.writeFile(book, 'Lista de Clientes.xlsx');
+    XLSX.writeFile(book, 'Lista de Usuarios.xlsx');
   }
-
-}
+    
+  }
