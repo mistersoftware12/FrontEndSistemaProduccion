@@ -9,6 +9,9 @@ export class Bodega {
     estado?: any;
     idSucursal?: any;
     idNombre?:any
+    nombreSucursal?:any
+    nombreEstado?:any
+
 
 }
 
@@ -23,5 +26,8 @@ export class Taller {
     estado?: any;
     idSucursal?: any;
     idNombre?:any
+    nombreSucursal?:any
+    nombreEstado?:any
+
 
 }

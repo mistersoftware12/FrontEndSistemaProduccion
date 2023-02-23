@@ -10,6 +10,14 @@ import { Sucursal } from 'src/app/models/sucursal';
 import { Observable, ReplaySubject } from 'rxjs';
 import { Catalogo } from 'src/app/models/catalogo';
 import { CatalogoService } from 'src/app/services/catalogo.service';
+import { EstadoFD } from 'src/app/models/estado';
+
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+import { DatePipe } from "@angular/common";
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { cedula } from 'src/environments/environment';
 
 @Component({
   selector: 'app-crud-catalogo.component',
@@ -43,6 +51,7 @@ export class CrudCatalogoComponent implements OnInit {
 
   public catalogoListaGuardar: Catalogo = new Catalogo();
   public catalogolLista: Catalogo[] = [];
+  public estadoLista: EstadoFD[] = [{ id: 1, nombres: 'Activo', value: 'true' }, { id: 2, nombres: 'Inactivo', value: 'false' }];
 
 
   formGrupos = new FormGroup({
@@ -63,7 +72,8 @@ export class CrudCatalogoComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private empresaService: EmpresaService,
-    private catalogoService: CatalogoService
+    private catalogoService: CatalogoService,
+    private usuarioService: UsuarioService,
   ) {
   }
 
@@ -157,21 +167,28 @@ export class CrudCatalogoComponent implements OnInit {
   public guardarInformacion() {
 
     this.catalogoListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
-    this.catalogoListaGuardar.inicialCodigo = Object.values(this.formGrupos.getRawValue())[1];
 
-   
+    var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[1]);  // [{"Spalte":3}] as String
+    var d = parseInt(s); // typeof d = number, 
 
-        this.catalogoService.createCatalogo(this.catalogoListaGuardar).subscribe(value => {
-          this._snackBar.open('Catalogo Creado', 'ACEPTAR');
+    if (d == 1) {
+      this.catalogoListaGuardar.estado = true;
+    } if (d == 2) {
+      this.catalogoListaGuardar.estado = false;
+    }
 
-          this.vaciarFormulario();
-          this.mostrarLista();
 
-        }, error => {
-          this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+    this.catalogoService.createCatalogo(this.catalogoListaGuardar).subscribe(value => {
+      this._snackBar.open('Catalogo Creado', 'ACEPTAR');
 
-        })
-     
+      this.vaciarFormulario();
+      this.mostrarLista();
+
+    }, error => {
+      this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+
+    })
+
 
 
 
@@ -180,15 +197,24 @@ export class CrudCatalogoComponent implements OnInit {
 
   ////Editar
 
-  editarInformacion(id: any, nombre: any, inicial: any) {
+  editarInformacion(id: any, nombre: any, estado: any) {
 
     this.idCatalogo = id;
     this.botonParaGuardar = false;
     this.botonParaEditar = true;
 
+    if (estado == true) {
+      this.catalogoListaGuardar.estado = 1;
+
+    } if (estado == false) {
+      this.catalogoListaGuardar.estado = 2;
+
+    }
+
+
     this.formGrupos.setValue({
       nombres: nombre,
-      inicial: inicial,
+      inicial: this.catalogoListaGuardar.estado,
     })
 
     this.mostrarNuevo();
@@ -197,7 +223,7 @@ export class CrudCatalogoComponent implements OnInit {
 
     this.catalogoListaGuardar.id = this.idCatalogo;
 
-    this.catalogoListaGuardar.inicialCodigo = inicial;
+    this.catalogoListaGuardar.estado = estado;
 
 
 
@@ -208,7 +234,17 @@ export class CrudCatalogoComponent implements OnInit {
   public guardarEditarInformacion() {
 
     this.catalogoListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
-    this.catalogoListaGuardar.inicialCodigo = Object.values(this.formGrupos.getRawValue())[1];
+
+
+    var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[1]);  // [{"Spalte":3}] as String
+    var d = parseInt(s); // typeof d = number, 
+
+    if (d == 1) {
+      this.catalogoListaGuardar.estado = true;
+    } if (d == 2) {
+      this.catalogoListaGuardar.estado = false;
+    }
+
     console.info(this.catalogoListaGuardar);
 
     this.catalogoService.putCatalogo(this.catalogoListaGuardar).subscribe(value => {
@@ -239,9 +275,142 @@ export class CrudCatalogoComponent implements OnInit {
     const book: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
 
-    XLSX.writeFile(book, 'Lista de Catalogos.xlsx');
+    XLSX.writeFile(book, 'Lista de Catálogos.xlsx');
   }
 
 
+
+
+  //Generar PDF
+
+
+  getBase64ImageFromURL(url: any) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        // @ts-ignore
+        ctx.drawImage(img, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        resolve(dataURL);
+      };
+
+      img.onerror = error => {
+        reject(error);
+      };
+
+      img.src = url;
+    });
+  }
+
+
+  generatePDF() {
+    this.loaderActualizar = true
+    var pipe: DatePipe = new DatePipe('es')
+    var dia: String = new Date().toISOString();
+
+    this.catalogoService.getCatalogoAll().subscribe(value => {
+      console.info(value)
+      this.catalogolLista = value;
+
+      for (var k = 0; k < this.catalogolLista.length; k++) {
+
+        if (this.catalogolLista[k].estado == true) {
+          this.catalogolLista[k].inicialCodigo = "Activo";
+        }
+
+        if (this.catalogolLista[k].estado == false) {
+          this.catalogolLista[k].inicialCodigo = "Inactivo";
+        }
+      }
+
+      this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+        console.info(valueb)
+
+        const pdfDefinition: any = {
+
+          footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+          header: function (currentPage, pageCount, pageSize) {
+            // you can apply any logic and return any valid pdfmake element
+
+            /*
+            return [
+              { text: 'simple text', alignment: (currentPage % 2) ? 'left' : 'right' },
+              { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+            ]*/
+          },
+
+          content: [
+            { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+            {
+              text: '_________________________________________________________________________________________',
+              alignment: 'center'
+            },
+            // @ts-ignore
+            { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+            { text: 'CATÁLOGOS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
+            { text: 'Catálogos registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            { text: '    ' },
+            {
+              table: {
+                headerRows: 1,
+                widths: ['5%', '75%', '20%'],
+                body: [
+                  ['ID', 'NOMBRE', 'ESTADO'],
+                  [this.catalogolLista.map(function (item) {
+                    return { text: item.id + '', fontSize: 12 }
+                  }),
+                  this.catalogolLista.map(function (item) {
+                    return { text: item.nombre + '', fontSize: 12 }
+                  }),
+                  this.catalogolLista.map(function (item) {
+
+                    return { text: item.inicialCodigo + '', fontSize: 12 }
+
+
+                  }),
+
+                  ],
+
+                ]
+              }
+
+            },
+            { text: '    ' },
+            { text: '    ' },
+
+
+            {
+              table: {
+                headerRows: 1,
+                widths: ['100%'],
+                heights: 20,
+                body: [
+                  ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+
+                ]
+              },
+            },
+
+          ],
+
+          pageOrientation: 'landscape',
+        }
+
+
+        this.loaderActualizar = false
+        const pdf = pdfMake.createPdf(pdfDefinition);
+        pdf.open();
+      })
+    })
+  }
 
 }

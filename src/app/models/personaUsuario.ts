@@ -9,4 +9,6 @@ export class PersonaUsuario {
   idRol:Number
   token:String
   rol:String
+  nombreRol:String
+  nombreSucursal:String
 }

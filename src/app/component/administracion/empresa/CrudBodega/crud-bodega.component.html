@@ -103,25 +103,24 @@
 
                 <div>
                     <div class="opcion1fd">
+                       
 
-
-                        <button *ngIf="botonParaGuardar==true" mat-flat-button color="warn"
-                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()"
-                            class=".buttonguardar">REGISTRAR
+                        <button *ngIf="botonParaGuardar==true" mat-flat-button color="primary" style="color: #FFFFFF;"
+                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()" class=".buttonguardar" > <mat-icon>save</mat-icon> REGISTRAR
+                        </button>
+                        
+                        <button *ngIf="botonParaEditar==true" mat-flat-button color="primary" style="color: #FFFFFF;"
+                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()" class="buttonguardar"> <mat-icon>save</mat-icon> ACTUALIZAR
                         </button>
 
-                        <button *ngIf="botonParaEditar==true" mat-flat-button color="warn"
-                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()"
-                            class="buttonguardar">ACTUALIZAR
-                        </button>
 
-
-                        <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;"
+                        <button mat-raised-button  mat-flat-button color="warn" 
                             class="buttonprincipales" (click)="botonCancelarRegistro()" class="buttonguardar">
-                            CANCELAR
+                            <mat-icon>close</mat-icon> CANCELAR
                         </button>
                     </div>
                 </div>
+
 
 
 
@@ -146,30 +145,35 @@
         <mat-card-content>
 
             <div>
-                <button mat-raised-button style="background-color: #689F38;color: #FFFFFF;" class="buttonprincipales"
+                <button mat-raised-button color="primary" style="color: #FFFFFF;" class="buttonprincipales"
                     (click)="mostrarNuevo()">
                     <mat-icon>add_circle_outline</mat-icon>
                     Nuevo
                 </button>
-                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales">
-                    <mat-icon>insert_drive_file</mat-icon>
+                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales"
+                (click)="generatePDF()">
+                    <mat-icon>save_alt</mat-icon>
                     PDF
-                </button>
+</button>
 
-                <button mat-raised-button style="background-color: #022661; color: #FFFFFF;" class="buttonprincipales"
+                <button mat-raised-button style="background-color: #217346; color: #FFFFFF;" class="buttonprincipales"
                     (click)="exportToExcel()">
-                    <mat-icon>insert_drive_file</mat-icon>
+                    <mat-icon>save_alt</mat-icon>
                     EXCEL
                 </button>
 
             </div>
             <br>
 
-            <mat-form-field appearance="outline" class="bordeFiltro">
-                <mat-label>Buscar Bodega</mat-label>
-                <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cuenca" #input>
-                <mat-icon matSuffix>find_in_page</mat-icon>
-            </mat-form-field>
+          
+
+            <div style="width: 340px;">
+                <mat-form-field appearance="outline" class="bordeFiltro">
+                    <mat-label>Buscar Bodega</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Cuenca" #input>
+                    <mat-icon matSuffix>find_in_page</mat-icon>
+                </mat-form-field>
+            </div>
 
 
 
@@ -235,7 +239,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:10px;">ACCIÓN</th>
                         <td mat-cell *matCellDef="let row" style="width:10px;"
                             (click)="editarInformacion(row.idBodega)">
-                            <button mat-flat-button color="primary">EDITAR</button>
+                            <button mat-flat-button color="primary"  style="color: #FFFFFF;">EDITAR</button>
                         </td>
                     </ng-container>
 

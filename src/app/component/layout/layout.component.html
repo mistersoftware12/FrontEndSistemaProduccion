@@ -3,13 +3,13 @@
 <html lang="en">
 
 
-<div style="background-color: #2196F3;">
+<div style="background-color: #97c00e;">
 
   <button class="botonmenu" mat-button [routerLink]="'/panel/biblioteca/bienvenida'">
-    <mat-icon>home</mat-icon>Home</button>
+    <mat-icon>home</mat-icon> Home</button>
 
 
-  <button mat-button [matMenuTriggerFor]="animals">Mantenimiento</button>
+  <button mat-button [matMenuTriggerFor]="animals"> <mat-icon>settings</mat-icon>ADMINISTRACIÓN</button>
   <mat-menu #animals="matMenu">
     <button mat-menu-item [matMenuTriggerFor]="vertebrates">Empresa</button>
     <button mat-menu-item [matMenuTriggerFor]="invertebrates">Personas</button>
@@ -34,7 +34,7 @@
   </mat-menu>
 
   <mat-menu #mas="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCatalogo'">Catalogo</button>
+    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCatalogo'">Catálogo</button>
     <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCategoria'">Categoria</button>
   </mat-menu>
 

@@ -1,12 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Cliente } from 'src/app/models/cliente';
-import { ClienteService } from 'src/app/services/cliente.service';
 import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import * as XLSX from 'xlsx';
+import { DatePipe } from "@angular/common";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ClienteService } from 'src/app/services/cliente.service';
+import { UsuarioService } from 'src/app/services/usuario.service';
+import { Cliente } from 'src/app/models/cliente';
+import { cedula } from 'src/environments/environment';
 
 
 @Component({
@@ -51,7 +57,7 @@ export class CrudClientesComponent implements OnInit {
   })
 
 
-  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos',  'telefono', 'nacimiento', 'correo', 'documento'];
+  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'telefono', 'nacimiento', 'correo', 'documento'];
   dataSource: MatTableDataSource<Cliente>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -63,6 +69,7 @@ export class CrudClientesComponent implements OnInit {
   constructor(
     private _snackBar: MatSnackBar,
     private clienteService: ClienteService,
+    private usuarioService: UsuarioService,
   ) {
 
   }
@@ -256,6 +263,145 @@ export class CrudClientesComponent implements OnInit {
     XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
 
     XLSX.writeFile(book, 'Lista de Clientes.xlsx');
+  }
+
+
+  //Generar PDF
+
+
+  getBase64ImageFromURL(url: any) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        // @ts-ignore
+        ctx.drawImage(img, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        resolve(dataURL);
+      };
+
+      img.onerror = error => {
+        reject(error);
+      };
+
+      img.src = url;
+    });
+  }
+
+
+  generatePDF() {
+    this.loaderActualizar = true
+    var pipe: DatePipe = new DatePipe('es')
+    var dia: String = new Date().toISOString();
+
+
+    this.clienteService.getClientesAll().subscribe(value => {
+      console.info(value)
+      this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+        console.info(valueb)
+
+        const pdfDefinition: any = {
+
+          footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+          header: function (currentPage, pageCount, pageSize) {
+            // you can apply any logic and return any valid pdfmake element
+
+            /*
+            return [
+              { text: 'simple text', alignment: (currentPage % 2) ? 'left' : 'right' },
+              { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+            ]*/
+          },
+
+          content: [
+            { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+            {
+              text: '_________________________________________________________________________________________',
+              alignment: 'center'
+            },
+            // @ts-ignore
+            { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+            { text: 'CLIENTES REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
+            { text: 'Clientes registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            { text: '    ' },
+            {
+              table: {
+                headerRows: 1,
+                widths: ['2%', '10%', '17%', '17%', '10,1%', '10,1%', '27%', '10%'],
+                body: [
+                  ['ID', 'CEDULA', 'NOMBRES', 'APELLIDOS', 'F.NACIMIENTO', 'DIRECCIÓN', 'CORREO', 'TELEFONO'],
+                  [value.map(function (item) {
+                    return { text: item.id + '', fontSize: 12 }
+                  }),
+                  value.map(function (item) {
+                    return { text: item.cedula + '', fontSize: 12 }
+                  }),
+                  value.map(function (item) {
+                    return { text: item.nombres + '', fontSize: 12 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: item.apellidos + '', fontSize: 12 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: item.fechaNacimiento + '', fontSize: 12 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: item.direccion + '', fontSize: 12 }
+                  }),
+                  value.map(function (item) {
+                    return { text: item.email + '', fontSize: 12 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: item.telefono + '', fontSize: 12 }
+
+                  })
+
+
+                  ],
+
+                ]
+              }
+
+            },
+            { text: '    ' },
+            { text: '    ' },
+
+
+            {
+              table: {
+                headerRows: 1,
+                widths: ['100%'],
+                heights: 20,
+                body: [
+                  ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+
+                ]
+              },
+            },
+
+          ],
+
+          pageOrientation: 'landscape',
+        }
+
+
+        this.loaderActualizar = false
+        const pdf = pdfMake.createPdf(pdfDefinition);
+        pdf.open();
+      })
+    })
   }
 
 }

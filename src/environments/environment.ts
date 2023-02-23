@@ -7,6 +7,20 @@ export const environment = {
   production: true
 };
 
+export const cedula = {
+  // data property
+  cedula:'0000000000',
+
+  // accessor property(getter)
+  get getCedula() {
+      return this.cedula;
+  },
+
+  //accessor property(setter)
+  set setcedula(newCedula) {
+      this.cedula = newCedula;
+  }
+}
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.

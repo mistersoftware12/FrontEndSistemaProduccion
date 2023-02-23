@@ -41,6 +41,7 @@ export class IniciosesionComponent implements OnInit,AfterViewInit {
       this._snackBar.open('SESION INICIADA', 'ACEPTAR');
       sessionStorage.clear()
       sessionStorage.setItem('personausuario', JSON.stringify(value));
+      console.info(value);
       this.router.navigate(['/panel/biblioteca/bienvenida']);
       this.iniciobar=false
 

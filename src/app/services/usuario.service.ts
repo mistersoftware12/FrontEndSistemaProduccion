@@ -46,19 +46,6 @@ export class UsuarioService {
   putUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.put(environment.URL_APP + "/persona/updateUsuario", usuario, {headers: this.httpHeaders})
   }
-  /*
-
-   createCliente(cliente: Cliente): Observable<Cliente> {
-    return this.http.post(environment.URL_APP + "/persona/registroCliente", cliente, { headers: this.httpHeaders })
-  }
-
-
-  getClientesAll(): Observable<Cliente[]> {
-    return this.http.get(environment.URL_APP + "/persona/allClientes", {headers: this.httpHeaders}).pipe(map(Response => Response as Cliente[]))
-  }
-
-  putCliente(evento: Cliente): Observable<Cliente> {
-    return this.http.put(environment.URL_APP + "/persona/updateCliente", evento, {headers: this.httpHeaders})
-  }
-*/
+ 
+  
 }

@@ -9,5 +9,7 @@ export class Almacen {
     estado?: any;
     idSucursal?: any;
     idNombre?:any
+    nombreSucursal?:any
+    nombreEstado?:any
 
 }

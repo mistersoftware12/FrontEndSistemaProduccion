@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {PersonaUsuario} from "../../models/personaUsuario";
+import { cedula } from 'src/environments/environment';
 
 @Component({
   selector: 'app-layout',
@@ -39,6 +40,11 @@ export class LayoutComponent implements OnInit {
           this.persona.rol="REPORTES"
         }
         this._snackBar.open('Bienvenido/a '+ this.persona.nombres, 'ACEPTAR');
+
+        cedula.setcedula = this.persona.cedula;
+        
+        console.info(cedula.getCedula)
+        
       }
     }catch (e) {
       this.router.navigate(['auth/iniciosesion']).then(() => {

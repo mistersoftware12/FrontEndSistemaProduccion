@@ -1,29 +1,34 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Cliente } from 'src/app/models/cliente';
-import { ClienteService } from 'src/app/services/cliente.service';
 import { MatTableDataSource } from "@angular/material/table";
-import { MatPaginator } from "@angular/material/paginator";
 import { MatSort } from "@angular/material/sort";
+import { MatPaginator } from "@angular/material/paginator";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
+import pdfMake from "pdfmake/build/pdfmake";
+import pdfFonts from "pdfmake/build/vfs_fonts";
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import * as XLSX from 'xlsx';
-import { Sucursal } from 'src/app/models/sucursal';
-import { EmpresaService } from 'src/app/services/empresa.service';
+import { DatePipe } from "@angular/common";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ClienteService } from 'src/app/services/cliente.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { Cliente } from 'src/app/models/cliente';
+import { EmpresaService } from 'src/app/services/empresa.service';
 import { Usuario } from 'src/app/models/persona';
+import { Sucursal } from 'src/app/models/sucursal';
+import { cedula } from 'src/environments/environment';
 
 
 @Component({
-    selector: 'app-crud-usurio',
-    templateUrl: './crud-usuario.component.html',
-    styleUrls: ['./crud-usuario.component.css'],
-    
- 
-  })
+  selector: 'app-crud-usurio',
+  templateUrl: './crud-usuario.component.html',
+  styleUrls: ['./crud-usuario.component.css'],
 
-  export class CrudUsuariosComponent implements OnInit{
 
-     //Control de pantallas
+})
+
+export class CrudUsuariosComponent implements OnInit {
+
+  //Control de pantallas
   public sectionTablaLista: Boolean = true;
   public sectionCrudDatos: Boolean = false;
 
@@ -57,11 +62,11 @@ import { Usuario } from 'src/app/models/persona';
     clave: new FormControl<String>('', [Validators.required]),
     sucursal: new FormControl<String>('', [Validators.required]),
     idRol: new FormControl<Number>(null, [Validators.required]),
-    
+
   })
 
 
-  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'sucursal','rol', 'telefono', 'nacimiento', 'correo', 'documento'];
+  displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'sucursal', 'rol', 'telefono', 'nacimiento', 'correo', 'documento'];
   dataSource: MatTableDataSource<Cliente>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -132,7 +137,7 @@ import { Usuario } from 'src/app/models/persona';
       fecha: null,
       sucursal: "",
       idRol: null,
-      clave:"",
+      clave: "",
     })
 
   }
@@ -192,11 +197,11 @@ import { Usuario } from 'src/app/models/persona';
     this.UsuarioListaGuardar.clave = Object.values(this.formGrupos.getRawValue())[7];
     this.UsuarioListaGuardar.idSucursal = Object.values(this.formGrupos.getRawValue())[8];
     this.UsuarioListaGuardar.idRol = Object.values(this.formGrupos.getRawValue())[9];
-   
-   this.usuarioService.createUsuario(this.UsuarioListaGuardar).subscribe(value => {
+
+    this.usuarioService.createUsuario(this.UsuarioListaGuardar).subscribe(value => {
       this._snackBar.open('Usuario registrado', 'ACEPTAR');
       this.vaciarFormulario();
-    
+
       this.mostrarLista();
     }, error => {
       this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
@@ -211,7 +216,7 @@ import { Usuario } from 'src/app/models/persona';
 
   editarInformacion(id: any) {
 
-    
+
     this.idPersona = id;
     this.botonParaGuardar = false;
     this.botonParaEditar = true;
@@ -230,7 +235,7 @@ import { Usuario } from 'src/app/models/persona';
           email: this.UsuarioLista[k].email,
           direccion: this.UsuarioLista[k].direccion,
           fecha: this.UsuarioLista[k].fechaNacimiento,
-          sucursal:this.UsuarioLista[k].idSucursal,
+          sucursal: this.UsuarioLista[k].idSucursal,
 
           idRol: this.UsuarioLista[k].idRol,
           clave: "",
@@ -266,18 +271,18 @@ import { Usuario } from 'src/app/models/persona';
     console.log(this.UsuarioListaGuardar);
 
 
-    this.usuarioService.putUsuario( this.UsuarioListaGuardar).subscribe(value => {
+    this.usuarioService.putUsuario(this.UsuarioListaGuardar).subscribe(value => {
       this._snackBar.open('Usuario Actualizado', 'ACEPTAR');
       this.vaciarFormulario();
       this.botonParaGuardar = true;
       this.botonParaEditar = false;
-     
+
       this.mostrarLista();
 
 
     }, error => {
       this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
-     
+
     })
 
 
@@ -296,5 +301,136 @@ import { Usuario } from 'src/app/models/persona';
 
     XLSX.writeFile(book, 'Lista de Usuarios.xlsx');
   }
-    
+
+
+  //Generar PDF
+
+
+  getBase64ImageFromURL(url: any) {
+    return new Promise((resolve, reject) => {
+      var img = new Image();
+      img.setAttribute("crossOrigin", "anonymous");
+
+      img.onload = () => {
+        var canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+
+        var ctx = canvas.getContext("2d");
+        // @ts-ignore
+        ctx.drawImage(img, 0, 0);
+
+        var dataURL = canvas.toDataURL("image/png");
+
+        resolve(dataURL);
+      };
+
+      img.onerror = error => {
+        reject(error);
+      };
+
+      img.src = url;
+    });
   }
+
+
+  generatePDF() {
+    this.loaderActualizar = true
+    var pipe: DatePipe = new DatePipe('es')
+    var dia: String = new Date().toISOString();
+    
+    this.usuarioService.getAllUsuarios().subscribe(value => {
+      
+      this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+        
+        const pdfDefinition: any = {
+
+          footer: function(currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+          header: function(currentPage, pageCount, pageSize) {
+            // you can apply any logic and return any valid pdfmake element
+        
+            /*
+            return [
+              { text: 'simple text', alignment: (currentPage % 2) ? 'left' : 'right' },
+              { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+            ]*/
+          },
+          
+          content: [
+            { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+            {
+              text: '_________________________________________________________________________________________',
+              alignment: 'center'
+            },
+            // @ts-ignore
+            { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+            { text: 'USUARIOS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
+            { text: 'Usuarios registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            { text: '    ' },
+            {
+              table: {
+                headerRows: 1,
+                widths: ['2%', '10%', '17%', '17%', '11%', '10,1%', '27%', '10%'],
+                body: [
+                  ['ID', 'CEDULA', 'NOMBRES', 'APELLIDOS', 'ROL', 'SUCURSAL', 'CORREO', 'TELEFONO'],
+                  [value.map(function (item) {
+                    return item.id + ''
+                  }),
+                  value.map(function (item) {
+                    return item.cedula + ''
+                  }),
+                  value.map(function (item) {
+                    return item.nombres + ''
+                  }),
+                  value.map(function (item) {
+                    return item.apellidos + ''
+                  }),
+                  value.map(function (item) {
+                    return item.nombreRol + ''
+                  }),
+                  value.map(function (item) {
+                    return item.nombreSucursal + ''
+                  }),
+                  value.map(function (item) {
+                    return item.email + ''
+                  }),
+                  value.map(function (item) {
+                    return item.telefono + ''
+                  })
+                  ],
+
+                ]
+              }
+
+            },
+            { text: '    ' },
+            { text: '    ' },
+          
+
+            {
+              table: {
+                headerRows: 1,
+                widths: ['100%'],
+                heights: 20,
+                body: [
+                  ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+
+                ]
+              },
+            },
+            
+          ],
+          
+          pageOrientation: 'landscape',
+        }
+
+
+        this.loaderActualizar = false
+        const pdf = pdfMake.createPdf(pdfDefinition);
+        pdf.open();
+      })
+    })
+  }
+
+
+}
