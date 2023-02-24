@@ -16,6 +16,7 @@ import { CrudTallerComponent } from './empresa/CrudTaller/crud-taller.component'
 import { CrudUsuariosComponent } from './personas/CrudUsuario/crud-usuario.component';
 import { CrudCatalogoComponent } from './catalogo/Crud/crud-catalogo.component';
 import { CrudCategoriaComponent } from './categoria/Crud/crud-categoria.component';
+import { CrudArticuloComponent} from './articulo/Crud/crud-articulo.component';
 registerLocaleData(localeEs, 'es')
 
 
@@ -75,6 +76,11 @@ const routes: Routes = [
     component: CrudCatalogoComponent
   },
 
+  {
+    path: 'administracionArticulo',
+    component: CrudArticuloComponent
+  },
+
 
 ]
 
@@ -94,6 +100,8 @@ const routes: Routes = [
 
     CrudCatalogoComponent,
     CrudCategoriaComponent,
+    CrudArticuloComponent
+
   ],
   imports: [
     CommonModule,

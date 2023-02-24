@@ -39,11 +39,23 @@
   </mat-menu>
 
 
+  <button mat-button [matMenuTriggerFor]="articulo"> <mat-icon>settings</mat-icon>ARTICULO</button>
+
+  <mat-menu #articulo="matMenu">
+    <button mat-menu-item [matMenuTriggerFor]="art">Articulo</button>
+    
+  </mat-menu>
+
+  <mat-menu #art="matMenu">
+    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionArticulo'">Articulos</button>
+  
+  </mat-menu>
+
 
 
 
   <button mat-button (click)="logout()">CERRAR SESION</button>
-<button>{{persona.nombres}} {{persona.apellidos}}</button>
+  <button>{{persona.nombres}} {{persona.apellidos}}</button>
 
 </div>
 
