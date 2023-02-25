@@ -61,7 +61,7 @@ export class CrudCategoriaComponent implements OnInit {
 
   formGrupos = new FormGroup({
     nombres: new FormControl<String>('', [Validators.required]),
-    inicial: new FormControl<String>('', [Validators.required]),
+    inicial: new FormControl<String>('', [Validators.required, Validators.maxLength(4), Validators.minLength(4),Validators.pattern(/^[a-z\s\u00E0-\u00FC\u00f1]*$/i)]),
     estado: new FormControl<String>('', [Validators.required]),
 
 

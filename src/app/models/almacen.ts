@@ -12,4 +12,6 @@ export class Almacen {
     nombreSucursal?:any
     nombreEstado?:any
 
+ 
+
 }

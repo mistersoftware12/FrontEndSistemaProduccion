@@ -35,34 +35,12 @@
                                     <div>
                                         <mat-grid-tile>
                                             <mat-form-field appearance="outline" class="margeninput">
-                                                <mat-label>Código de Barra</mat-label>
-                                                <input matInput formControlName="codigobarra">
-                                            </mat-form-field>
-                                        </mat-grid-tile>
-
-                                    </div>
-
-                                    <div>
-                                        <mat-grid-tile>
-                                            <mat-form-field appearance="outline" class="margeninput">
                                                 <mat-label>Descripción</mat-label>
                                                 <input matInput formControlName="descripcion">
                                             </mat-form-field>
                                         </mat-grid-tile>
 
                                     </div>
-
-
-                                    <div>
-                                        <mat-grid-tile>
-                                            <mat-form-field appearance="outline" class="margeninput">
-                                                <mat-label>Código Compra</mat-label>
-                                                <input matInput formControlName="codigocompra">
-                                            </mat-form-field>
-                                        </mat-grid-tile>
-
-                                    </div>
-
 
                                     <div>
                                         <mat-grid-tile>
@@ -82,6 +60,16 @@
 
                                     <div>
                                         <mat-grid-tile>
+                                            <mat-form-field appearance="outline" class="margeninput">
+                                                <mat-label>Código de Barra</mat-label>
+                                                <input matInput formControlName="codigobarra">
+                                            </mat-form-field>
+                                        </mat-grid-tile>
+
+                                    </div>
+
+                                    <div>
+                                        <mat-grid-tile>
 
                                             <mat-form-field appearance="outline" class="margeninput">
                                                 <mat-label>Seleccione Catálogo</mat-label>
@@ -94,6 +82,23 @@
 
                                         </mat-grid-tile>
                                     </div>
+
+
+                                    <div>
+                                        <mat-grid-tile>
+                                            <mat-form-field appearance="outline" class="margeninput">
+                                                <mat-label>Código Compra</mat-label>
+                                                <input matInput formControlName="codigocompra">
+                                            </mat-form-field>
+                                        </mat-grid-tile>
+
+                                    </div>
+
+
+
+
+
+
 
                                     <div>
                                         <mat-grid-tile>
@@ -132,7 +137,7 @@
                                         <mat-grid-tile>
                                             <mat-form-field appearance="outline" class="margeninput">
                                                 <mat-label>Stock mínimo</mat-label>
-                                                <input matInput formControlName="stockminimo">
+                                                <input matInput type="number" formControlName="stockminimo">
                                             </mat-form-field>
                                         </mat-grid-tile>
 
@@ -202,7 +207,7 @@
                             <mat-grid-tile>
                                 <mat-form-field appearance="outline" class="margeninput">
                                     <mat-label>Alto</mat-label>
-                                    <input matInput formControlName="alto">
+                                    <input matInput type="number" formControlName="alto">
                                 </mat-form-field>
                             </mat-grid-tile>
 
@@ -211,7 +216,7 @@
                             <mat-grid-tile>
                                 <mat-form-field appearance="outline" class="margeninput">
                                     <mat-label>Ancho</mat-label>
-                                    <input matInput formControlName="ancho">
+                                    <input matInput type="number" formControlName="ancho">
                                 </mat-form-field>
                             </mat-grid-tile>
 
@@ -221,7 +226,7 @@
                             <mat-grid-tile>
                                 <mat-form-field appearance="outline" class="margeninput">
                                     <mat-label>Profundidad</mat-label>
-                                    <input matInput formControlName="profundidad">
+                                    <input matInput type="number" formControlName="profundidad">
                                 </mat-form-field>
                             </mat-grid-tile>
 
@@ -231,7 +236,7 @@
                             <mat-grid-tile>
                                 <mat-form-field appearance="outline" class="margeninput">
                                     <mat-label>Peso</mat-label>
-                                    <input matInput formControlName="peso">
+                                    <input matInput type="number" formControlName="peso">
                                 </mat-form-field>
                             </mat-grid-tile>
 
@@ -241,45 +246,65 @@
                     </mat-grid-list>
 
 
-                    <table class="tablastyle">
-                        <thead>
-                            <tr class="tablastyle">
-                                <th class="tablastyle1">PRECIO COSTO</th>
-                                <th class="tablastyle1">IVA</th>
-                                <th class="tablastyle1">PRECIO IVA</th>
-                                <th class="tablastyle1">PRECIO FINAL</th>
-                                <th class="tablastyle1">PRECIO ESTANDAR</th>
-                                <th class="tablastyle1">MARGEN PRODUCCIÓN</th>
-                                <th class="tablastyle1">PRECIO PRODUCCIÓN</th>
-                                <th class="tablastyle1">MARGEN VENTA</th>
-                                <th class="tablastyle1">PRECIO VENTA</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="text-align: center;">
-                                <th class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="preciocosto"></th>
-                                <td class="tablastyle"><input class="inputstyle" type="text" formControlName="iva"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="precioiva"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="preciofinal"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="precioestandar"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="margenproduccion"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="precioproduccion"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="margenventa"></td>
-                                <td class="tablastyle"><input class="inputstyle" type="text"
-                                        formControlName="precioventa"></td>
-                            </tr>
+                    <form [formGroup]="formGrupoPrecio">
 
-                        </tbody>
-                    </table>
+                        <table class="tablastyle">
+                            <thead>
+                                <tr class="tablastyle">
+                                    <th class="tablastyle1">PRECIO COSTO</th>
+                                    <th class="tablastyle1">IVA</th>
+                                    <th class="tablastyle1">PRECIO IVA</th>
+                                    <th class="tablastyle1">PRECIO FINAL</th>
+                                    <th class="tablastyle1">PRECIO ESTANDAR</th>
+                                    <th class="tablastyle1">MARGEN PRODUCCIÓN</th>
+                                    <th class="tablastyle1">PRECIO PRODUCCIÓN</th>
+                                    <th class="tablastyle1">MARGEN VENTA</th>
+                                    <th class="tablastyle1">PRECIO VENTA</th>
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <tr style="text-align: center;">
+                                    <th class="tablastyle"><input class="inputstyle" type="text"
+                                            formControlName="preciocosto" (change)="calcularValorTabla(1)"></th>
+
+                                    <td class="tablastyle"><input class="inputstyle" type="text" formControlName="iva">
+                                    </td>
+
+                                    <td class="tablastyle"><input   readonly="true" matInput 
+                                            formControlName="precioiva" ></td>
+
+                                    <td class="tablastyle"><input  readonly="true" matInput 
+                                            formControlName="preciofinal" ></td>
+
+                                    <td class="tablastyle"><input class="inputstyle" type="text"
+                                            formControlName="precioestandar" (change)="calcularValorTabla(2)"></td>
+
+                                    <td class="tablastyle"><input class="inputstyle" type="text"
+                                            formControlName="margenproduccion" (change)="calcularValorTabla(4)"></td>
+
+                                    <td class="tablastyle"><input class="inputstyle" type="text"
+                                            formControlName="precioproduccion" (change)="calcularValorTabla(3)"></td>
+
+                                    <td class="tablastyle"><input class="inputstyle" type="text"
+                                            formControlName="margenventa" (change)="calcularValorTabla(4)"></td>
+
+                                    <td class="tablastyle"><input class="inputstyle" type="text"
+                                            formControlName="precioventa" (change)="calcularValorTabla(3)"></td>
+
+                                </tr>
+
+                            </tbody>
+
+                        </table>
+                    </form>
+
+
 
                 </mat-card-content>
+
+
+
 
                 <div>
                     <div>
@@ -381,14 +406,14 @@
                     <!-- Name Column -->
                     <ng-container matColumnDef="logo">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE</th>
-                        <td mat-cell *matCellDef="let row"> {{row.nombre}}</td>
+                        <td mat-cell *matCellDef="let row"> <strong>{{row.nombre}}</strong> </td>
                     </ng-container>
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="estado">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> PRECIO VENTA</th>
                         <td mat-cell *matCellDef="let row">
-                            {{row.precioVenta}}
+                            {{row.precioVenta.toFixed(2)}}
                     </ng-container>
 
                     <!-- Name Column -->
@@ -400,8 +425,7 @@
 
                     <ng-container matColumnDef="documento">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCIÓN</th>
-                        <td mat-cell *matCellDef="let row"
-                            (click)="editarInformacion(row.id  )">
+                        <td mat-cell *matCellDef="let row" (click)="editarInformacion(row.id  )">
                             <button mat-flat-button color="primary" style="color: #FFFFFF;">EDITAR</button>
                         </td>
                     </ng-container>

@@ -38,4 +38,8 @@ export class Articulo{
    idCategoria?: any;
    idCatalogo?: any;
 
+   nombreCategoria ?:any
+   nombreCatalogo ?:any
+   nombreEstadoArticulo ?:any
+
 }

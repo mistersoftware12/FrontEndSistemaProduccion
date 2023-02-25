@@ -24,6 +24,9 @@ import { ArticuloService } from 'src/app/services/articulo.service';
 import { Articulo } from 'src/app/models/articulo';
 import { Categoria } from 'src/app/models/categoria';
 
+//import * as JsBarcode from "JsBarcode";
+
+
 @Component({
     selector: 'app-crud-articulo',
     templateUrl: './crud-articulo.component.html',
@@ -33,6 +36,8 @@ import { Categoria } from 'src/app/models/categoria';
 })
 
 export class CrudArticuloComponent implements OnInit {
+
+
 
     //Control de pantallas
     public sectionTablaLista: Boolean = true;
@@ -74,9 +79,9 @@ export class CrudArticuloComponent implements OnInit {
         catalogo: new FormControl<String>('', [Validators.required]),
         estadoarticulo: new FormControl<String>('', [Validators.required]),
         estadoweb: new FormControl<String>('', [Validators.required]),
-        stockminimo: new FormControl<String>('', [Validators.required]),
-        color: new FormControl<String>('', [Validators.required]),
-        marca: new FormControl<String>('', [Validators.required]),
+        stockminimo: new FormControl<String>('', [Validators.required, Validators.pattern("[0-9]+")]),
+        color: new FormControl<String>('', [Validators.required, Validators.pattern(/^[a-z\s\u00E0-\u00FC\u00f1]*$/i)]),
+        marca: new FormControl<String>('', [Validators.required, Validators.pattern(/^[a-z\s\u00E0-\u00FC\u00f1]*$/i)]),
         vidautil: new FormControl<String>('', [Validators.required]),
 
         alto: new FormControl<String>('', [Validators.required]),
@@ -84,6 +89,7 @@ export class CrudArticuloComponent implements OnInit {
         profundidad: new FormControl<String>('', [Validators.required]),
         peso: new FormControl<String>('', [Validators.required]),
 
+        /*
         preciocosto: new FormControl<String>('', [Validators.required]),
         iva: new FormControl<String>('', [Validators.required]),
         precioiva: new FormControl<String>('', [Validators.required]),
@@ -94,7 +100,19 @@ export class CrudArticuloComponent implements OnInit {
         margenventa: new FormControl<String>('', [Validators.required]),
         precioventa: new FormControl<String>('', [Validators.required]),
 
+*/
+    })
 
+    formGrupoPrecio = new FormGroup({
+        preciocosto: new FormControl<String>('', [Validators.required]),
+        iva: new FormControl<String>('', [Validators.required]),
+        precioiva: new FormControl<String>('', [Validators.required]),
+        preciofinal: new FormControl<String>('', [Validators.required]),
+        precioestandar: new FormControl<String>('', [Validators.required]),
+        margenproduccion: new FormControl<String>('', [Validators.required]),
+        precioproduccion: new FormControl<String>('', [Validators.required]),
+        margenventa: new FormControl<String>('', [Validators.required]),
+        precioventa: new FormControl<String>('', [Validators.required]),
     })
 
 
@@ -150,6 +168,7 @@ export class CrudArticuloComponent implements OnInit {
         this.sectionTablaLista = false;
         this.sectionCrudDatos = true;
 
+        this.vaciarFormualarioPrecio();
     }
 
     public mostrarLista() {
@@ -190,6 +209,11 @@ export class CrudArticuloComponent implements OnInit {
             profundidad: "",
             peso: "",
 
+
+
+        })
+
+        this.formGrupoPrecio.setValue({
             preciocosto: "",
             iva: "",
             precioiva: "",
@@ -199,7 +223,6 @@ export class CrudArticuloComponent implements OnInit {
             precioproduccion: "",
             margenventa: "",
             precioventa: "",
-
         })
 
     }
@@ -292,15 +315,15 @@ export class CrudArticuloComponent implements OnInit {
         this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[14];
         this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[15];
 
-        this.articuloListaGuardar.precioCosto = Object.values(this.formGrupos.getRawValue())[16];
-        this.articuloListaGuardar.iva = Object.values(this.formGrupos.getRawValue())[17];
-        this.articuloListaGuardar.precioIva = Object.values(this.formGrupos.getRawValue())[18];
-        this.articuloListaGuardar.precioFinal = Object.values(this.formGrupos.getRawValue())[19];
-        this.articuloListaGuardar.precioStandar = Object.values(this.formGrupos.getRawValue())[20];
-        this.articuloListaGuardar.margenProduccion = Object.values(this.formGrupos.getRawValue())[21];
-        this.articuloListaGuardar.precioProduccion = Object.values(this.formGrupos.getRawValue())[22];
-        this.articuloListaGuardar.margenVenta = Object.values(this.formGrupos.getRawValue())[23];
-        this.articuloListaGuardar.precioVenta = Object.values(this.formGrupos.getRawValue())[24];
+        this.articuloListaGuardar.precioCosto = Object.values(this.formGrupoPrecio.getRawValue())[0];
+        this.articuloListaGuardar.iva = Object.values(this.formGrupoPrecio.getRawValue())[1];
+        this.articuloListaGuardar.precioIva = Object.values(this.formGrupoPrecio.getRawValue())[2];
+        this.articuloListaGuardar.precioFinal = Object.values(this.formGrupoPrecio.getRawValue())[3];
+        this.articuloListaGuardar.precioStandar = Object.values(this.formGrupoPrecio.getRawValue())[4];
+        this.articuloListaGuardar.margenProduccion = Object.values(this.formGrupoPrecio.getRawValue())[5];
+        this.articuloListaGuardar.precioProduccion = Object.values(this.formGrupoPrecio.getRawValue())[6];
+        this.articuloListaGuardar.margenVenta = Object.values(this.formGrupoPrecio.getRawValue())[7];
+        this.articuloListaGuardar.precioVenta = Object.values(this.formGrupoPrecio.getRawValue())[8];
 
 
         console.info(this.articuloListaGuardar);
@@ -310,6 +333,7 @@ export class CrudArticuloComponent implements OnInit {
 
             this.vaciarFormulario();
             this.mostrarLista();
+            this.listarInformacion();
 
         }, error => {
             this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
@@ -333,16 +357,16 @@ export class CrudArticuloComponent implements OnInit {
         this.articuloService.getArticuloId(id).subscribe(value1 => {
             console.info(value1);
 
-           
-            
+
+
 
             if (value1.estadoArticulo == true) {
                 this.articuloListaGuardar.estadoArticulo = 1;
-                
+
 
             } if (value1.estadoArticulo == false) {
                 this.articuloListaGuardar.estadoArticulo = 2;
-              
+
             }
 
             this.base64Output = value1.foto;
@@ -352,14 +376,15 @@ export class CrudArticuloComponent implements OnInit {
             console.info(value1.estadoWeb);
             if (value1.estadoWeb == true) {
                 this.articuloListaGuardar.estadoWeb = 1;
-              
-               
+
+
             } if (value1.estadoWeb == false) {
                 this.articuloListaGuardar.estadoWeb = 2;
-                
+
             }
 
-           
+            this.articuloListaGuardar.foto = value1.foto;
+
 
 
 
@@ -379,69 +404,107 @@ export class CrudArticuloComponent implements OnInit {
                 marca: value1.marca,
                 vidautil: value1.vidaUtil,
 
-                alto: value1.ancho,
+                alto: value1.alto,
                 ancho: value1.ancho,
                 profundidad: value1.profundidad,
                 peso: value1.peso,
 
-                preciocosto: value1.precioCosto,
+
+            })
+
+            this.formGrupoPrecio.setValue({
+                preciocosto: value1.precioCosto.toFixed(2),
                 iva: value1.iva,
-                precioiva: value1.precioIva,
-                preciofinal: value1.precioFinal,
-                precioestandar: value1.precioStandar,
+                precioiva: value1.precioIva.toFixed(2),
+                preciofinal: value1.precioFinal.toFixed(2),
+                precioestandar: value1.precioStandar.toFixed(2),
                 margenproduccion: value1.margenProduccion,
-                precioproduccion: value1.precioProduccion,
+                precioproduccion: value1.precioProduccion.toFixed(2),
                 margenventa: value1.margenVenta,
-                precioventa: value1.precioVenta,
+                precioventa: value1.precioVenta.toFixed(2),
             })
 
 
+            this.numeroControl = 3;
+            this.articuloListaGuardar.id = this.idArticulo;
+
         })
 
-
-       
-
         this.mostrarNuevo();
-        this.numeroControl = 3;
-        this.articuloListaGuardar.id = this.idArticulo;
+
+
+
+
 
 
     }
 
 
     public guardarEditarInformacion() {
-        /*
-    
+
         this.articuloListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
-        this.articuloListaGuardar.inicialCodigo = Object.values(this.formGrupos.getRawValue())[1];
-    
-    
-        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[2]);  // [{"Spalte":3}] as String
-        var d = parseInt(s); // typeof d = number, 
-    
+        this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
+        this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[2];
+        this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[3];
+        this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[4];
+        this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[5];
+
+        console.info(this.articuloListaGuardar.codigoBarra);
+
+        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
+        var d = parseInt(s);
         if (d == 1) {
-          this.articuloListaGuardar.estado = true;
+            this.articuloListaGuardar.estadoArticulo = true;
         } if (d == 2) {
-          this.articuloListaGuardar.estado = false;
+            this.articuloListaGuardar.estadoArticulo = false;
         }
-    
+
+        var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[7]);
+        var da = parseInt(sa);
+        if (da == 1) {
+            this.articuloListaGuardar.estadoWeb = true;
+        } if (da == 2) {
+            this.articuloListaGuardar.estadoWeb = false;
+        }
+
+        this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[8];
+        this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[9];
+        this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[10];
+        this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[11];
+
+        this.articuloListaGuardar.alto = Object.values(this.formGrupos.getRawValue())[12];
+        this.articuloListaGuardar.ancho = Object.values(this.formGrupos.getRawValue())[13];
+        this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[14];
+        this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[15];
+
+        this.articuloListaGuardar.precioCosto = Object.values(this.formGrupoPrecio.getRawValue())[0];
+        this.articuloListaGuardar.iva = Object.values(this.formGrupoPrecio.getRawValue())[1];
+        this.articuloListaGuardar.precioIva = Object.values(this.formGrupoPrecio.getRawValue())[2];
+        this.articuloListaGuardar.precioFinal = Object.values(this.formGrupoPrecio.getRawValue())[3];
+        this.articuloListaGuardar.precioStandar = Object.values(this.formGrupoPrecio.getRawValue())[4];
+        this.articuloListaGuardar.margenProduccion = Object.values(this.formGrupoPrecio.getRawValue())[5];
+        this.articuloListaGuardar.precioProduccion = Object.values(this.formGrupoPrecio.getRawValue())[6];
+        this.articuloListaGuardar.margenVenta = Object.values(this.formGrupoPrecio.getRawValue())[7];
+        this.articuloListaGuardar.precioVenta = Object.values(this.formGrupoPrecio.getRawValue())[8];
+
+
         console.info(this.articuloListaGuardar);
-    
-        this.categoriaService.putCategoria(this.articuloListaGuardar).subscribe(value => {
-          this._snackBar.open('Categoria Actualizado', 'ACEPTAR');
-          this.vaciarFormulario();
-          this.botonParaGuardar = true;
-          this.botonParaEditar = false;
-    
-          this.vaciarFormulario();
-          //this.listarEventoSinParticipantes();
-          this.mostrarLista();
-    
-    
+
+        this.articuloService.putArticulo(this.articuloListaGuardar).subscribe(value => {
+            this._snackBar.open('Artículo Actualizado', 'ACEPTAR');
+            this.vaciarFormulario();
+            this.botonParaGuardar = true;
+            this.botonParaEditar = false;
+
+            this.vaciarFormulario();
+            this.mostrarLista();
+
+
         }, error => {
-          this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
-    
-        })*/
+            this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+
+        })
+
     }
 
     //Convertir a base 64
@@ -520,7 +583,7 @@ export class CrudArticuloComponent implements OnInit {
         var dia: String = new Date().toISOString();
 
 
-        this.categoriaService.getCategoriaAll().subscribe(value => {
+        this.articuloService.getArticuloAll().subscribe(value => {
             console.info(value)
 
             this.usuarioService.getAllUsuarios().subscribe(async valueb => {
@@ -547,27 +610,43 @@ export class CrudArticuloComponent implements OnInit {
                         },
                         // @ts-ignore
                         { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
-                        { text: 'CATEGORIAS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
-                        { text: 'Categorias registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+                        { text: 'ARTÍCULOS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
+                        { text: 'Artículos registrados ', fontSize: 15, margin: [0, 0, 20, 0] },
                         { text: '    ' },
                         {
                             table: {
                                 headerRows: 1,
-                                widths: ['4%', '52%', '27%', '17%'],
+                                widths: ['5%', '20%', '10%', '18%', '15%', '15%', '9%', '8%'],
                                 body: [
-                                    ['ID', 'NOMBRE', 'INICIAL CÓDIGO', 'ESTADO'],
+                                    ['ID', 'NOMBRE', 'CÓD. BARRA', 'CÓD. COMPRA', 'CATÉGORIA', 'CATÁLOGO', 'PRECIO VENTA', 'ESTADO'],
                                     [value.map(function (item) {
-                                        return { text: item.id + '', fontSize: 12 }
+                                        return { text: item.id + '', fontSize: 10 }
                                     }),
                                     value.map(function (item) {
-                                        return { text: item.nombre + '', fontSize: 12 }
+                                        return { text: item.nombre + '', fontSize: 10 }
                                     }),
                                     value.map(function (item) {
-                                        return { text: item.inicialCodigo + '', fontSize: 12 }
+                                        return { text: item.codigoBarra + '', fontSize: 10 }
 
                                     }),
                                     value.map(function (item) {
-                                        return { text: item.nombreEstado + '', fontSize: 12 }
+                                        return { text: item.codigoCompra + '', fontSize: 10 }
+
+                                    }),
+                                    value.map(function (item) {
+                                        return { text: item.nombreCategoria + '', fontSize: 10 }
+
+                                    }),
+                                    value.map(function (item) {
+                                        return { text: item.nombreCatalogo + '', fontSize: 10 }
+
+                                    }),
+                                    value.map(function (item) {
+                                        return { text:'$'+ item.precioVenta.toFixed(2) + '', fontSize: 10 }
+
+                                    }),
+                                    value.map(function (item) {
+                                        return { text: item.nombreEstadoArticulo + '', fontSize: 10 }
 
                                     }),
 
@@ -604,6 +683,145 @@ export class CrudArticuloComponent implements OnInit {
                 pdf.open();
             })
         })
+    }
+
+
+
+    /////CALCULAR
+
+    public apreciocosto: any;
+    public aiva: any;
+    public aprecioiva: any;
+    public apreciofinal: any;
+    public aprecioestandar: any;
+    public amargenproduccion: any;
+    public aprecioproduccion: any;
+    public amargenventa: any;
+    public aprecioventa: any;
+
+    public preiva: any;
+    public prefiniva: any;
+    public preprodu: any;
+    public preventa: any;
+
+    public calcularValorTabla(condicion: any) {
+        this.apreciocosto = Number(Object.values(this.formGrupoPrecio.getRawValue())[0]);
+        this.aiva = Number(Object.values(this.formGrupoPrecio.getRawValue())[1]);
+        this.aprecioiva = Number(Object.values(this.formGrupoPrecio.getRawValue())[2]);
+        this.apreciofinal = Number(Object.values(this.formGrupoPrecio.getRawValue())[3]);
+        this.aprecioestandar = Number(Object.values(this.formGrupoPrecio.getRawValue())[4]);
+        this.amargenproduccion = Number(Object.values(this.formGrupoPrecio.getRawValue())[5]);
+        this.aprecioproduccion = Number(Object.values(this.formGrupoPrecio.getRawValue())[6]);
+        this.amargenventa = Number(Object.values(this.formGrupoPrecio.getRawValue())[7]);
+        this.aprecioventa = Number(Object.values(this.formGrupoPrecio.getRawValue())[8]);
+
+        if (condicion == 1) {
+            this.preiva = (this.apreciocosto * (this.aiva / 100));
+            this.prefiniva = this.preiva + this.apreciocosto;
+            this.preprodu = this.prefiniva / (this.amargenproduccion / 100);
+            this.preventa = this.prefiniva / (this.amargenventa / 100);
+
+            this.formGrupoPrecio.setValue({
+                preciocosto: this.apreciocosto,
+                iva: this.aiva,
+                precioiva: this.preiva.toFixed(2),
+                preciofinal: this.prefiniva.toFixed(2),
+                precioestandar: this.prefiniva.toFixed(2),
+                margenproduccion: this.amargenproduccion,
+                precioproduccion: this.preprodu.toFixed(2),
+                margenventa: this.amargenventa.toFixed(2),
+                precioventa: this.preventa.toFixed(2),
+
+            })
+
+        }
+
+        if (condicion == 2) {
+            this.preprodu = this.aprecioestandar / (this.amargenproduccion / 100);
+            this.preventa = this.aprecioestandar / (this.amargenventa / 100);
+
+            this.formGrupoPrecio.setValue({
+                preciocosto: this.apreciocosto,
+                iva: this.aiva,
+                precioiva: this.aprecioiva.toFixed(2),
+                preciofinal: this.apreciofinal.toFixed(2),
+                precioestandar: this.aprecioestandar.toFixed(2),
+                margenproduccion: this.amargenproduccion.toFixed(2),
+                precioproduccion: this.preprodu.toFixed(2),
+                margenventa: this.amargenventa.toFixed(2),
+                precioventa: this.preventa.toFixed(2),
+
+            })
+        }
+
+        if (condicion == 3) {
+
+            this.amargenproduccion = (this.aprecioestandar / this.aprecioproduccion) * 100;
+            this.amargenventa = (this.aprecioestandar / this.aprecioventa) * 100;
+
+            this.formGrupoPrecio.setValue({
+                preciocosto: this.apreciocosto,
+                iva: this.aiva,
+                precioiva: this.aprecioiva.toFixed(2),
+                preciofinal: this.apreciofinal.toFixed(2),
+                precioestandar: this.aprecioestandar.toFixed(2),
+                margenproduccion: this.amargenproduccion.toFixed(2),
+                precioproduccion: this.aprecioproduccion.toFixed(2),
+                margenventa: this.amargenventa.toFixed(2),
+                precioventa: this.aprecioventa.toFixed(2),
+
+            })
+
+        }
+
+        if(condicion ==4){
+
+
+            this.preprodu = this.aprecioestandar / (this.amargenproduccion / 100);
+            this.preventa = this.aprecioestandar / (this.amargenventa / 100);
+
+            this.formGrupoPrecio.setValue({
+                preciocosto: this.apreciocosto,
+                iva: this.aiva,
+                precioiva: this.aprecioiva.toFixed(2),
+                preciofinal: this.apreciofinal.toFixed(2),
+                precioestandar: this.aprecioestandar.toFixed(2),
+                margenproduccion: this.amargenproduccion.toFixed(2),
+                precioproduccion: this.preprodu.toFixed(2),
+                margenventa: this.amargenventa.toFixed(2),
+                precioventa: this.preventa.toFixed(2),
+
+            })
+
+        }
+
+
+
+
+    }
+
+
+
+
+    vaciarFormualarioPrecio() {
+
+        this.formGrupoPrecio.setValue({
+            preciocosto: "0",
+            iva: "12",
+            precioiva: "0",
+            preciofinal: "0",
+            precioestandar: "0",
+            margenproduccion: "100",
+            precioproduccion: "0",
+            margenventa: "100",
+            precioventa: "0",
+        })
+
+    }
+
+
+    codigodeBarra(){
+       // JsBarcode(".codigo").init();
     }
 
 }
