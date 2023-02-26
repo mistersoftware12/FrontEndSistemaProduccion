@@ -24,6 +24,7 @@
     "angular-cli-ghpages": "^1.0.3",
     "docxtemplater": "^3.31.2",
     "file-saver": "^2.0.5",
+    "jsbarcode": "^3.11.5",
     "pdfmake": "^0.2.5",
     "pizzip": "^3.1.1",
     "primeng": "^14.0.1",

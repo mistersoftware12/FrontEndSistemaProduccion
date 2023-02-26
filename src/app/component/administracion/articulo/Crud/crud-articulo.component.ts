@@ -23,8 +23,8 @@ import { cedula } from 'src/environments/environment';
 import { ArticuloService } from 'src/app/services/articulo.service';
 import { Articulo } from 'src/app/models/articulo';
 import { Categoria } from 'src/app/models/categoria';
+import * as JsBarcode from 'jsbarcode';
 
-//import * as JsBarcode from "JsBarcode";
 
 
 @Component({
@@ -138,6 +138,7 @@ export class CrudArticuloComponent implements OnInit {
         this.listarInformacion();
         this.listarCategorias();
         this.listarCatalogos();
+        //this.codigodeBarra();
 
     }
 
@@ -550,6 +551,7 @@ export class CrudArticuloComponent implements OnInit {
 
 
     getBase64ImageFromURL(url: any) {
+
         return new Promise((resolve, reject) => {
             var img = new Image();
             img.setAttribute("crossOrigin", "anonymous");
@@ -573,6 +575,7 @@ export class CrudArticuloComponent implements OnInit {
             };
 
             img.src = url;
+
         });
     }
 
@@ -642,7 +645,7 @@ export class CrudArticuloComponent implements OnInit {
 
                                     }),
                                     value.map(function (item) {
-                                        return { text:'$'+ item.precioVenta.toFixed(2) + '', fontSize: 10 }
+                                        return { text: '$' + item.precioVenta.toFixed(2) + '', fontSize: 10 }
 
                                     }),
                                     value.map(function (item) {
@@ -685,6 +688,328 @@ export class CrudArticuloComponent implements OnInit {
         })
     }
 
+    generatePDFCodigoBarra(id: any) {
+        this.loaderActualizar = true
+        var pipe: DatePipe = new DatePipe('es')
+        var dia: String = new Date().toISOString();
+
+
+
+
+
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+        this.articuloService.getArticuloId(id).subscribe(value => {
+
+            console.info(value)
+
+            var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
+
+            JsBarcode(canvas, value.codigoBarra);
+
+            var img = canvas.toDataURL();
+
+            this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+                //console.info(valueb)
+
+                const pdfDefinition: any = {
+
+                    footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+                    header: function (currentPage, pageCount, pageSize) {
+
+                    },
+
+                    content: [
+                        { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+                        {
+                            text: '_______________________________________________________________________________________________',
+                            alignment: 'center'
+                        },
+                        // @ts-ignore
+                        { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+                        { text: '', fontSize: 15, bold: true, alignment: 'center' },
+                        { text: '    ' },
+                        { text: '    ' },
+                        { text: value.nombre + ' $' + value.precioVenta.toFixed(2), alignment: 'center' },
+                        { image: img, fontSize: 15, bold: true, alignment: 'center', width: 200 }
+
+
+
+                    ],
+
+                    pageOrientation: 'portrait',
+                }
+
+
+                this.loaderActualizar = false
+                const pdf = pdfMake.createPdf(pdfDefinition);
+                pdf.open();
+            })
+        })
+    }
+
+
+
+    generatePDFReporteArticulo(id: any) {
+        this.loaderActualizar = true
+        var pipe: DatePipe = new DatePipe('es')
+        var dia: String = new Date().toISOString();
+
+
+
+        this.articuloService.getArticuloId(id).subscribe(value => {
+            console.info(value)
+
+            this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+                console.info(valueb)
+
+                var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
+
+                JsBarcode(canvas, value.codigoBarra);
+
+                var img = canvas.toDataURL()
+
+                console.info(img);
+
+
+
+                //aqui la progra
+
+              
+
+
+
+                //console.info(image);
+
+                const pdfDefinition: any = {
+
+                    footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+                    header: function (currentPage, pageCount, pageSize) {
+
+                    },
+
+                    content: [
+                        { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+                        {
+                            text: '_______________________________________________________________________________________________',
+                            alignment: 'center'
+                        },
+                        // @ts-ignore
+                        // { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+                        { text: '    ' },
+                        { text: '' },
+
+
+                        {
+                            table: {
+                                widths: ['40%', '60%'],
+                                body: [
+                                    [
+
+                                        {
+                                            //image: img, fontSize: 15, bold: true, alignment: 'center', width: 185,
+                                            image: await this.getBase64ImageFromURL('assets/images/elvalle.jpg'), width: 100,
+
+                                        },
+
+                                        {
+
+
+                                            columns: [
+
+                                                { width: '*', text: '' },
+                                                {
+                                                    width: '85%',
+                                                    layout: 'noBorders',
+                                                    table: {
+                                                        body: [
+                                                            [{
+                                                                columns: [
+                                                                    { text: value.nombre, alignment: 'center', bold: 'true' },
+                                                                ]
+                                                            }],
+
+
+
+                                                            [{
+                                                                columns: [
+                                                                    {
+                                                                        table: {
+
+                                                                            body: [
+                                                                                [
+                                                                                    {
+                                                                                        columns: [
+                                                                                            [
+                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                { image: img, fontSize: 15, bold: true, alignment: 'center', width: 185 },
+                                                                                            ],
+
+                                                                                        ]
+                                                                                    },
+
+                                                                                ]
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ]
+                                                            }],
+
+                                                            [''],
+                                                            [{
+                                                                columns: [
+                                                                    {
+                                                                        table: {
+
+                                                                            body: [
+                                                                                [
+                                                                                    {
+                                                                                        columns: [
+                                                                                            [
+                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                {
+                                                                                                    layout: 'noBorders',
+                                                                                                    table: {
+
+                                                                                                        body: [
+                                                                                                            [
+                                                                                                                { text: 'Categoría: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.nombreCategoria, alignment: 'left' },
+                                                                                                            ],
+                                                                                                            [
+                                                                                                                { text: 'Catálogo: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.nombreCatalogo, alignment: 'left' },
+                                                                                                            ],
+                                                                                                            [
+                                                                                                                { text: 'Descripción: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.descripcion, alignment: 'left' },
+
+                                                                                                            ],
+
+                                                                                                            [
+                                                                                                                { text: 'Cod. Compra: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.codigoCompra, alignment: 'left' },
+
+                                                                                                            ],
+
+                                                                                                        ]
+                                                                                                    }
+                                                                                                }
+
+                                                                                            ],
+
+                                                                                        ]
+                                                                                    },
+
+                                                                                ]
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ]
+                                                            }],
+
+                                                            [{
+                                                                columns: [
+                                                                    {
+                                                                        table: {
+
+                                                                            body: [
+                                                                                [
+                                                                                    {
+                                                                                        columns: [
+                                                                                            [
+                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                {
+                                                                                                    layout: 'noBorders',
+                                                                                                    table: {
+
+                                                                                                        body: [
+                                                                                                            [
+                                                                                                                { text: 'Pre. Costo: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: '$' + value.precioCosto.toFixed(2), alignment: 'left' },
+                                                                                                            ],
+                                                                                                            [
+                                                                                                                { text: 'Pre. Venta: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: '$' + value.precioVenta.toFixed(2), alignment: 'left' },
+
+                                                                                                            ],
+
+                                                                                                        ]
+                                                                                                    }
+                                                                                                }
+
+                                                                                            ],
+
+                                                                                        ]
+                                                                                    },
+
+                                                                                ]
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ]
+                                                            }],
+
+                                                            [' '],
+                                                            // ['Column 1'],
+
+                                                        ]
+                                                    },
+                                                },
+
+                                                { width: '*', text: '' },
+
+
+
+
+                                            ]
+
+
+
+
+                                        }
+
+
+
+                                    ]
+                                ]
+                            }
+                        },
+
+
+                        { text: '    ' },
+                        { text: '    ' },
+
+
+                        {
+                            table: {
+                                headerRows: 1,
+                                widths: ['100%'],
+                                heights: 20,
+                                body: [
+                                    ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+
+                                ]
+                            },
+                        },
+
+
+
+                    ],
+
+                    pageOrientation: 'portrait',
+                }
+
+
+                this.loaderActualizar = false
+                const pdf = pdfMake.createPdf(pdfDefinition);
+                pdf.open();
+            })
+        })
+    }
 
 
     /////CALCULAR
@@ -774,7 +1099,7 @@ export class CrudArticuloComponent implements OnInit {
 
         }
 
-        if(condicion ==4){
+        if (condicion == 4) {
 
 
             this.preprodu = this.aprecioestandar / (this.amargenproduccion / 100);
@@ -820,8 +1145,25 @@ export class CrudArticuloComponent implements OnInit {
     }
 
 
-    codigodeBarra(){
-       // JsBarcode(".codigo").init();
+    codigodeBarra() {
+        JsBarcode("#barcode", "ASDF00001");
+
+        var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
+        JsBarcode(canvas, 'ASDF00001');
+        var img = canvas.toDataURL();
+
+        pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+        var dd = {
+            content: [
+                { image: img }
+            ]
+        };
+
+        pdfMake.createPdf(dd).download();
     }
+
+
+
 
 }

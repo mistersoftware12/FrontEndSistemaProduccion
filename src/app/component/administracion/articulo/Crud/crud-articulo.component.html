@@ -425,8 +425,11 @@
 
                     <ng-container matColumnDef="documento">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCIÓN</th>
-                        <td mat-cell *matCellDef="let row" (click)="editarInformacion(row.id  )">
-                            <button mat-flat-button color="primary" style="color: #FFFFFF;">EDITAR</button>
+                        <td mat-cell *matCellDef="let row" >
+                            <button mat-flat-button color="primary" style="color: #FFFFFF;" (click)="editarInformacion(row.id  )">EDITAR</button>
+                            <button mat-flat-button color="warn" style="color: #FFFFFF;" (click)="generatePDFCodigoBarra(row.id)">CÓDIGO</button>
+                            <button mat-flat-button color="warn" style="color: #FFFFFF;" (click)="generatePDFReporteArticulo(row.id)">RÉPORTE</button>
+                           
                         </td>
                     </ng-container>
 
@@ -448,3 +451,6 @@
         </mat-card-content>
     </mat-card>
 </section>
+
+
+<svg id="barcode"></svg>
