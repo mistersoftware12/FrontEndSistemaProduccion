@@ -383,7 +383,7 @@ export class CrudAlmacenComponent implements OnInit {
             // @ts-ignore
             { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
             { text: 'ALMACENES REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
-            { text: 'Almacenes registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            //{ text: 'Almacenes registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
             { text: '    ' },
             {
               table: {

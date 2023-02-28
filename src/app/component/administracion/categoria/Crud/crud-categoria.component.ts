@@ -175,7 +175,7 @@ export class CrudCategoriaComponent implements OnInit {
     this.catalogoListaGuardar.inicialCodigo = Object.values(this.formGrupos.getRawValue())[1];
     this.catalogoListaGuardar.estado = Object.values(this.formGrupos.getRawValue())[2];
 
-
+   
 
     this.categoriaService.createCategoria(this.catalogoListaGuardar).subscribe(value => {
       this._snackBar.open('Categoria Creado', 'ACEPTAR');
@@ -344,7 +344,7 @@ export class CrudCategoriaComponent implements OnInit {
             // @ts-ignore
             { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
             { text: 'CATEGORIAS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
-            { text: 'Categorias registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            //{ text: 'Categorias registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
             { text: '    ' },
             {
               table: {
@@ -353,17 +353,17 @@ export class CrudCategoriaComponent implements OnInit {
                 body: [
                   ['ID', 'NOMBRE', 'INICIAL CÓDIGO', 'ESTADO'],
                   [value.map(function (item) {
-                    return { text: item.id + '', fontSize: 12 }
+                    return { text: item.id + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return { text: item.nombre + '', fontSize: 12 }
+                    return { text: item.nombre + '', fontSize: 11 }
                   }),
                   value.map(function (item) {
-                    return { text: item.inicialCodigo + '', fontSize: 12 }
+                    return { text: item.inicialCodigo + '', fontSize: 11 }
 
                   }),
                   value.map(function (item) {
-                    return { text: item.nombreEstado + '', fontSize: 12 }
+                    return { text: item.nombreEstado + '', fontSize: 11 }
 
                   }),
 

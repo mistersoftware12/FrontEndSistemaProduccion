@@ -13,6 +13,9 @@ import { ClienteService } from 'src/app/services/cliente.service';
 import { UsuarioService } from 'src/app/services/usuario.service';
 import { Cliente } from 'src/app/models/cliente';
 import { cedula } from 'src/environments/environment';
+import { CuidadService } from 'src/app/services/cuidad.service';
+import { Cuidad } from 'src/app/models/cuidad';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -44,6 +47,7 @@ export class CrudClientesComponent implements OnInit {
 
   public clienteListaGuardar: Cliente = new Cliente();
   public clienteLista: Cliente[] = [];
+  public cuidadLista: Cuidad[] = [];
 
 
   formGrupos = new FormGroup({
@@ -54,6 +58,7 @@ export class CrudClientesComponent implements OnInit {
     email: new FormControl<String>('', [Validators.required, Validators.email]),
     direccion: new FormControl<String>(null, [Validators.required]),
     fecha: new FormControl<String>('', [Validators.required]),
+    cuidad: new FormControl<String>('', [Validators.required]),
   })
 
 
@@ -70,12 +75,14 @@ export class CrudClientesComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private clienteService: ClienteService,
     private usuarioService: UsuarioService,
+    private cuidadService: CuidadService,
   ) {
 
   }
 
   ngOnInit(): void {
     this.listarInformacion();
+    this.listarCuidad();
 
   }
 
@@ -124,6 +131,7 @@ export class CrudClientesComponent implements OnInit {
       email: "",
       direccion: "",
       fecha: null,
+      cuidad: "",
 
     })
 
@@ -144,6 +152,20 @@ export class CrudClientesComponent implements OnInit {
       this.dataSource.sort = this.sort;
 
     })
+
+
+  }
+
+
+  public listarCuidad() {
+
+
+    this.cuidadService.getCuidadall().subscribe(value => {
+
+      this.cuidadLista = value;
+    })
+
+
 
 
   }
@@ -169,6 +191,8 @@ export class CrudClientesComponent implements OnInit {
     this.clienteListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
     this.clienteListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
     this.clienteListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
+    this.clienteListaGuardar.idCuidad = Object.values(this.formGrupos.getRawValue())[7];
+
 
     this.clienteService.createCliente(this.clienteListaGuardar).subscribe(value => {
       this._snackBar.open('Cliente registrado', 'ACEPTAR');
@@ -181,6 +205,33 @@ export class CrudClientesComponent implements OnInit {
     })
 
 
+  }
+
+
+  public agregarCuidad() {
+    Swal.fire({
+      title: "Ingrese el nombre de la Cuidad",
+      input: "text",
+      showCancelButton: true,
+      confirmButtonText: "Guardar",
+      cancelButtonText: "Cancelar",
+      background: '#f7f2dc',
+      confirmButtonColor:'#a01b20',
+      backdrop: false
+    })
+      .then(resultado => {
+        if (resultado.value) {
+          let cuidad:Cuidad = new Cuidad()
+          cuidad.nombre = resultado.value
+
+          this.cuidadService.createCuidad(cuidad).subscribe(value => {
+            this.listarCuidad();
+            this._snackBar.open('Cuidad registrado', 'ACEPTAR');
+          },error => {
+            this._snackBar.open(error.error.message, 'ACEPTAR');
+          })
+        }
+      });
   }
 
 
@@ -205,6 +256,7 @@ export class CrudClientesComponent implements OnInit {
           email: this.clienteLista[k].email,
           direccion: this.clienteLista[k].direccion,
           fecha: this.clienteLista[k].fechaNacimiento,
+          cuidad: this.clienteLista[k].idCuidad,
 
         })
         this.mostrarNuevo();
@@ -227,8 +279,10 @@ export class CrudClientesComponent implements OnInit {
     this.clienteListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
     this.clienteListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
     this.clienteListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
+    this.clienteListaGuardar.idCuidad = Object.values(this.formGrupos.getRawValue())[7];
     this.clienteListaGuardar.id = this.idPersona;
 
+    console.info(this.clienteListaGuardar);
 
     console.log("Datos Actualizar");
     console.log(this.clienteListaGuardar);
@@ -330,41 +384,41 @@ export class CrudClientesComponent implements OnInit {
             // @ts-ignore
             { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
             { text: 'CLIENTES REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
-            { text: 'Clientes registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            //{ text: 'Clientes registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
             { text: '    ' },
             {
               table: {
                 headerRows: 1,
                 widths: ['2%', '10%', '17%', '17%', '10,1%', '10,1%', '27%', '10%'],
                 body: [
-                  ['ID', 'CEDULA', 'NOMBRES', 'APELLIDOS', 'F.NACIMIENTO', 'DIRECCIÓN', 'CORREO', 'TELEFONO'],
+                  ['ID', 'CEDULA', 'NOMBRES', 'APELLIDOS', 'F.NACI.', 'CUIDAD', 'CORREO', 'TELEFONO'],
                   [value.map(function (item) {
-                    return { text: item.id + '', fontSize: 12 }
+                    return { text: item.id + '', fontSize: 11 }
                   }),
                   value.map(function (item) {
-                    return { text: item.cedula + '', fontSize: 12 }
+                    return { text: item.cedula + '', fontSize: 11 }
                   }),
                   value.map(function (item) {
-                    return { text: item.nombres + '', fontSize: 12 }
+                    return { text: item.nombres + '', fontSize: 11 }
 
                   }),
                   value.map(function (item) {
-                    return { text: item.apellidos + '', fontSize: 12 }
+                    return { text: item.apellidos + '', fontSize: 11 }
 
                   }),
                   value.map(function (item) {
-                    return { text: item.fechaNacimiento + '', fontSize: 12 }
+                    return { text: item.fechaNacimiento + '', fontSize: 11 }
 
                   }),
                   value.map(function (item) {
-                    return { text: item.direccion + '', fontSize: 12 }
+                    return { text: item.nombreCuidad + '', fontSize: 11 }
                   }),
                   value.map(function (item) {
-                    return { text: item.email + '', fontSize: 12 }
+                    return { text: item.email + '', fontSize: 11 }
 
                   }),
                   value.map(function (item) {
-                    return { text: item.telefono + '', fontSize: 12 }
+                    return { text: item.telefono + '', fontSize: 11 }
 
                   })
 

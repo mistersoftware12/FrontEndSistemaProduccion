@@ -357,7 +357,7 @@ export class CrudCatalogoComponent implements OnInit {
             // @ts-ignore
             { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
             { text: 'CATÁLOGOS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
-            { text: 'Catálogos registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            //{ text: 'Catálogos registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
             { text: '    ' },
             {
               table: {
@@ -366,14 +366,14 @@ export class CrudCatalogoComponent implements OnInit {
                 body: [
                   ['ID', 'NOMBRE', 'ESTADO'],
                   [this.catalogolLista.map(function (item) {
-                    return { text: item.id + '', fontSize: 12 }
+                    return { text: item.id + '', fontSize: 11 }
                   }),
                   this.catalogolLista.map(function (item) {
-                    return { text: item.nombre + '', fontSize: 12 }
+                    return { text: item.nombre + '', fontSize: 11 }
                   }),
                   this.catalogolLista.map(function (item) {
 
-                    return { text: item.inicialCodigo + '', fontSize: 12 }
+                    return { text: item.inicialCodigo + '', fontSize: 11 }
 
 
                   }),

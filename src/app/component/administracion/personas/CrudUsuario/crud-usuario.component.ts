@@ -365,37 +365,37 @@ export class CrudUsuariosComponent implements OnInit {
             // @ts-ignore
             { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
             { text: 'USUARIOS REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
-            { text: 'Usuarios registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            //{ text: 'Usuarios registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
             { text: '    ' },
             {
               table: {
                 headerRows: 1,
-                widths: ['2%', '10%', '17%', '17%', '11%', '10,1%', '27%', '10%'],
+                widths: ['2%', '10%', '17%', '17%', '11%', '10,1%', '23%', '10%'],
                 body: [
                   ['ID', 'CEDULA', 'NOMBRES', 'APELLIDOS', 'ROL', 'SUCURSAL', 'CORREO', 'TELEFONO'],
                   [value.map(function (item) {
-                    return item.id + ''
+                    return { text: item.id + '', fontSize: 11 } 
                   }),
                   value.map(function (item) {
-                    return item.cedula + ''
+                    return { text: item.cedula + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return item.nombres + ''
+                    return { text: item.nombres + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return item.apellidos + ''
+                    return { text: item.apellidos + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return item.nombreRol + ''
+                    return { text: item.nombreRol + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return item.nombreSucursal + ''
+                    return { text: item.nombreSucursal + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return item.email + ''
+                    return { text: item.email + '', fontSize: 11}
                   }),
                   value.map(function (item) {
-                    return item.telefono + ''
+                    return { text: item.telefono + '', fontSize: 11}
                   })
                   ],
 

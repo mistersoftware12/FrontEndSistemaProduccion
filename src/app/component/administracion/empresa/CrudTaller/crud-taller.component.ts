@@ -382,8 +382,8 @@ export class CrudTallerComponent implements OnInit {
               },
               // @ts-ignore
               { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
-              { text: 'BODEGAS REGISTRADAS', fontSize: 15, bold: true, alignment: 'center' },
-              { text: 'Bodegas registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+              { text: 'TALLERES REGISTRADOS', fontSize: 15, bold: true, alignment: 'center' },
+             // { text: 'Bodegas registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
               { text: '    ' },
               {
                 table: {

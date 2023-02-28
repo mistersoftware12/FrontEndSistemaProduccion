@@ -45,6 +45,7 @@ export class CrudArticuloComponent implements OnInit {
 
 
     public idArticulo: any;
+    public idCategoria: any;
     public botonParaGuardar: Boolean = true;
     public botonParaEditar: Boolean = false;
 
@@ -57,6 +58,7 @@ export class CrudArticuloComponent implements OnInit {
 
 
     base64Output: string;
+    public codigoBarra: string = "sasa";
 
 
     public articuloListaGuardar: Articulo = new Articulo();
@@ -72,7 +74,7 @@ export class CrudArticuloComponent implements OnInit {
 
     formGrupos = new FormGroup({
         nombres: new FormControl<String>('', [Validators.required]),
-        codigobarra: new FormControl<String>('', [Validators.required]),
+
         descripcion: new FormControl<String>('', [Validators.required]),
         codigocompra: new FormControl<String>('', [Validators.required]),
         categoria: new FormControl<String>('', [Validators.required]),
@@ -89,18 +91,6 @@ export class CrudArticuloComponent implements OnInit {
         profundidad: new FormControl<String>('', [Validators.required]),
         peso: new FormControl<String>('', [Validators.required]),
 
-        /*
-        preciocosto: new FormControl<String>('', [Validators.required]),
-        iva: new FormControl<String>('', [Validators.required]),
-        precioiva: new FormControl<String>('', [Validators.required]),
-        preciofinal: new FormControl<String>('', [Validators.required]),
-        precioestandar: new FormControl<String>('', [Validators.required]),
-        margenproduccion: new FormControl<String>('', [Validators.required]),
-        precioproduccion: new FormControl<String>('', [Validators.required]),
-        margenventa: new FormControl<String>('', [Validators.required]),
-        precioventa: new FormControl<String>('', [Validators.required]),
-
-*/
     })
 
     formGrupoPrecio = new FormGroup({
@@ -115,9 +105,13 @@ export class CrudArticuloComponent implements OnInit {
         precioventa: new FormControl<String>('', [Validators.required]),
     })
 
+    forGrupoCodigoBarra = new FormGroup({
+        codigobarra: new FormControl<String>('', [Validators.required]),
+    })
 
 
-    displayedColumns: string[] = ['id', 'nombre', 'logo', 'estado', 'stockminimo', 'documento'];
+
+    displayedColumns: string[] = ['id', 'nombre', 'logo', 'precioproduccion', 'precioventa', 'stockminimo', 'documento'];
     dataSource: MatTableDataSource<Sucursal>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -138,7 +132,7 @@ export class CrudArticuloComponent implements OnInit {
         this.listarInformacion();
         this.listarCategorias();
         this.listarCatalogos();
-        //this.codigodeBarra();
+        // this.codigodeBarra();
 
     }
 
@@ -193,7 +187,6 @@ export class CrudArticuloComponent implements OnInit {
         this.formGrupos.setValue({
 
             nombres: "",
-            codigobarra: "",
             descripcion: "",
             codigocompra: "",
             categoria: "",
@@ -225,6 +218,12 @@ export class CrudArticuloComponent implements OnInit {
             margenventa: "",
             precioventa: "",
         })
+
+        this.forGrupoCodigoBarra.setValue({
+            codigobarra: "",
+
+        })
+
 
     }
 
@@ -284,13 +283,13 @@ export class CrudArticuloComponent implements OnInit {
     public guardarInformacion() {
 
         this.articuloListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
-        this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
-        this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[2];
-        this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[3];
-        this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[4];
-        this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[5];
+        //this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
+        this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[1];
+        this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[2];
+        this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[3];
+        this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[4];
 
-        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
+        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[5]);
         var d = parseInt(s);
         if (d == 1) {
             this.articuloListaGuardar.estadoArticulo = true;
@@ -298,7 +297,7 @@ export class CrudArticuloComponent implements OnInit {
             this.articuloListaGuardar.estadoArticulo = false;
         }
 
-        var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[7]);
+        var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
         var da = parseInt(sa);
         if (da == 1) {
             this.articuloListaGuardar.estadoWeb = true;
@@ -306,15 +305,15 @@ export class CrudArticuloComponent implements OnInit {
             this.articuloListaGuardar.estadoWeb = false;
         }
 
-        this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[8];
-        this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[9];
-        this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[10];
-        this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[11];
+        this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[7];
+        this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[8];
+        this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[9];
+        this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[10];
 
         this.articuloListaGuardar.alto = Object.values(this.formGrupos.getRawValue())[12];
         this.articuloListaGuardar.ancho = Object.values(this.formGrupos.getRawValue())[13];
-        this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[14];
-        this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[15];
+        this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[13];
+        this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[14];
 
         this.articuloListaGuardar.precioCosto = Object.values(this.formGrupoPrecio.getRawValue())[0];
         this.articuloListaGuardar.iva = Object.values(this.formGrupoPrecio.getRawValue())[1];
@@ -326,6 +325,9 @@ export class CrudArticuloComponent implements OnInit {
         this.articuloListaGuardar.margenVenta = Object.values(this.formGrupoPrecio.getRawValue())[7];
         this.articuloListaGuardar.precioVenta = Object.values(this.formGrupoPrecio.getRawValue())[8];
 
+
+
+        this.articuloListaGuardar.codigoBarra = Object.values(this.forGrupoCodigoBarra.getRawValue())[0];
 
         console.info(this.articuloListaGuardar);
 
@@ -343,6 +345,29 @@ export class CrudArticuloComponent implements OnInit {
 
 
 
+
+    }
+
+    //Generar Código
+
+    generaCodigo() {
+
+        this.idCategoria
+
+        this.articuloService.getMaximoRegistroCodigo(this.idCategoria).subscribe(value => {
+
+
+            console.info(value.maximoDato);
+
+
+            this.forGrupoCodigoBarra.setValue({
+                codigobarra: value.maximoDato,
+
+            })
+
+
+
+        })
 
     }
 
@@ -392,7 +417,7 @@ export class CrudArticuloComponent implements OnInit {
 
             this.formGrupos.setValue({
                 nombres: value1.nombre,
-                codigobarra: value1.codigoBarra,
+                //codigobarra: value1.codigoBarra,
                 descripcion: value1.descripcion,
                 codigocompra: value1.codigoCompra,
                 categoria: value1.idCategoria,
@@ -425,6 +450,11 @@ export class CrudArticuloComponent implements OnInit {
                 precioventa: value1.precioVenta.toFixed(2),
             })
 
+            this.forGrupoCodigoBarra.setValue({
+                codigobarra: value1.codigoBarra,
+
+            })
+
 
             this.numeroControl = 3;
             this.articuloListaGuardar.id = this.idArticulo;
@@ -444,15 +474,15 @@ export class CrudArticuloComponent implements OnInit {
     public guardarEditarInformacion() {
 
         this.articuloListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
-        this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
-        this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[2];
-        this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[3];
-        this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[4];
-        this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[5];
+        //this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
+        this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[1];
+        this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[2];
+        this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[3];
+        this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[4];
 
         console.info(this.articuloListaGuardar.codigoBarra);
 
-        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
+        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[5]);
         var d = parseInt(s);
         if (d == 1) {
             this.articuloListaGuardar.estadoArticulo = true;
@@ -460,7 +490,7 @@ export class CrudArticuloComponent implements OnInit {
             this.articuloListaGuardar.estadoArticulo = false;
         }
 
-        var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[7]);
+        var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
         var da = parseInt(sa);
         if (da == 1) {
             this.articuloListaGuardar.estadoWeb = true;
@@ -468,15 +498,15 @@ export class CrudArticuloComponent implements OnInit {
             this.articuloListaGuardar.estadoWeb = false;
         }
 
-        this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[8];
-        this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[9];
-        this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[10];
-        this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[11];
+        this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[7];
+        this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[8];
+        this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[9];
+        this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[10];
 
-        this.articuloListaGuardar.alto = Object.values(this.formGrupos.getRawValue())[12];
-        this.articuloListaGuardar.ancho = Object.values(this.formGrupos.getRawValue())[13];
-        this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[14];
-        this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[15];
+        this.articuloListaGuardar.alto = Object.values(this.formGrupos.getRawValue())[11];
+        this.articuloListaGuardar.ancho = Object.values(this.formGrupos.getRawValue())[12];
+        this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[13];
+        this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[14];
 
         this.articuloListaGuardar.precioCosto = Object.values(this.formGrupoPrecio.getRawValue())[0];
         this.articuloListaGuardar.iva = Object.values(this.formGrupoPrecio.getRawValue())[1];
@@ -488,6 +518,7 @@ export class CrudArticuloComponent implements OnInit {
         this.articuloListaGuardar.margenVenta = Object.values(this.formGrupoPrecio.getRawValue())[7];
         this.articuloListaGuardar.precioVenta = Object.values(this.formGrupoPrecio.getRawValue())[8];
 
+        this.articuloListaGuardar.codigoBarra = Object.values(this.forGrupoCodigoBarra.getRawValue())[0];
 
         console.info(this.articuloListaGuardar);
 
@@ -517,6 +548,7 @@ export class CrudArticuloComponent implements OnInit {
             this.base64Output = base64;
             this.articuloListaGuardar.foto = base64;
             console.info("Convertido a base 64");
+            console.info(base64);
             this.mostrarImagenBase();
         });
 
@@ -530,6 +562,8 @@ export class CrudArticuloComponent implements OnInit {
         reader.onload = (event) => result.next(btoa(event.target.result.toString()));
         return result;
     }
+
+
 
 
 
@@ -720,13 +754,8 @@ export class CrudArticuloComponent implements OnInit {
                     },
 
                     content: [
-                        { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
-                        {
-                            text: '_______________________________________________________________________________________________',
-                            alignment: 'center'
-                        },
-                        // @ts-ignore
-                        { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+
+
                         { text: '', fontSize: 15, bold: true, alignment: 'center' },
                         { text: '    ' },
                         { text: '    ' },
@@ -758,44 +787,34 @@ export class CrudArticuloComponent implements OnInit {
 
 
         this.articuloService.getArticuloId(id).subscribe(value => {
-            console.info(value)
+
+
+
 
             this.usuarioService.getAllUsuarios().subscribe(async valueb => {
                 console.info(valueb)
 
                 var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
-
                 JsBarcode(canvas, value.codigoBarra);
-
                 var img = canvas.toDataURL()
-
-                console.info(img);
-
-
-
-                //aqui la progra
-
-              
-
-
-
-                //console.info(image);
 
                 const pdfDefinition: any = {
 
+                    /*
                     footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
                     header: function (currentPage, pageCount, pageSize) {
 
-                    },
+                    },*/
 
                     content: [
                         { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
-                        {
-                            text: '_______________________________________________________________________________________________',
-                            alignment: 'center'
-                        },
+
+                        // {
+                        //    text: '_______________________________________________________________________________________________',
+                        //   alignment: 'center'
+                        // },
                         // @ts-ignore
-                        // { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+                        { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
                         { text: '    ' },
                         { text: '' },
 
@@ -806,9 +825,172 @@ export class CrudArticuloComponent implements OnInit {
                                 body: [
                                     [
 
+                                        /*
                                         {
-                                            //image: img, fontSize: 15, bold: true, alignment: 'center', width: 185,
-                                            image: await this.getBase64ImageFromURL('assets/images/elvalle.jpg'), width: 100,
+
+                                            image: 'data:image/jpeg;base64,' + value.foto + '',
+                                            width: 198
+
+                                        },*/
+
+                                        {
+
+
+                                            columns: [
+
+                                                { width: '*', text: '' },
+                                                {
+                                                    width: '100%',
+                                                    layout: 'noBorders',
+                                                    table: {
+                                                        body: [
+                                                            [{
+                                                                columns: [
+                                                                    { text: '' },
+                                                                ]
+                                                            }],
+
+
+
+                                                            [{
+                                                                columns: [
+                                                                    {
+                                                                        layout: 'noBorders',
+                                                                        table: {
+
+                                                                            body: [
+                                                                                [
+                                                                                    {
+                                                                                        columns: [
+                                                                                            [
+
+
+                                                                                                {
+
+                                                                                                    image: 'data:image/jpeg;base64,' + value.foto + '',
+                                                                                                    width: 180
+
+                                                                                                },
+
+                                                                                            ],
+
+                                                                                        ]
+                                                                                    },
+
+                                                                                ]
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ]
+                                                            }],
+
+                                                            [''],
+
+                                                            [
+
+                                                                { text: value.descripcion, alignment: 'justify ' }],
+
+
+                                                            [{
+                                                                columns: [
+                                                                    {
+                                                                        layout: 'noBorders',
+                                                                        table: {
+
+                                                                            body: [
+                                                                                [
+                                                                                    {
+                                                                                        columns: [
+                                                                                            [
+                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                { text: 'Medidas: ', alignment: 'center', bold: 'true' },
+                                                                                                {
+                                                                                                    layout: 'noBorders',
+
+                                                                                                    table: {
+
+                                                                                                        body: [
+                                                                                                            /*
+                                                                                                            [
+                                                                                                                { text: 'Alto: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.alto, alignment: 'left' },
+                                                                                                                { text: 'Ancho: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.ancho, alignment: 'left' },
+                                                                                                            ],
+                                                                                                            
+                                                                                                            [
+                                                                                                                { text: 'Prof: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.profundidad, alignment: 'left' },
+                                                                                                                { text: 'Peso: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.peso, alignment: 'left' },
+
+                                                                                                            ],*/
+
+                                                                                                            [
+                                                                                                                { text: 'Alto: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.alto, alignment: 'left' },
+
+                                                                                                            ],
+
+                                                                                                            [
+
+                                                                                                                { text: 'Ancho: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.ancho, alignment: 'left' },
+                                                                                                            ],
+
+                                                                                                            [
+                                                                                                                { text: 'Prof: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.profundidad, alignment: 'left' },
+
+
+                                                                                                            ],
+
+
+                                                                                                            [
+
+                                                                                                                { text: 'Peso: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.peso, alignment: 'left' },
+
+                                                                                                            ]
+
+
+                                                                                                        ]
+                                                                                                    }
+                                                                                                }
+
+                                                                                            ],
+
+                                                                                        ]
+                                                                                    },
+
+                                                                                ]
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ]
+                                                            }],
+
+
+
+
+
+                                                            [' '],
+                                                            // ['Column 1'],
+
+                                                        ]
+                                                    },
+                                                },
+
+                                                { width: '*', text: '' },
+
+
+
+
+                                            ]
+
+
+
 
                                         },
 
@@ -825,7 +1007,7 @@ export class CrudArticuloComponent implements OnInit {
                                                         body: [
                                                             [{
                                                                 columns: [
-                                                                    { text: value.nombre, alignment: 'center', bold: 'true' },
+                                                                    { text: value.nombre, alignment: 'center', bold: 'true', fontSize: 14 },
                                                                 ]
                                                             }],
 
@@ -857,6 +1039,8 @@ export class CrudArticuloComponent implements OnInit {
                                                             }],
 
                                                             [''],
+
+                                                            
                                                             [{
                                                                 columns: [
                                                                     {
@@ -882,15 +1066,16 @@ export class CrudArticuloComponent implements OnInit {
                                                                                                                 { text: 'Catálogo: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: value.nombreCatalogo, alignment: 'left' },
                                                                                                             ],
-                                                                                                            [
-                                                                                                                { text: 'Descripción: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.descripcion, alignment: 'left' },
 
-                                                                                                            ],
 
                                                                                                             [
                                                                                                                 { text: 'Cod. Compra: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: value.codigoCompra, alignment: 'left' },
+
+                                                                                                            ],
+                                                                                                            [
+                                                                                                                { text: 'Web: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: value.nombreEstadoWeb, alignment: 'left' },
 
                                                                                                             ],
 
@@ -932,8 +1117,59 @@ export class CrudArticuloComponent implements OnInit {
                                                                                                                 { text: '$' + value.precioCosto.toFixed(2), alignment: 'left' },
                                                                                                             ],
                                                                                                             [
+                                                                                                                { text: 'Pre. Producción: ', alignment: 'left', bold: 'true' },
+                                                                                                                { text: '$' + value.precioProduccion.toFixed(2), alignment: 'left' },
+
+                                                                                                            ],
+                                                                                                            [
                                                                                                                 { text: 'Pre. Venta: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: '$' + value.precioVenta.toFixed(2), alignment: 'left' },
+
+                                                                                                            ],
+
+                                                                                                        ]
+                                                                                                    }
+                                                                                                }
+
+                                                                                            ],
+
+                                                                                        ]
+                                                                                    },
+
+                                                                                ]
+                                                                            ],
+                                                                        },
+                                                                    },
+                                                                ]
+                                                            }],
+
+
+
+                                                            [{
+                                                                columns: [
+                                                                    {
+                                                                        table: {
+
+                                                                            body: [
+                                                                                [
+                                                                                    {
+                                                                                        columns: [
+                                                                                            [
+                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                { text: 'PROVEEDORES', bold: 'true', alignment: 'center' },
+                                                                                                {
+                                                                                                    layout: 'noBorders',
+                                                                                                    table: {
+
+                                                                                                        body: [
+                                                                                                            [
+                                                                                                                { text: 'NOMBRE', alignment: 'left', bold: 'true' },
+                                                                                                                { text: 'TELEFONO', alignment: 'left', bold: 'true' },
+                                                                                                            ],
+                                                                                                            [
+                                                                                                                { text: '------', alignment: 'left', },
+                                                                                                                { text: '------', alignment: 'left' },
 
                                                                                                             ],
 
@@ -984,6 +1220,7 @@ export class CrudArticuloComponent implements OnInit {
                         { text: '    ' },
 
 
+                        /*
                         {
                             table: {
                                 headerRows: 1,
@@ -994,7 +1231,7 @@ export class CrudArticuloComponent implements OnInit {
 
                                 ]
                             },
-                        },
+                        },*/
 
 
 
@@ -1047,7 +1284,7 @@ export class CrudArticuloComponent implements OnInit {
             this.preventa = this.prefiniva / (this.amargenventa / 100);
 
             this.formGrupoPrecio.setValue({
-                preciocosto: this.apreciocosto,
+                preciocosto: this.apreciocosto.toFixed(2),
                 iva: this.aiva,
                 precioiva: this.preiva.toFixed(2),
                 preciofinal: this.prefiniva.toFixed(2),
@@ -1066,7 +1303,7 @@ export class CrudArticuloComponent implements OnInit {
             this.preventa = this.aprecioestandar / (this.amargenventa / 100);
 
             this.formGrupoPrecio.setValue({
-                preciocosto: this.apreciocosto,
+                preciocosto: this.apreciocosto.toFixed(2),
                 iva: this.aiva,
                 precioiva: this.aprecioiva.toFixed(2),
                 preciofinal: this.apreciofinal.toFixed(2),
@@ -1085,7 +1322,7 @@ export class CrudArticuloComponent implements OnInit {
             this.amargenventa = (this.aprecioestandar / this.aprecioventa) * 100;
 
             this.formGrupoPrecio.setValue({
-                preciocosto: this.apreciocosto,
+                preciocosto: this.apreciocosto.toFixed(2),
                 iva: this.aiva,
                 precioiva: this.aprecioiva.toFixed(2),
                 preciofinal: this.apreciofinal.toFixed(2),
@@ -1106,7 +1343,7 @@ export class CrudArticuloComponent implements OnInit {
             this.preventa = this.aprecioestandar / (this.amargenventa / 100);
 
             this.formGrupoPrecio.setValue({
-                preciocosto: this.apreciocosto,
+                preciocosto: this.apreciocosto.toFixed(2),
                 iva: this.aiva,
                 precioiva: this.aprecioiva.toFixed(2),
                 preciofinal: this.apreciofinal.toFixed(2),
@@ -1148,19 +1385,23 @@ export class CrudArticuloComponent implements OnInit {
     codigodeBarra() {
         JsBarcode("#barcode", "ASDF00001");
 
+
+
+
+        /*
         var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
         JsBarcode(canvas, 'ASDF00001');
         var img = canvas.toDataURL();
-
+    
         pdfMake.vfs = pdfFonts.pdfMake.vfs;
-
+    
         var dd = {
             content: [
                 { image: img }
             ]
         };
-
-        pdfMake.createPdf(dd).download();
+    
+        pdfMake.createPdf(dd).download();*/
     }
 
 

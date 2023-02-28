@@ -28,6 +28,17 @@
 
                         <div>
                             <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Responsable</mat-label>
+                                    <input matInput formControlName="responsable">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                        </div>
+
+
+                        <div>
+                            <mat-grid-tile>
                                 <input (change)="onFileSelected($event)" type="file" id="file"
                                     accept="application/image">
                             </mat-grid-tile>
@@ -42,13 +53,17 @@
 
 
                     <br>
-                    <div style=" margin-left: 20vh;">
+
+                    <!--
+  <div style=" margin-left: 20vh;">
 
 
                         <img *ngIf="imagenFijo==true" mat-card-image src="assets/images/sinfoto.webp" alt="Photo of a Shiba Inu">            
                         <img *ngIf="imagenBase==true" src="data:image/png;base64,{{  base64Output}}">
                         
                     </div>
+                    -->
+
 
 
 
@@ -63,19 +78,21 @@
 
                 <div>
                     <div class="opcion1fd">
-                       
+
 
                         <button *ngIf="botonParaGuardar==true" mat-flat-button color="primary" style="color: #FFFFFF;"
-                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()" class=".buttonguardar" > <mat-icon>save</mat-icon> REGISTRAR
+                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()" class=".buttonguardar">
+                            <mat-icon>save</mat-icon> REGISTRAR
                         </button>
-                        
+
                         <button *ngIf="botonParaEditar==true" mat-flat-button color="primary" style="color: #FFFFFF;"
-                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()" class="buttonguardar"> <mat-icon>save</mat-icon> ACTUALIZAR
+                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()" class="buttonguardar">
+                            <mat-icon>save</mat-icon> ACTUALIZAR
                         </button>
 
 
-                        <button mat-raised-button  mat-flat-button color="warn" 
-                            class="buttonprincipales" (click)="botonCancelarRegistro()" class="buttonguardar">
+                        <button mat-raised-button mat-flat-button color="warn" class="buttonprincipales"
+                            (click)="botonCancelarRegistro()" class="buttonguardar">
                             <mat-icon>close</mat-icon> CANCELAR
                         </button>
                     </div>
@@ -109,7 +126,8 @@
                     <mat-icon>add_circle_outline</mat-icon>
                     Nuevo
                 </button>
-                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales">
+                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales"
+                    (click)="generatePDF()">
                     <mat-icon>save_alt</mat-icon>
                     PDF
                 </button>
@@ -132,18 +150,18 @@
             </div>
 
 
-            <div class="mat-elevation-z8" >
-                <table  mat-table [dataSource]="dataSource" matSort id="table" style="background-color: #F2F1E9">
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort id="table" style="background-color: #F2F1E9">
 
 
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="id">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header >ID</th>
-                        <td mat-cell *matCellDef="let row" > {{row.id}} </td>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
                     </ng-container>
 
-                   
+
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="nombre">
@@ -153,23 +171,25 @@
 
                     <!-- Name Column -->
                     <ng-container matColumnDef="logo">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header> LOGO</th>
-                        <td mat-cell *matCellDef="let row"> 
-                            
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> RESPONSABLE</th>
+                        <td mat-cell *matCellDef="let row">
+
+                            {{row.logo}}
+                            <!-- <img class="imgtabla" src="data:image/png;base64,{{  row.logo}}">-->
 
 
-                            <img  class="imgtabla" src="data:image/png;base64,{{  row.logo}}">
-                                
-                            
+
+
 
                         </td>
                     </ng-container>
 
 
                     <ng-container matColumnDef="documento">
-                        <th mat-header-cell *matHeaderCellDef mat-sort-header >ACCIÓN</th>
-                        <td mat-cell *matCellDef="let row"  (click)="editarInformacion(row.id , row.nombre ,row.logo )">
-                            <button mat-flat-button color="primary"  style="color: #FFFFFF;">EDITAR</button>
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCIÓN</th>
+                        <td mat-cell *matCellDef="let row">
+                            <button mat-flat-button color="primary" style="color: #FFFFFF;"
+                                (click)="editarInformacion(row.id , row.nombre ,row.logo )">EDITAR</button>
                         </td>
                     </ng-container>
 

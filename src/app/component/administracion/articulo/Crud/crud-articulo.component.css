@@ -55,9 +55,7 @@
     width: 100%;
   }
   
-  td, th {
-    width: 15%;
-  }
+ 
   
   .table2 {
     width: 100%;
@@ -167,7 +165,8 @@
     border-collapse: collapse;
    
     border: #060606 2px solid;
-    overflow: hidden
+    overflow: hidden;
+    
 
   }
 
@@ -175,9 +174,13 @@
     border-collapse: collapse;
     background-color: #97c00e;
     border: #060606 2px solid;
-    overflow: hidden
+    overflow: hidden;
+    font-size: 16px;
+    height: 10px;
 
   }
+
+
 
  
 
@@ -187,8 +190,18 @@
     width: 80px;
     overflow: hidden;
     border-color: transparent;
-    
+    font-size: 18px;
 
+  }
+
+  .inputselect{
+    background-color: #f2f1e9;
+    font-size: 18px;
+  }
+
+  .botontabla{
+    color: #FFFFFF;
+    margin-left: 1vh;
   }
   
   

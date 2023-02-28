@@ -45,7 +45,7 @@
                                 </mat-form-field>
                             </mat-grid-tile>
                         </div>
-                        
+
 
                         <div>
                             <mat-grid-tile>
@@ -65,7 +65,7 @@
                             </mat-grid-tile>
                         </div>
 
-                       
+
 
                         <div>
                             <mat-grid-tile>
@@ -103,19 +103,21 @@
 
                 <div>
                     <div class="opcion1fd">
-                       
+
 
                         <button *ngIf="botonParaGuardar==true" mat-flat-button color="primary" style="color: #FFFFFF;"
-                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()" class=".buttonguardar" > <mat-icon>save</mat-icon> REGISTRAR
+                            [disabled]="formGrupos.invalid" (click)="guardarInformacion()" class=".buttonguardar">
+                            <mat-icon>save</mat-icon> REGISTRAR
                         </button>
-                        
+
                         <button *ngIf="botonParaEditar==true" mat-flat-button color="primary" style="color: #FFFFFF;"
-                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()" class="buttonguardar"> <mat-icon>save</mat-icon> ACTUALIZAR
+                            [disabled]="formGrupos.invalid" (click)="guardarEditarInformacion()" class="buttonguardar">
+                            <mat-icon>save</mat-icon> ACTUALIZAR
                         </button>
 
 
-                        <button mat-raised-button  mat-flat-button color="warn" 
-                            class="buttonprincipales" (click)="botonCancelarRegistro()" class="buttonguardar">
+                        <button mat-raised-button mat-flat-button color="warn" class="buttonprincipales"
+                            (click)="botonCancelarRegistro()" class="buttonguardar">
                             <mat-icon>close</mat-icon> CANCELAR
                         </button>
                     </div>
@@ -151,10 +153,10 @@
                     Nuevo
                 </button>
                 <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales"
-                (click)="generatePDF()">
+                    (click)="generatePDF()">
                     <mat-icon>save_alt</mat-icon>
                     PDF
-</button>
+                </button>
 
                 <button mat-raised-button style="background-color: #217346; color: #FFFFFF;" class="buttonprincipales"
                     (click)="exportToExcel()">
@@ -165,7 +167,7 @@
             </div>
             <br>
 
-          
+
 
             <div style="width: 340px;">
                 <mat-form-field appearance="outline" class="bordeFiltro">
@@ -192,7 +194,7 @@
                     <!-- Name Column -->
                     <ng-container matColumnDef="estado">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header> ESTADO</th>
-                        <td mat-cell *matCellDef="let row"> 
+                        <td mat-cell *matCellDef="let row">
                             <div *ngIf="row.estado==false">Inactivo</div>
                             <div *ngIf="row.estado==true">Activo</div>
                         </td>
@@ -237,9 +239,9 @@
 
                     <ng-container matColumnDef="documento">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:10px;">ACCIÓN</th>
-                        <td mat-cell *matCellDef="let row" style="width:10px;"
-                            (click)="editarInformacion(row.idBodega)">
-                            <button mat-flat-button color="primary"  style="color: #FFFFFF;">EDITAR</button>
+                        <td mat-cell *matCellDef="let row" style="width:10px;">
+                            <button (click)="editarInformacion(row.idBodega)" mat-flat-button color="primary"
+                                style="color: #FFFFFF;">EDITAR</button>
                         </td>
                     </ng-container>
 

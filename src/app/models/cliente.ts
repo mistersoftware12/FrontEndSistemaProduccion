@@ -6,6 +6,8 @@ export class Cliente{
     email?: any;
     fechaNacimiento?: any;
     nombres?: any;
-    telefono?: any;;
+    telefono?: any;
+    idCuidad?: any;
+    nombreCuidad?:any;
 }
 

@@ -153,10 +153,10 @@
                     Nuevo
                 </button>
                 <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales"
-                (click)="generatePDF()">
+                    (click)="generatePDF()">
                     <mat-icon>save_alt</mat-icon>
                     PDF
-</button>
+                </button>
 
                 <button mat-raised-button style="background-color: #217346; color: #FFFFFF;" class="buttonprincipales"
                     (click)="exportToExcel()">
@@ -237,9 +237,9 @@
 
                     <ng-container matColumnDef="documento">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:10px;">ACCIÓN</th>
-                        <td mat-cell *matCellDef="let row" style="width:10px;"
-                            (click)="editarInformacion(row.idTaller)">
-                            <button mat-flat-button color="primary" style="color: #FFFFFF;">EDITAR</button>
+                        <td mat-cell *matCellDef="let row" style="width:10px;">
+                            <button mat-flat-button color="primary" style="color: #FFFFFF;"
+                                (click)="editarInformacion(row.idTaller)">EDITAR</button>
                         </td>
                     </ng-container>
 

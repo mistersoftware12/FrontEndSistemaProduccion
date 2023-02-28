@@ -240,8 +240,8 @@
                     <ng-container matColumnDef="documento">
                         <th mat-header-cell *matHeaderCellDef mat-sort-header style="width:10px;">ACCIÓN</th>
                         <td mat-cell *matCellDef="let row" style="width:10px;"
-                            (click)="editarInformacion(row.idAlmacen)">
-                            <button mat-flat-button color="primary" style="color: #FFFFFF;">EDITAR</button>
+                            >
+                            <button mat-flat-button color="primary" style="color: #FFFFFF;" (click)="editarInformacion(row.idAlmacen)">EDITAR</button>
                         </td>
                     </ng-container>
 
