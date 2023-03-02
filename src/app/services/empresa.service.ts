@@ -22,7 +22,7 @@ export class EmpresaService {
   constructor(private http: HttpClient) {
   }
 
-  
+
 
   createSucursal(sucursal: Sucursal): Observable<Sucursal> {
     return this.http.post(environment.URL_APP + "/empresa/registrarSucursal", sucursal, { headers: this.httpHeaders })
@@ -43,38 +43,54 @@ export class EmpresaService {
 
 
   getSucursalAll(): Observable<Sucursal[]> {
-    return this.http.get(environment.URL_APP + "/empresa/allSucursal", {headers: this.httpHeaders}).pipe(map(Response => Response as Sucursal[]))
+    return this.http.get(environment.URL_APP + "/empresa/allSucursal", { headers: this.httpHeaders }).pipe(map(Response => Response as Sucursal[]))
   }
 
   getAlmacenAll(): Observable<Almacen[]> {
-    return this.http.get(environment.URL_APP + "/empresa/allAlmacen", {headers: this.httpHeaders}).pipe(map(Response => Response as Almacen[]))
+    return this.http.get(environment.URL_APP + "/empresa/allAlmacen", { headers: this.httpHeaders }).pipe(map(Response => Response as Almacen[]))
   }
 
   getBodegaAll(): Observable<Bodega[]> {
-    return this.http.get(environment.URL_APP + "/empresa/allBodega", {headers: this.httpHeaders}).pipe(map(Response => Response as Bodega[]))
+    return this.http.get(environment.URL_APP + "/empresa/allBodega", { headers: this.httpHeaders }).pipe(map(Response => Response as Bodega[]))
   }
 
   getTallerAll(): Observable<Taller[]> {
-    return this.http.get(environment.URL_APP + "/empresa/allTaller", {headers: this.httpHeaders}).pipe(map(Response => Response as Taller[]))
+    return this.http.get(environment.URL_APP + "/empresa/allTaller", { headers: this.httpHeaders }).pipe(map(Response => Response as Taller[]))
   }
 
-  
+  //Listar por id Sucurssal
+
+  getAlmacenAllByIdSucursal(idSucursal: any): Observable<Almacen[]> {
+    return this.http.get(environment.URL_APP + "/empresa/allAlmacenByIdSucursal/" + idSucursal, { headers: this.httpHeaders }).pipe(map(Response => Response as Almacen[]))
+  }
+
+
+
+
+  getBodegaId(id: any): Observable<Bodega[]> {
+    return this.http.get(environment.URL_APP + "/empresa/allBodegaBySucursal/" + id, { headers: this.httpHeaders }).pipe(map(Response => Response as Bodega[]))
+  }
+
+  getTallerId(id: any): Observable<Taller[]> {
+    return this.http.get(environment.URL_APP + "/empresa/allTalleByIdSucursal/" + id, { headers: this.httpHeaders }).pipe(map(Response => Response as Taller[]))
+  }
+
 
   putSucursal(sucursal: Sucursal): Observable<Sucursal> {
-    return this.http.put(environment.URL_APP + "/empresa/updateSucursal", sucursal, {headers: this.httpHeaders})
+    return this.http.put(environment.URL_APP + "/empresa/updateSucursal", sucursal, { headers: this.httpHeaders })
   }
 
   putAlmacen(almacen: Almacen): Observable<Almacen> {
-    return this.http.put(environment.URL_APP + "/empresa/updateAlmacen", almacen, {headers: this.httpHeaders})
+    return this.http.put(environment.URL_APP + "/empresa/updateAlmacen", almacen, { headers: this.httpHeaders })
   }
 
   putBodega(bodega: Bodega): Observable<Bodega> {
-    return this.http.put(environment.URL_APP + "/empresa/updateBodega", bodega, {headers: this.httpHeaders})
+    return this.http.put(environment.URL_APP + "/empresa/updateBodega", bodega, { headers: this.httpHeaders })
   }
 
   putTaller(taller: Taller): Observable<Taller> {
-    return this.http.put(environment.URL_APP + "/empresa/updateTaller", taller, {headers: this.httpHeaders})
+    return this.http.put(environment.URL_APP + "/empresa/updateTaller", taller, { headers: this.httpHeaders })
   }
- 
+
 
 }

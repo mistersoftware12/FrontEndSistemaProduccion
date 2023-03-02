@@ -31,5 +31,13 @@ export class CuidadService {
     }
 
 
+    getPaisall(): Observable<Cuidad[]> {
+        return this.http.get(environment.URL_APP + "/ubicacion/allPais", { headers: this.httpHeaders }).pipe(map(Response => Response as Cuidad[]))
+    }
+
+
+    createPais(cuidad: Cuidad): Observable<Cuidad> {
+        return this.http.post(environment.URL_APP + "/ubicacion/registrarPais", cuidad, { headers: this.httpHeaders })
+    }
 
 }

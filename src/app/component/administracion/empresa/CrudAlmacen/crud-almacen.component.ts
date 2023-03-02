@@ -82,6 +82,7 @@ export class CrudAlmacenComponent implements OnInit {
 
   ngOnInit(): void {
     this.listarInformacion();
+   
 
   }
 
@@ -141,9 +142,11 @@ export class CrudAlmacenComponent implements OnInit {
 
 
     this.empresaService.getAlmacenAll().subscribe(value => {
-
+      
 
       this.almacenLista = value;
+
+      console.info(this.almacenLista);
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
@@ -456,5 +459,10 @@ export class CrudAlmacenComponent implements OnInit {
       })
     })
   }
+
+
+ 
+
+
 
 }

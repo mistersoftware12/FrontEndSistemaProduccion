@@ -44,3 +44,13 @@ mat-expansion-panel-header{
   border-color: transparent;
   ;
 }
+
+
+mat-grid-tile {
+  background: lightblue;
+}
+
+table {
+  width: 100%;
+  
+}

@@ -315,7 +315,7 @@ export class CrudBodegaComponent implements OnInit {
     const book: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
 
-    XLSX.writeFile(book, 'Lista de Almacenes.xlsx');
+    XLSX.writeFile(book, 'Lista de Bodegas.xlsx');
   }
 
 

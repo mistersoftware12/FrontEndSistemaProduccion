@@ -211,7 +211,7 @@
                     </table>
 
 
-                    <mat-grid-list cols="4" rowHeight="5:1.9">
+                    <mat-grid-list cols="4" rowHeight="8:2">
 
                         <div>
                             <mat-grid-tile>
@@ -253,8 +253,77 @@
                         </div>
 
 
+                        <form [formGroup]="forGrupoProveedores">
+
+
+
+                            <div>
+                                <mat-grid-tile>
+
+                                    <mat-form-field appearance="outline" class="margeninput">
+                                        <mat-label>Seleccione Proveedor 1</mat-label>
+                                        <mat-select formControlName="proveedor1"  (selectionChange)="activarProveedor2()">
+                                            <mat-option *ngFor="let option2 of proveedorListaSelect1"
+                                                [value]="option2.idProveedor">{{option2.nombres}} {{option2.apellidos}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </mat-grid-tile>
+                            </div>
+
+                            <div *ngIf="proveedor2 == true">
+                                <mat-grid-tile>
+
+                                    <mat-form-field appearance="outline" class="margeninput">
+                                        <mat-label>Seleccione Proveedor 2</mat-label>
+                                        <mat-select formControlName="proveedor2" (selectionChange)="activarProveedor3()">
+                                            <mat-option *ngFor="let option2 of proveedorListaSelect2"
+                                                [value]="option2.idProveedor" disabled="false">{{option2.nombres}}
+                                                {{option2.apellidos}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </mat-grid-tile>
+                            </div>
+
+                            <div *ngIf="proveedor3 == true">
+                                <mat-grid-tile>
+
+                                    <mat-form-field appearance="outline" class="margeninput">
+                                        <mat-label>Seleccione Proveedor 3</mat-label>
+                                        <mat-select formControlName="proveedor3" (selectionChange)="activarProveedor4()">
+                                            <mat-option *ngFor="let option2 of proveedorListaSelect3"
+                                                [value]="option2.idProveedor">{{option2.nombres}} {{option2.apellidos}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </mat-grid-tile>
+                            </div>
+
+                            <div *ngIf="proveedor4 == true">
+                                <mat-grid-tile>
+
+                                    <mat-form-field appearance="outline" class="margeninput">
+                                        <mat-label>Seleccione Proveedor 4</mat-label>
+                                        <mat-select formControlName="proveedor4">
+                                            <mat-option *ngFor="let option2 of proveedorListaSelect4"
+                                                [value]="option2.idProveedor">{{option2.nombres}} {{option2.apellidos}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+
+                                </mat-grid-tile>
+                            </div>
+
+                        </form>
                     </mat-grid-list>
 
+                    <button (click)="asiganarValorAProveedor()">Prueba</button>
+
+                    <br>
 
                     <form [formGroup]="formGrupoPrecio">
 
@@ -387,7 +456,8 @@
 
                                     <td class="tablastyle">
 
-                                        <select formControlName="iva" class="inputselect" (change)="calcularValorTabla(1)">
+                                        <select formControlName="iva" class="inputselect"
+                                            (change)="calcularValorTabla(1)">
                                             <option value="0">0%</option>
                                             <option value="12">12%</option>
                                         </select>
@@ -427,6 +497,26 @@
 
                         </table>
                     </form>
+
+                    <br>
+
+                    <mat-accordion>
+
+                        <mat-expansion-panel style="background-color: #F2F1E9;" (opened)="panelOpenState = true"
+                            (closed)="panelOpenState = false">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <strong> Proveedores </strong>
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    Actualmente esta {{panelOpenState ? 'abierto' : 'cerrado'}}
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <p>I'm visible because I am open</p>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+
+
 
 
 

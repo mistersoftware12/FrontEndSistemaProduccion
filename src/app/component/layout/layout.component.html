@@ -1,66 +1,71 @@
-<!doctype html>
+<table class="resp" style="background-color:  #97c00e;color: #ffffff;">
 
-<html lang="en">
+  <tr>
+    <td scope="col" style=" width: 80%;">
+      <button class="botonmenu" mat-button [routerLink]="'/panel/biblioteca/bienvenida'">
+        <mat-icon>home</mat-icon> <br>HOME</button>
 
+      <button mat-button [matMenuTriggerFor]="animals"> <mat-icon>settings</mat-icon><br>ADMINISTRACIÓN</button>
+      <mat-menu #animals="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="vertebrates">Empresa</button>
+        <button mat-menu-item [matMenuTriggerFor]="invertebrates">Personas</button>
+        <button mat-menu-item [matMenuTriggerFor]="mas">Mas</button>
+      </mat-menu>
 
-<div style="background-color: #97c00e;">
+      <mat-menu #vertebrates="matMenu">
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionSucursal'">Sucursal</button>
+        <button mat-menu-item [matMenuTriggerFor]="fish">Complementos</button>
 
-  <button class="botonmenu" mat-button [routerLink]="'/panel/biblioteca/bienvenida'">
-    <mat-icon>home</mat-icon> Home</button>
+      </mat-menu>
 
+      <mat-menu #invertebrates="matMenu">
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionusuarios'"> Usuarios</button>
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionClientes'">Clientes</button>
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionProveedores'">Proveedores</button>
+      </mat-menu>
 
-  <button mat-button [matMenuTriggerFor]="animals"> <mat-icon>settings</mat-icon>ADMINISTRACIÓN</button>
-  <mat-menu #animals="matMenu">
-    <button mat-menu-item [matMenuTriggerFor]="vertebrates">Empresa</button>
-    <button mat-menu-item [matMenuTriggerFor]="invertebrates">Personas</button>
-    <button mat-menu-item [matMenuTriggerFor]="mas">Mas</button>
-  </mat-menu>
+      <mat-menu #fish="matMenu">
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionAlmacen'">Almacen</button>
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionBodega'">Bodega</button>
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionTaller'">Taller</button>
+      </mat-menu>
 
-  <mat-menu #vertebrates="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionSucursal'">Sucursal</button>
-    <button mat-menu-item [matMenuTriggerFor]="fish">Complementos</button>
-
-  </mat-menu>
-
-  <mat-menu #invertebrates="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionusuarios'"> Usuarios</button>
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionClientes'">Clientes</button>
-  </mat-menu>
-
-  <mat-menu #fish="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionAlmacen'">Almacen</button>
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionBodega'">Bodega</button>
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionTaller'">Taller</button>
-  </mat-menu>
-
-  <mat-menu #mas="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCatalogo'">Catálogo</button>
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCategoria'">Categoria</button>
-  </mat-menu>
+      <mat-menu #mas="matMenu">
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCategoria'">Categoria</button>
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCatalogo'">Catálogo</button>
+      </mat-menu>
 
 
-  <button mat-button [matMenuTriggerFor]="articulo"> <mat-icon>settings</mat-icon>ARTICULO</button>
+      <button mat-button [matMenuTriggerFor]="articulo"> <mat-icon>dialpad</mat-icon><br>ARTICULO</button>
 
-  <mat-menu #articulo="matMenu">
-    <button mat-menu-item [matMenuTriggerFor]="art">Articulo</button>
-    
-  </mat-menu>
+      <mat-menu #articulo="matMenu">
+        <button mat-menu-item [matMenuTriggerFor]="art">Articulo</button>
 
-  <mat-menu #art="matMenu">
-    <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionArticulo'">Articulos</button>
-  
-  </mat-menu>
+      </mat-menu>
 
+      <mat-menu #art="matMenu">
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionArticulo'">Articulos</button>
 
+      </mat-menu>
 
 
-  <button mat-button (click)="logout()">CERRAR SESION</button>
-  <button>{{persona.nombres}} {{persona.apellidos}}</button>
+    </td>
 
-</div>
+
+    <td scope="col" style=" width: 20%; text-align: center;">
+      <button mat-button [matMenuTriggerFor]="beforeMenu"> <mat-icon> person</mat-icon> <br> {{persona.nombres}}
+        {{persona.apellidos}}</button>
+      <mat-menu #beforeMenu="matMenu" xPosition="before">
+        <button mat-menu-item (click)="logout()">Cerrar Sesion</button>
+      </mat-menu>
+    </td>
+  </tr>
+
+
+</table>
+
+
 
 <div class="example-sidenav-content">
   <router-outlet></router-outlet>
 </div>
-
-</html>

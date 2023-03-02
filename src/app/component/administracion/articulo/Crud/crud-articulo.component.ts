@@ -21,9 +21,12 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { DatePipe } from "@angular/common";
 import { cedula } from 'src/environments/environment';
 import { ArticuloService } from 'src/app/services/articulo.service';
-import { Articulo } from 'src/app/models/articulo';
+import { Articulo, ArticuloProveedor } from 'src/app/models/articulo';
 import { Categoria } from 'src/app/models/categoria';
 import * as JsBarcode from 'jsbarcode';
+import { Almacen } from 'src/app/models/almacen';
+import { ProveedorService } from 'src/app/services/proveedorService';
+import { Proveedor } from 'src/app/models/persona';
 
 
 
@@ -37,7 +40,7 @@ import * as JsBarcode from 'jsbarcode';
 
 export class CrudArticuloComponent implements OnInit {
 
-
+    panelOpenState = false;
 
     //Control de pantallas
     public sectionTablaLista: Boolean = true;
@@ -60,11 +63,25 @@ export class CrudArticuloComponent implements OnInit {
     base64Output: string;
     public codigoBarra: string = "sasa";
 
-
     public articuloListaGuardar: Articulo = new Articulo();
+    public articuloProveedorListaGuardar: ArticuloProveedor = new ArticuloProveedor();
+
     public articuloLista: Articulo[] = [];
     public catalogoLista: Catalogo[] = [];
     public categoriaLista: Categoria[] = [];
+
+    public proveedorListaSelect1: Proveedor[] = [];
+    public proveedorListaSelect2: Proveedor[] = [];
+    public proveedorListaSelect3: Proveedor[] = [];
+    public proveedorListaSelect4: Proveedor[] = [];
+
+
+    public idProveedores = [];
+
+    public proveedor2: Boolean = false;
+    public proveedor3: Boolean = false;
+    public proveedor4: Boolean = false;
+
 
 
     public estadoLista: EstadoFD[] = [{ id: 1, nombres: 'Activo', value: 'true' }, { id: 2, nombres: 'Inactivo', value: 'false' }];
@@ -91,6 +108,8 @@ export class CrudArticuloComponent implements OnInit {
         profundidad: new FormControl<String>('', [Validators.required]),
         peso: new FormControl<String>('', [Validators.required]),
 
+
+
     })
 
     formGrupoPrecio = new FormGroup({
@@ -109,6 +128,13 @@ export class CrudArticuloComponent implements OnInit {
         codigobarra: new FormControl<String>('', [Validators.required]),
     })
 
+    forGrupoProveedores = new FormGroup({
+        proveedor1: new FormControl<String>('', [Validators.required]),
+        proveedor2: new FormControl<String>('', []),
+        proveedor3: new FormControl<String>('', []),
+        proveedor4: new FormControl<String>('', []),
+    })
+
 
 
     displayedColumns: string[] = ['id', 'nombre', 'logo', 'precioproduccion', 'precioventa', 'stockminimo', 'documento'];
@@ -125,6 +151,8 @@ export class CrudArticuloComponent implements OnInit {
         private articuloService: ArticuloService,
         private catalogoService: CatalogoService,
 
+        private proveedorService: ProveedorService,
+
     ) {
     }
 
@@ -132,9 +160,11 @@ export class CrudArticuloComponent implements OnInit {
         this.listarInformacion();
         this.listarCategorias();
         this.listarCatalogos();
-        // this.codigodeBarra();
+        this.listarProveedor();
+
 
     }
+
 
 
 
@@ -224,6 +254,18 @@ export class CrudArticuloComponent implements OnInit {
 
         })
 
+        this.forGrupoProveedores.setValue({
+            proveedor1: "",
+            proveedor2: "",
+            proveedor3: "",
+            proveedor4: "",
+
+        })
+
+        this.proveedor2 = false;
+        this.proveedor3 = false;
+        this.proveedor4 = false;
+
 
     }
 
@@ -264,6 +306,16 @@ export class CrudArticuloComponent implements OnInit {
 
     }
 
+    public listarProveedor() {
+
+        this.proveedorService.getProveedoresAll().subscribe(value => {
+            this.proveedorListaSelect1 = value;
+
+        })
+
+
+    }
+
 
 
 
@@ -282,72 +334,225 @@ export class CrudArticuloComponent implements OnInit {
 
     public guardarInformacion() {
 
-        this.articuloListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
-        //this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
-        this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[1];
-        this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[2];
-        this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[3];
-        this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[4];
+        this.asiganarValorAProveedor();
 
-        var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[5]);
-        var d = parseInt(s);
-        if (d == 1) {
-            this.articuloListaGuardar.estadoArticulo = true;
-        } if (d == 2) {
-            this.articuloListaGuardar.estadoArticulo = false;
+
+
+        if (Number(Object.values(this.forGrupoProveedores.getRawValue())[0]) != 0) {
+
+
+
+
+            this.articuloListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
+            this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[1];
+            this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[2];
+            this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[3];
+            this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[4];
+
+            var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[5]);
+            var d = parseInt(s);
+            if (d == 1) {
+                this.articuloListaGuardar.estadoArticulo = true;
+            } if (d == 2) {
+                this.articuloListaGuardar.estadoArticulo = false;
+            }
+
+            var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
+            var da = parseInt(sa);
+            if (da == 1) {
+                this.articuloListaGuardar.estadoWeb = true;
+            } if (da == 2) {
+                this.articuloListaGuardar.estadoWeb = false;
+            }
+
+            this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[7];
+            this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[8];
+            this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[9];
+            this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[10];
+
+            this.articuloListaGuardar.alto = Object.values(this.formGrupos.getRawValue())[12];
+            this.articuloListaGuardar.ancho = Object.values(this.formGrupos.getRawValue())[13];
+            this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[13];
+            this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[14];
+
+            this.articuloListaGuardar.precioCosto = Object.values(this.formGrupoPrecio.getRawValue())[0];
+            this.articuloListaGuardar.iva = Object.values(this.formGrupoPrecio.getRawValue())[1];
+            this.articuloListaGuardar.precioIva = Object.values(this.formGrupoPrecio.getRawValue())[2];
+            this.articuloListaGuardar.precioFinal = Object.values(this.formGrupoPrecio.getRawValue())[3];
+            this.articuloListaGuardar.precioStandar = Object.values(this.formGrupoPrecio.getRawValue())[4];
+            this.articuloListaGuardar.margenProduccion = Object.values(this.formGrupoPrecio.getRawValue())[5];
+            this.articuloListaGuardar.precioProduccion = Object.values(this.formGrupoPrecio.getRawValue())[6];
+            this.articuloListaGuardar.margenVenta = Object.values(this.formGrupoPrecio.getRawValue())[7];
+            this.articuloListaGuardar.precioVenta = Object.values(this.formGrupoPrecio.getRawValue())[8];
+
+
+
+            this.articuloListaGuardar.codigoBarra = Object.values(this.forGrupoCodigoBarra.getRawValue())[0];
+
+            console.info(this.articuloListaGuardar);
+
+            this.articuloService.createArticulo(this.articuloListaGuardar).subscribe(value => {
+                this._snackBar.open('Articulo Creado', 'ACEPTAR');
+
+                this.articuloProveedorListaGuardar.idArticulo = value.id;
+
+
+
+                for (let i = 0; i < this.idProveedores.length; i++) {
+
+                    if(this.idProveedores[i]!=0){
+                        this.articuloProveedorListaGuardar.idProveedor = this.idProveedores[i];
+                        this.articuloService.createArticuloProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
+                           // this._snackBar.open('Articulo Creado', 'ACEPTAR');
+                        }, error => {
+                            this._snackBar.open(error.error.message + ' OCURRIO UN ERROR AL AGREGAR PROVEEDOR', 'ACEPTAR');
+            
+                        })
+
+                    }
+                   
+                }
+
+
+
+
+
+
+
+                this.vaciarFormulario();
+                this.mostrarLista();
+                this.listarInformacion();
+
+
+
+            }, error => {
+                this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+
+            })
+
+        } else {
+            this._snackBar.open(' ESCOJA AL MENOS UN PROVEEDOR', 'ACEPTAR');
         }
 
-        var sa = JSON.stringify(Object.values(this.formGrupos.getRawValue())[6]);
-        var da = parseInt(sa);
-        if (da == 1) {
-            this.articuloListaGuardar.estadoWeb = true;
-        } if (da == 2) {
-            this.articuloListaGuardar.estadoWeb = false;
+
+    }
+
+
+    asiganarValorAProveedor() {
+
+        this.idProveedores = [];
+
+        for (let i = 0; i <= 3; i++) {
+
+            if (Object.values(this.forGrupoProveedores.getRawValue())[i].length != 0) {
+                this.idProveedores.push(Object.values(this.forGrupoProveedores.getRawValue())[i]);
+            } else {
+                this.idProveedores.push(0);
+            }
+
         }
 
-        this.articuloListaGuardar.stockMinimo = Object.values(this.formGrupos.getRawValue())[7];
-        this.articuloListaGuardar.color = Object.values(this.formGrupos.getRawValue())[8];
-        this.articuloListaGuardar.marca = Object.values(this.formGrupos.getRawValue())[9];
-        this.articuloListaGuardar.vidaUtil = Object.values(this.formGrupos.getRawValue())[10];
+        console.info(this.idProveedores);
 
-        this.articuloListaGuardar.alto = Object.values(this.formGrupos.getRawValue())[12];
-        this.articuloListaGuardar.ancho = Object.values(this.formGrupos.getRawValue())[13];
-        this.articuloListaGuardar.profundidad = Object.values(this.formGrupos.getRawValue())[13];
-        this.articuloListaGuardar.peso = Object.values(this.formGrupos.getRawValue())[14];
+        /*
+        for (let i = 0; i < this.idProveedores.length; i++) {
 
-        this.articuloListaGuardar.precioCosto = Object.values(this.formGrupoPrecio.getRawValue())[0];
-        this.articuloListaGuardar.iva = Object.values(this.formGrupoPrecio.getRawValue())[1];
-        this.articuloListaGuardar.precioIva = Object.values(this.formGrupoPrecio.getRawValue())[2];
-        this.articuloListaGuardar.precioFinal = Object.values(this.formGrupoPrecio.getRawValue())[3];
-        this.articuloListaGuardar.precioStandar = Object.values(this.formGrupoPrecio.getRawValue())[4];
-        this.articuloListaGuardar.margenProduccion = Object.values(this.formGrupoPrecio.getRawValue())[5];
-        this.articuloListaGuardar.precioProduccion = Object.values(this.formGrupoPrecio.getRawValue())[6];
-        this.articuloListaGuardar.margenVenta = Object.values(this.formGrupoPrecio.getRawValue())[7];
-        this.articuloListaGuardar.precioVenta = Object.values(this.formGrupoPrecio.getRawValue())[8];
+            console.info(this.idProveedores[i]);
+        }*/
 
 
+    }
 
-        this.articuloListaGuardar.codigoBarra = Object.values(this.forGrupoCodigoBarra.getRawValue())[0];
 
-        console.info(this.articuloListaGuardar);
+    ///Proveedores seleccionr
 
-        this.articuloService.createArticulo(this.articuloListaGuardar).subscribe(value => {
-            this._snackBar.open('Articulo Creado', 'ACEPTAR');
 
-            this.vaciarFormulario();
-            this.mostrarLista();
-            this.listarInformacion();
+    activarProveedor2() {
 
-        }, error => {
-            this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+        this.proveedorListaSelect2 = [];
+        this.proveedor2 = true;
+
+        for (let i = 0; i < this.proveedorListaSelect1.length; i++) {
+
+
+            if (this.proveedorListaSelect1[i].idProveedor != Object.values(this.forGrupoProveedores.getRawValue())[0]) {
+
+                this.proveedorListaSelect2.push(this.proveedorListaSelect1[i]);
+            }
+
+
+        }
+
+        this.forGrupoProveedores.setValue({
+            proveedor1: Object.values(this.forGrupoProveedores.getRawValue())[0],
+            proveedor2: "0",
+            proveedor3: "0",
+            proveedor4: "0",
+
+        })
+
+        this.proveedor3 = false;
+        this.proveedor4 = false;
+
+
+    }
+
+    activarProveedor3() {
+        this.proveedor3 = true;
+
+        this.proveedorListaSelect3 = [];
+
+        for (let i = 0; i < this.proveedorListaSelect2.length; i++) {
+
+
+            if (this.proveedorListaSelect2[i].idProveedor != Object.values(this.forGrupoProveedores.getRawValue())[1]) {
+
+                this.proveedorListaSelect3.push(this.proveedorListaSelect2[i]);
+            }
+
+
+        }
+
+        this.forGrupoProveedores.setValue({
+            proveedor1: Object.values(this.forGrupoProveedores.getRawValue())[0],
+            proveedor2: Object.values(this.forGrupoProveedores.getRawValue())[1],
+            proveedor3: "0",
+            proveedor4: "0",
+
+        })
+
+
+        this.proveedor4 = false;
+
+
+    }
+
+    activarProveedor4() {
+        this.proveedor4 = true;
+        this.proveedorListaSelect4 = [];
+
+        for (let i = 0; i < this.proveedorListaSelect3.length; i++) {
+
+
+            if (this.proveedorListaSelect3[i].idProveedor != Object.values(this.forGrupoProveedores.getRawValue())[2]) {
+
+                this.proveedorListaSelect4.push(this.proveedorListaSelect3[i]);
+            }
+
+
+        }
+
+        this.forGrupoProveedores.setValue({
+            proveedor1: Object.values(this.forGrupoProveedores.getRawValue())[0],
+            proveedor2: Object.values(this.forGrupoProveedores.getRawValue())[1],
+            proveedor3: Object.values(this.forGrupoProveedores.getRawValue())[2],
+            proveedor4: "0",
 
         })
 
 
 
-
     }
-
     //Generar Código
 
     generaCodigo() {
@@ -562,11 +767,6 @@ export class CrudArticuloComponent implements OnInit {
         reader.onload = (event) => result.next(btoa(event.target.result.toString()));
         return result;
     }
-
-
-
-
-
 
 
     //Exportaciones de documento
@@ -807,7 +1007,7 @@ export class CrudArticuloComponent implements OnInit {
                     },*/
 
                     content: [
-                        { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+                        { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100, alignment: 'center' },
 
                         // {
                         //    text: '_______________________________________________________________________________________________',
@@ -886,6 +1086,8 @@ export class CrudArticuloComponent implements OnInit {
 
                                                             [''],
 
+                                                            [{ text: 'Descripción:', alignment: 'justify ', bold: 'true' }],
+
                                                             [
 
                                                                 { text: value.descripcion, alignment: 'justify ' }],
@@ -904,28 +1106,29 @@ export class CrudArticuloComponent implements OnInit {
                                                                                             [
                                                                                                 { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
 
-                                                                                                { text: 'Medidas: ', alignment: 'center', bold: 'true' },
+                                                                                                { text: 'Medidas: ', alignment: 'justify', bold: 'true' },
                                                                                                 {
                                                                                                     layout: 'noBorders',
 
                                                                                                     table: {
 
                                                                                                         body: [
-                                                                                                            /*
+
                                                                                                             [
                                                                                                                 { text: 'Alto: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: value.alto, alignment: 'left' },
                                                                                                                 { text: 'Ancho: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: value.ancho, alignment: 'left' },
                                                                                                             ],
-                                                                                                            
+
                                                                                                             [
                                                                                                                 { text: 'Prof: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: value.profundidad, alignment: 'left' },
                                                                                                                 { text: 'Peso: ', alignment: 'left', bold: 'true' },
                                                                                                                 { text: value.peso, alignment: 'left' },
 
-                                                                                                            ],*/
+                                                                                                            ],
+                                                                                                            /*
 
                                                                                                             [
                                                                                                                 { text: 'Alto: ', alignment: 'left', bold: 'true' },
@@ -953,7 +1156,7 @@ export class CrudArticuloComponent implements OnInit {
                                                                                                                 { text: value.peso, alignment: 'left' },
 
                                                                                                             ]
-
+*/
 
                                                                                                         ]
                                                                                                     }
@@ -1040,7 +1243,7 @@ export class CrudArticuloComponent implements OnInit {
 
                                                             [''],
 
-                                                            
+
                                                             [{
                                                                 columns: [
                                                                     {
@@ -1164,8 +1367,8 @@ export class CrudArticuloComponent implements OnInit {
 
                                                                                                         body: [
                                                                                                             [
-                                                                                                                { text: 'NOMBRE', alignment: 'left', bold: 'true' },
-                                                                                                                { text: 'TELEFONO', alignment: 'left', bold: 'true' },
+                                                                                                                { text: 'SOLO NOMBRE', alignment: 'left', bold: 'true' },
+                                                                                                                { text: '', alignment: 'left', bold: 'true' },
                                                                                                             ],
                                                                                                             [
                                                                                                                 { text: '------', alignment: 'left', },
@@ -1403,6 +1606,7 @@ export class CrudArticuloComponent implements OnInit {
     
         pdfMake.createPdf(dd).download();*/
     }
+
 
 
 

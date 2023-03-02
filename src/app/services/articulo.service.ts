@@ -2,8 +2,9 @@ import { Injectable } from '@angular/core';
 import { map, Observable } from "rxjs";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
-import { Articulo } from '../models/articulo';
+import { Articulo, ArticuloProveedor } from '../models/articulo';
 import { ContadorDatos, MaximoDadoCaptura } from '../models/extras';
+import { Bodega, Taller } from '../models/empresa';
 
 
 @Injectable({
@@ -27,6 +28,10 @@ export class ArticuloService {
         return this.http.post(environment.URL_APP + "/articulo/registrarArticulo", articulo, { headers: this.httpHeaders })
     }
 
+    createArticuloProveedor(articuloproveedor: ArticuloProveedor): Observable<ArticuloProveedor> {
+        return this.http.post(environment.URL_APP + "/articulo/registrarArticuloProveedor", articuloproveedor, { headers: this.httpHeaders })
+    }
+
     getArticuloAll(): Observable<Articulo[]> {
         return this.http.get(environment.URL_APP + "/articulo/allArticulo", { headers: this.httpHeaders }).pipe(map(Response => Response as Articulo[]))
     }
@@ -47,5 +52,6 @@ export class ArticuloService {
     }
 
 
+   
 
 }

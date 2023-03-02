@@ -16,7 +16,8 @@ import { CrudTallerComponent } from './empresa/CrudTaller/crud-taller.component'
 import { CrudUsuariosComponent } from './personas/CrudUsuario/crud-usuario.component';
 import { CrudCatalogoComponent } from './catalogo/Crud/crud-catalogo.component';
 import { CrudCategoriaComponent } from './categoria/Crud/crud-categoria.component';
-import { CrudArticuloComponent} from './articulo/Crud/crud-articulo.component';
+import { CrudArticuloComponent } from './articulo/Crud/crud-articulo.component';
+import { CrudProveedorComponent } from './personas/CrudProveedor/crud-proveedor.component';
 registerLocaleData(localeEs, 'es')
 
 
@@ -29,7 +30,7 @@ const routes: Routes = [
     component: BienvenidaComponent
   },
 
- 
+
 
 
   {
@@ -44,6 +45,11 @@ const routes: Routes = [
   {
     path: 'administracionClientes',
     component: CrudClientesComponent
+  },
+
+  {
+    path: 'administracionProveedores',
+    component: CrudProveedorComponent
   },
 
   {
@@ -90,9 +96,10 @@ const routes: Routes = [
     CrudusuarioComponent,
     EditarUsuariosComponent,
 
-    
+
     CrudClientesComponent,
     CrudUsuariosComponent,
+    CrudProveedorComponent,
     CrudAlmacenComponent,
     CrudBodegaComponent,
     CrudSucursalComponent,

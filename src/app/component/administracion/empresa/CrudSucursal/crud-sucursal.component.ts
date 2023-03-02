@@ -16,6 +16,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { DatePipe } from "@angular/common";
 import { cedula } from 'src/environments/environment';
 import { UsuarioService } from 'src/app/services/usuario.service';
+import { ArticuloService } from 'src/app/services/articulo.service';
 
 @Component({
   selector: 'app-crud-sucursal',
@@ -69,13 +70,18 @@ export class CrudSucursalComponent implements OnInit {
     private _snackBar: MatSnackBar,
     private empresaService: EmpresaService,
     private usuarioService: UsuarioService,
+
   ) {
   }
 
   ngOnInit(): void {
     this.listarInformacion();
 
+
   }
+
+
+
 
   public mostrarImagenFijo() {
     this.imagenFijo = true;
@@ -398,6 +404,215 @@ export class CrudSucursalComponent implements OnInit {
       })
     })
   }
+
+
+  generatePDFSucursal(idSucu: any, nombreSucursal: any) {
+    this.loaderActualizar = true
+    var pipe: DatePipe = new DatePipe('es')
+    var dia: String = new Date().toISOString();
+
+
+
+    this.empresaService.getAlmacenAllByIdSucursal(idSucu).subscribe(value => {
+      console.info("Dato almacen Cargado");
+
+      this.empresaService.getBodegaId(idSucu).subscribe(valuea => {
+        console.info("Dato bodega Cargado");
+
+        this.empresaService.getTallerId(idSucu).subscribe(valuec => {
+          console.info("Dato taller Cargado");
+
+          this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+            console.info("Dato Usuario Cargado");
+
+            const pdfDefinition: any = {
+
+              footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+              header: function (currentPage, pageCount, pageSize) {
+                // you can apply any logic and return any valid pdfmake element
+
+                /*
+                return [
+                  { text: 'simple text', alignment: (currentPage % 2) ? 'left' : 'right' },
+                  { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+                ]*/
+              },
+
+              content: [
+                { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+                {
+                  text: '_________________________________________________________________________________________',
+                  alignment: 'center'
+                },
+                // @ts-ignore
+                { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+                { text: 'Sucursal ' + nombreSucursal, fontSize: 17, bold: true, alignment: 'center' },
+                { text: 'Almacén registrado:  ', fontSize: 14, margin: [0, 0, 20, 0] },
+                {
+                  table: {
+                    headerRows: 1,
+                    widths: ['2%', '10%', '37%', '15%', '10,1%', '20%', '6%'],
+                    body: [
+                      ['ID', 'NOMBRE', 'DIRECCIÓN', 'RESPONSABLE', 'TELÉFONO', 'CORREO',  'EST.'],
+                      [value.map(function (item) {
+                        return { text: item.id + '', fontSize: 10 }
+                      }),
+                      value.map(function (item) {
+                        return { text: item.nombre + '', fontSize: 10 }
+                      }),
+                      value.map(function (item) {
+                        return { text: item.direccion + '', fontSize: 10 }
+
+                      }),
+                      value.map(function (item) {
+                        return { text: item.responsable + '', fontSize: 10 }
+
+                      }),
+                      value.map(function (item) {
+                        return { text: item.telefono + '', fontSize: 10 }
+
+                      }),
+                      value.map(function (item) {
+                        return { text: item.correo + '', fontSize: 10 }
+                      }),
+                      
+                      value.map(function (item) {
+                        return { text: item.nombreEstado + '', fontSize: 10 }
+
+                      })
+
+
+                      ],
+
+                    ]
+                  }
+
+                },
+
+                { text: '    ' },
+                { text: 'Bodega registrada:  ', fontSize: 14, margin: [0, 0, 20, 0] },
+                {
+                  table: {
+                    headerRows: 1,
+                    widths: ['2%', '10%', '37%', '15%', '10,1%', '20%',  '6%'],
+                    body: [
+                      ['ID', 'NOMBRE', 'DIRECCIÓN', 'RESPONSABLE', 'TELÉFONO', 'CORREO',  'EST.'],
+                      [valuea.map(function (item) {
+                        return { text: item.id + '', fontSize: 10 }
+                      }),
+                      valuea.map(function (item) {
+                        return { text: item.nombre + '', fontSize: 10 }
+                      }),
+                      valuea.map(function (item) {
+                        return { text: item.direccion + '', fontSize: 10 }
+
+                      }),
+                      valuea.map(function (item) {
+                        return { text: item.responsable + '', fontSize: 10 }
+
+                      }),
+                      valuea.map(function (item) {
+                        return { text: item.telefono + '', fontSize: 10 }
+
+                      }),
+                      valuea.map(function (item) {
+                        return { text: item.correo + '', fontSize: 10 }
+                      }),
+                      
+                      valuea.map(function (item) {
+                        return { text: item.nombreEstado + '', fontSize: 10 }
+
+                      })
+
+
+                      ],
+
+                    ]
+                  }
+
+                },
+
+                { text: '    ' },
+                { text: 'Taller registrado:  ', fontSize: 14, margin: [0, 0, 20, 0] },
+
+                {
+                  table: {
+                    headerRows: 1,
+                    widths: ['2%', '10%', '37%', '15%', '10,1%', '20%',  '6%'],
+                    body: [
+                      ['ID', 'NOMBRE', 'DIRECCIÓN', 'RESPONSABLE', 'TELÉFONO', 'CORREO',  'EST.'],
+                      [valuec.map(function (item) {
+                        return { text: item.id + '', fontSize: 10 }
+                      }),
+                      valuec.map(function (item) {
+                        return { text: item.nombre + '', fontSize: 10 }
+                      }),
+                      valuec.map(function (item) {
+                        return { text: item.direccion + '', fontSize: 10 }
+
+                      }),
+                      valuec.map(function (item) {
+                        return { text: item.responsable + '', fontSize: 10 }
+
+                      }),
+                      valuec.map(function (item) {
+                        return { text: item.telefono + '', fontSize: 10 }
+
+                      }),
+                      valuec.map(function (item) {
+                        return { text: item.correo + '', fontSize: 10 }
+                      }),
+                     
+                      valuec.map(function (item) {
+                        return { text: item.nombreEstado + '', fontSize: 10 }
+
+                      })
+
+
+                      ],
+
+                    ]
+                  }
+
+                },
+
+                { text: '    ' },
+                { text: '    ' },
+
+
+                {
+                  table: {
+                    headerRows: 1,
+                    widths: ['100%'],
+                    heights: 20,
+                    body: [
+                      ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+
+                    ]
+                  },
+                },
+
+              ],
+
+              pageOrientation: 'landscape',
+            }
+
+
+            this.loaderActualizar = false
+            const pdf = pdfMake.createPdf(pdfDefinition);
+            pdf.open();
+          })
+
+
+        })
+      })
+
+
+    })
+  }
+
+
+
 
 
 }

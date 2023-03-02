@@ -44,3 +44,9 @@ export class Articulo{
    nombreEstadoWeb?:any;
 
 }
+
+export class ArticuloProveedor{
+   id?: any;
+  idArticulo?: any;
+  idProveedor?: any;
+}
