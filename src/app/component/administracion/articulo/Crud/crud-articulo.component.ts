@@ -69,6 +69,7 @@ export class CrudArticuloComponent implements OnInit {
     public articuloLista: Articulo[] = [];
     public catalogoLista: Catalogo[] = [];
     public categoriaLista: Categoria[] = [];
+    public articuloProveedorLista1: ArticuloProveedor[] = [];
 
     public proveedorListaSelect1: Proveedor[] = [];
     public proveedorListaSelect2: Proveedor[] = [];
@@ -400,17 +401,17 @@ export class CrudArticuloComponent implements OnInit {
 
                 for (let i = 0; i < this.idProveedores.length; i++) {
 
-                    if(this.idProveedores[i]!=0){
+                    if (this.idProveedores[i] != 0) {
                         this.articuloProveedorListaGuardar.idProveedor = this.idProveedores[i];
                         this.articuloService.createArticuloProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
-                           // this._snackBar.open('Articulo Creado', 'ACEPTAR');
+                            // this._snackBar.open('Articulo Creado', 'ACEPTAR');
                         }, error => {
                             this._snackBar.open(error.error.message + ' OCURRIO UN ERROR AL AGREGAR PROVEEDOR', 'ACEPTAR');
-            
+
                         })
 
                     }
-                   
+
                 }
 
 
@@ -983,470 +984,475 @@ export class CrudArticuloComponent implements OnInit {
         this.loaderActualizar = true
         var pipe: DatePipe = new DatePipe('es')
         var dia: String = new Date().toISOString();
-
+    
 
 
         this.articuloService.getArticuloId(id).subscribe(value => {
 
 
 
+            this.articuloService.getArticuloProveedorId(id).subscribe(valuec => {
 
-            this.usuarioService.getAllUsuarios().subscribe(async valueb => {
-                console.info(valueb)
 
-                var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
-                JsBarcode(canvas, value.codigoBarra);
-                var img = canvas.toDataURL()
 
-                const pdfDefinition: any = {
+                this.usuarioService.getAllUsuarios().subscribe(async valueb => {
 
-                    /*
-                    footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
-                    header: function (currentPage, pageCount, pageSize) {
 
-                    },*/
+                    var canvas = document.createElement('CANVAS') as HTMLCanvasElement;
+                    JsBarcode(canvas, value.codigoBarra);
+                    var img = canvas.toDataURL()
 
-                    content: [
-                        { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100, alignment: 'center' },
-
-                        // {
-                        //    text: '_______________________________________________________________________________________________',
-                        //   alignment: 'center'
-                        // },
-                        // @ts-ignore
-                        { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
-                        { text: '    ' },
-                        { text: '' },
-
-
-                        {
-                            table: {
-                                widths: ['40%', '60%'],
-                                body: [
-                                    [
-
-                                        /*
-                                        {
-
-                                            image: 'data:image/jpeg;base64,' + value.foto + '',
-                                            width: 198
-
-                                        },*/
-
-                                        {
-
-
-                                            columns: [
-
-                                                { width: '*', text: '' },
-                                                {
-                                                    width: '100%',
-                                                    layout: 'noBorders',
-                                                    table: {
-                                                        body: [
-                                                            [{
-                                                                columns: [
-                                                                    { text: '' },
-                                                                ]
-                                                            }],
-
-
-
-                                                            [{
-                                                                columns: [
-                                                                    {
-                                                                        layout: 'noBorders',
-                                                                        table: {
-
-                                                                            body: [
-                                                                                [
-                                                                                    {
-                                                                                        columns: [
-                                                                                            [
-
-
-                                                                                                {
-
-                                                                                                    image: 'data:image/jpeg;base64,' + value.foto + '',
-                                                                                                    width: 180
-
-                                                                                                },
-
-                                                                                            ],
-
-                                                                                        ]
-                                                                                    },
-
-                                                                                ]
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ]
-                                                            }],
-
-                                                            [''],
-
-                                                            [{ text: 'Descripción:', alignment: 'justify ', bold: 'true' }],
-
-                                                            [
-
-                                                                { text: value.descripcion, alignment: 'justify ' }],
-
-
-                                                            [{
-                                                                columns: [
-                                                                    {
-                                                                        layout: 'noBorders',
-                                                                        table: {
-
-                                                                            body: [
-                                                                                [
-                                                                                    {
-                                                                                        columns: [
-                                                                                            [
-                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
-
-                                                                                                { text: 'Medidas: ', alignment: 'justify', bold: 'true' },
-                                                                                                {
-                                                                                                    layout: 'noBorders',
-
-                                                                                                    table: {
-
-                                                                                                        body: [
-
-                                                                                                            [
-                                                                                                                { text: 'Alto: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.alto, alignment: 'left' },
-                                                                                                                { text: 'Ancho: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.ancho, alignment: 'left' },
-                                                                                                            ],
-
-                                                                                                            [
-                                                                                                                { text: 'Prof: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.profundidad, alignment: 'left' },
-                                                                                                                { text: 'Peso: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.peso, alignment: 'left' },
-
-                                                                                                            ],
-                                                                                                            /*
-
-                                                                                                            [
-                                                                                                                { text: 'Alto: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.alto, alignment: 'left' },
-
-                                                                                                            ],
-
-                                                                                                            [
-
-                                                                                                                { text: 'Ancho: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.ancho, alignment: 'left' },
-                                                                                                            ],
-
-                                                                                                            [
-                                                                                                                { text: 'Prof: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.profundidad, alignment: 'left' },
-
-
-                                                                                                            ],
-
-
-                                                                                                            [
-
-                                                                                                                { text: 'Peso: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.peso, alignment: 'left' },
-
-                                                                                                            ]
-*/
-
-                                                                                                        ]
-                                                                                                    }
-                                                                                                }
-
-                                                                                            ],
-
-                                                                                        ]
-                                                                                    },
-
-                                                                                ]
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ]
-                                                            }],
-
-
-
-
-
-                                                            [' '],
-                                                            // ['Column 1'],
-
-                                                        ]
-                                                    },
-                                                },
-
-                                                { width: '*', text: '' },
-
-
-
-
-                                            ]
-
-
-
-
-                                        },
-
-                                        {
-
-
-                                            columns: [
-
-                                                { width: '*', text: '' },
-                                                {
-                                                    width: '85%',
-                                                    layout: 'noBorders',
-                                                    table: {
-                                                        body: [
-                                                            [{
-                                                                columns: [
-                                                                    { text: value.nombre, alignment: 'center', bold: 'true', fontSize: 14 },
-                                                                ]
-                                                            }],
-
-
-
-                                                            [{
-                                                                columns: [
-                                                                    {
-                                                                        table: {
-
-                                                                            body: [
-                                                                                [
-                                                                                    {
-                                                                                        columns: [
-                                                                                            [
-                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
-
-                                                                                                { image: img, fontSize: 15, bold: true, alignment: 'center', width: 185 },
-                                                                                            ],
-
-                                                                                        ]
-                                                                                    },
-
-                                                                                ]
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ]
-                                                            }],
-
-                                                            [''],
-
-
-                                                            [{
-                                                                columns: [
-                                                                    {
-                                                                        table: {
-
-                                                                            body: [
-                                                                                [
-                                                                                    {
-                                                                                        columns: [
-                                                                                            [
-                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
-
-                                                                                                {
-                                                                                                    layout: 'noBorders',
-                                                                                                    table: {
-
-                                                                                                        body: [
-                                                                                                            [
-                                                                                                                { text: 'Categoría: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.nombreCategoria, alignment: 'left' },
-                                                                                                            ],
-                                                                                                            [
-                                                                                                                { text: 'Catálogo: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.nombreCatalogo, alignment: 'left' },
-                                                                                                            ],
-
-
-                                                                                                            [
-                                                                                                                { text: 'Cod. Compra: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.codigoCompra, alignment: 'left' },
-
-                                                                                                            ],
-                                                                                                            [
-                                                                                                                { text: 'Web: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: value.nombreEstadoWeb, alignment: 'left' },
-
-                                                                                                            ],
-
-                                                                                                        ]
-                                                                                                    }
-                                                                                                }
-
-                                                                                            ],
-
-                                                                                        ]
-                                                                                    },
-
-                                                                                ]
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ]
-                                                            }],
-
-                                                            [{
-                                                                columns: [
-                                                                    {
-                                                                        table: {
-
-                                                                            body: [
-                                                                                [
-                                                                                    {
-                                                                                        columns: [
-                                                                                            [
-                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
-
-                                                                                                {
-                                                                                                    layout: 'noBorders',
-                                                                                                    table: {
-
-                                                                                                        body: [
-                                                                                                            [
-                                                                                                                { text: 'Pre. Costo: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: '$' + value.precioCosto.toFixed(2), alignment: 'left' },
-                                                                                                            ],
-                                                                                                            [
-                                                                                                                { text: 'Pre. Producción: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: '$' + value.precioProduccion.toFixed(2), alignment: 'left' },
-
-                                                                                                            ],
-                                                                                                            [
-                                                                                                                { text: 'Pre. Venta: ', alignment: 'left', bold: 'true' },
-                                                                                                                { text: '$' + value.precioVenta.toFixed(2), alignment: 'left' },
-
-                                                                                                            ],
-
-                                                                                                        ]
-                                                                                                    }
-                                                                                                }
-
-                                                                                            ],
-
-                                                                                        ]
-                                                                                    },
-
-                                                                                ]
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ]
-                                                            }],
-
-
-
-                                                            [{
-                                                                columns: [
-                                                                    {
-                                                                        table: {
-
-                                                                            body: [
-                                                                                [
-                                                                                    {
-                                                                                        columns: [
-                                                                                            [
-                                                                                                { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
-
-                                                                                                { text: 'PROVEEDORES', bold: 'true', alignment: 'center' },
-                                                                                                {
-                                                                                                    layout: 'noBorders',
-                                                                                                    table: {
-
-                                                                                                        body: [
-                                                                                                            [
-                                                                                                                { text: 'SOLO NOMBRE', alignment: 'left', bold: 'true' },
-                                                                                                                { text: '', alignment: 'left', bold: 'true' },
-                                                                                                            ],
-                                                                                                            [
-                                                                                                                { text: '------', alignment: 'left', },
-                                                                                                                { text: '------', alignment: 'left' },
-
-                                                                                                            ],
-
-                                                                                                        ]
-                                                                                                    }
-                                                                                                }
-
-                                                                                            ],
-
-                                                                                        ]
-                                                                                    },
-
-                                                                                ]
-                                                                            ],
-                                                                        },
-                                                                    },
-                                                                ]
-                                                            }],
-
-                                                            [' '],
-                                                            // ['Column 1'],
-
-                                                        ]
-                                                    },
-                                                },
-
-                                                { width: '*', text: '' },
-
-
-
-
-                                            ]
-
-
-
-
-                                        }
-
-
-
-                                    ]
-                                ]
-                            }
-                        },
-
-
-                        { text: '    ' },
-                        { text: '    ' },
-
+                    const pdfDefinition: any = {
 
                         /*
-                        {
-                            table: {
-                                headerRows: 1,
-                                widths: ['100%'],
-                                heights: 20,
-                                body: [
-                                    ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
-
-                                ]
-                            },
+                        footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+                        header: function (currentPage, pageCount, pageSize) {
+    
                         },*/
 
+                        content: [
+                            { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100, alignment: 'center' },
+
+                            // {
+                            //    text: '_______________________________________________________________________________________________',
+                            //   alignment: 'center'
+                            // },
+                            // @ts-ignore
+                            { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+                            { text: '    ' },
+                            { text: '' },
 
 
-                    ],
+                            {
+                                table: {
+                                    widths: ['40%', '60%'],
+                                    body: [
+                                        [
 
-                    pageOrientation: 'portrait',
-                }
+                                            /*
+                                            {
+    
+                                                image: 'data:image/jpeg;base64,' + value.foto + '',
+                                                width: 198
+    
+                                            },*/
+
+                                            {
 
 
-                this.loaderActualizar = false
-                const pdf = pdfMake.createPdf(pdfDefinition);
-                pdf.open();
+                                                columns: [
+
+                                                    { width: '*', text: '' },
+                                                    {
+                                                        width: '100%',
+                                                        layout: 'noBorders',
+                                                        table: {
+                                                            body: [
+                                                                [{
+                                                                    columns: [
+                                                                        { text: '' },
+                                                                    ]
+                                                                }],
+
+
+
+                                                                [{
+                                                                    columns: [
+                                                                        {
+                                                                            layout: 'noBorders',
+                                                                            table: {
+
+                                                                                body: [
+                                                                                    [
+                                                                                        {
+                                                                                            columns: [
+                                                                                                [
+
+
+                                                                                                    {
+
+                                                                                                        image: 'data:image/jpeg;base64,' + value.foto + '',
+                                                                                                        width: 180
+
+                                                                                                    },
+
+                                                                                                ],
+
+                                                                                            ]
+                                                                                        },
+
+                                                                                    ]
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    ]
+                                                                }],
+
+                                                                [''],
+
+                                                                [{ text: 'Descripción:', alignment: 'justify ', bold: 'true' }],
+
+                                                                [
+
+                                                                    { text: value.descripcion, alignment: 'justify ' }],
+
+
+                                                                [{
+                                                                    columns: [
+                                                                        {
+                                                                            layout: 'noBorders',
+                                                                            table: {
+
+                                                                                body: [
+                                                                                    [
+                                                                                        {
+                                                                                            columns: [
+                                                                                                [
+                                                                                                    { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                    { text: 'Medidas: ', alignment: 'justify', bold: 'true' },
+                                                                                                    {
+                                                                                                        layout: 'noBorders',
+
+                                                                                                        table: {
+
+                                                                                                            body: [
+
+                                                                                                                [
+                                                                                                                    { text: 'Alto: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.alto, alignment: 'left' },
+                                                                                                                    { text: 'Ancho: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.ancho, alignment: 'left' },
+                                                                                                                ],
+
+                                                                                                                [
+                                                                                                                    { text: 'Prof: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.profundidad, alignment: 'left' },
+                                                                                                                    { text: 'Peso: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.peso, alignment: 'left' },
+
+                                                                                                                ],
+                                                                                                                /*
+    
+                                                                                                                [
+                                                                                                                    { text: 'Alto: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.alto, alignment: 'left' },
+    
+                                                                                                                ],
+    
+                                                                                                                [
+    
+                                                                                                                    { text: 'Ancho: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.ancho, alignment: 'left' },
+                                                                                                                ],
+    
+                                                                                                                [
+                                                                                                                    { text: 'Prof: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.profundidad, alignment: 'left' },
+    
+    
+                                                                                                                ],
+    
+    
+                                                                                                                [
+    
+                                                                                                                    { text: 'Peso: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.peso, alignment: 'left' },
+    
+                                                                                                                ]
+    */
+
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                ],
+
+                                                                                            ]
+                                                                                        },
+
+                                                                                    ]
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    ]
+                                                                }],
+
+
+
+
+
+                                                                [' '],
+                                                                // ['Column 1'],
+
+                                                            ]
+                                                        },
+                                                    },
+
+                                                    { width: '*', text: '' },
+
+
+
+
+                                                ]
+
+
+
+
+                                            },
+
+                                            {
+
+
+                                                columns: [
+
+                                                    { width: '*', text: '' },
+                                                    {
+                                                        width: '85%',
+                                                        layout: 'noBorders',
+                                                        table: {
+                                                            body: [
+                                                                [{
+                                                                    columns: [
+                                                                        { text: value.nombre, alignment: 'center', bold: 'true', fontSize: 14 },
+                                                                    ]
+                                                                }],
+
+
+
+                                                                [{
+                                                                    columns: [
+                                                                        {
+                                                                            table: {
+
+                                                                                body: [
+                                                                                    [
+                                                                                        {
+                                                                                            columns: [
+                                                                                                [
+                                                                                                    { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                    { image: img, fontSize: 15, bold: true, alignment: 'center', width: 185 },
+                                                                                                ],
+
+                                                                                            ]
+                                                                                        },
+
+                                                                                    ]
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    ]
+                                                                }],
+
+                                                                [''],
+
+
+                                                                [{
+                                                                    columns: [
+                                                                        {
+                                                                            table: {
+
+                                                                                body: [
+                                                                                    [
+                                                                                        {
+                                                                                            columns: [
+                                                                                                [
+                                                                                                    { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                    {
+                                                                                                        layout: 'noBorders',
+                                                                                                        table: {
+
+                                                                                                            body: [
+                                                                                                                [
+                                                                                                                    { text: 'Categoría: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.nombreCategoria, alignment: 'left' },
+                                                                                                                ],
+                                                                                                                [
+                                                                                                                    { text: 'Catálogo: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.nombreCatalogo, alignment: 'left' },
+                                                                                                                ],
+
+
+                                                                                                                [
+                                                                                                                    { text: 'Cod. Compra: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.codigoCompra, alignment: 'left' },
+
+                                                                                                                ],
+                                                                                                                [
+                                                                                                                    { text: 'Web: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: value.nombreEstadoWeb, alignment: 'left' },
+
+                                                                                                                ],
+
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                ],
+
+                                                                                            ]
+                                                                                        },
+
+                                                                                    ]
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    ]
+                                                                }],
+
+                                                                [{
+                                                                    columns: [
+                                                                        {
+                                                                            table: {
+
+                                                                                body: [
+                                                                                    [
+                                                                                        {
+                                                                                            columns: [
+                                                                                                [
+                                                                                                    { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                    {
+                                                                                                        layout: 'noBorders',
+                                                                                                        table: {
+
+                                                                                                            body: [
+                                                                                                                [
+                                                                                                                    { text: 'Pre. Costo: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: '$' + value.precioCosto.toFixed(2), alignment: 'left' },
+                                                                                                                ],
+                                                                                                                [
+                                                                                                                    { text: 'Pre. Producción: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: '$' + value.precioProduccion.toFixed(2), alignment: 'left' },
+
+                                                                                                                ],
+                                                                                                                [
+                                                                                                                    { text: 'Pre. Venta: ', alignment: 'left', bold: 'true' },
+                                                                                                                    { text: '$' + value.precioVenta.toFixed(2), alignment: 'left' },
+
+                                                                                                                ],
+
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                ],
+
+                                                                                            ]
+                                                                                        },
+
+                                                                                    ]
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    ]
+                                                                }],
+
+
+
+                                                                [{
+                                                                    columns: [
+                                                                        {
+                                                                            table: {
+
+                                                                                body: [
+                                                                                    [
+                                                                                        {
+                                                                                            columns: [
+                                                                                                [
+                                                                                                    { text: '111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111 ', alignment: 'left', color: '#FFFFFF', fontSize: 2 },
+
+                                                                                                    { text: 'PROVEEDORES', bold: 'true', alignment: 'center' },
+
+                                                                                                  
+
+                                                                                                    {
+                                                                                                        layout: 'noBorders',
+                                                                                                        table: {
+
+                                                                                                            body: [
+                                                                                                                
+                                                                                                                [valuec.map(function (item) {
+                                                                                                                    return { text: item.nombreProveedor }
+                                                                                                                }),
+
+                                                                                                                ],
+
+                                                                                                            ]
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                ],
+
+                                                                                            ]
+                                                                                        },
+
+                                                                                    ]
+                                                                                ],
+                                                                            },
+                                                                        },
+                                                                    ]
+                                                                }],
+
+                                                                [' '],
+                                                                // ['Column 1'],
+
+                                                            ]
+                                                        },
+                                                    },
+
+                                                    { width: '*', text: '' },
+
+
+
+
+                                                ]
+
+
+
+
+                                            }
+
+
+
+                                        ]
+                                    ]
+                                }
+                            },
+
+
+                            { text: '    ' },
+                            { text: '    ' },
+
+
+                            /*
+                            {
+                                table: {
+                                    headerRows: 1,
+                                    widths: ['100%'],
+                                    heights: 20,
+                                    body: [
+                                        ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+    
+                                    ]
+                                },
+                            },*/
+
+
+
+                        ],
+
+                        pageOrientation: 'portrait',
+                    }
+
+
+                    this.loaderActualizar = false
+                    const pdf = pdfMake.createPdf(pdfDefinition);
+                    pdf.open();
+                })
+
             })
         })
     }

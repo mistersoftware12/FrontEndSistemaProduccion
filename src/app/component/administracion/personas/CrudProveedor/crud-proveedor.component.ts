@@ -312,38 +312,6 @@ export class CrudProveedorComponent implements OnInit {
     })
 
 
-    /*
-        this.proveedorListaGuardar.cedula = Object.values(this.formGrupos.getRawValue())[0];
-        this.proveedorListaGuardar.nombres = Object.values(this.formGrupos.getRawValue())[1];
-        this.proveedorListaGuardar.apellidos = Object.values(this.formGrupos.getRawValue())[2];
-        this.proveedorListaGuardar.telefono = Object.values(this.formGrupos.getRawValue())[3];
-        this.proveedorListaGuardar.email = Object.values(this.formGrupos.getRawValue())[4];
-        this.proveedorListaGuardar.direccion = Object.values(this.formGrupos.getRawValue())[5];
-        this.proveedorListaGuardar.fechaNacimiento = Object.values(this.formGrupos.getRawValue())[6];
-        this.proveedorListaGuardar.idCuidad = Object.values(this.formGrupos.getRawValue())[7];
-        this.proveedorListaGuardar.id = this.idPersona;
-    
-        console.info(this.proveedorListaGuardar);
-    
-        console.log("Datos Actualizar");
-        console.log(this.proveedorListaGuardar);
-    
-    
-        this.clienteService.putCliente(this.proveedorListaGuardar).subscribe(value => {
-          this._snackBar.open('Cliente Actualizado', 'ACEPTAR');
-          this.vaciarFormulario();
-          this.botonParaGuardar = true;
-          this.botonParaEditar = false;
-          //this.listarEventoSinParticipantes();
-          this.mostrarLista();
-    
-    
-        }, error => {
-          this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
-          //this.loaderGuardar=false
-        })
-    */
-
   }
 
 

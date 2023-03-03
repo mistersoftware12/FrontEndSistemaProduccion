@@ -46,7 +46,9 @@ export class Articulo{
 }
 
 export class ArticuloProveedor{
-   id?: any;
+   
+  id?: any;
   idArticulo?: any;
   idProveedor?: any;
+  nombreProveedor?:any;
 }
