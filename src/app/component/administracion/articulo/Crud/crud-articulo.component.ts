@@ -21,12 +21,13 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { DatePipe } from "@angular/common";
 import { cedula } from 'src/environments/environment';
 import { ArticuloService } from 'src/app/services/articulo.service';
-import { Articulo, ArticuloProveedor } from 'src/app/models/articulo';
+import { Articulo, ArticuloControl, ArticuloProveedor } from 'src/app/models/articulo';
 import { Categoria } from 'src/app/models/categoria';
 import * as JsBarcode from 'jsbarcode';
 import { Almacen } from 'src/app/models/almacen';
 import { ProveedorService } from 'src/app/services/proveedorService';
 import { Proveedor } from 'src/app/models/persona';
+import Swal from 'sweetalert2';
 
 
 
@@ -69,13 +70,18 @@ export class CrudArticuloComponent implements OnInit {
     public articuloLista: Articulo[] = [];
     public catalogoLista: Catalogo[] = [];
     public categoriaLista: Categoria[] = [];
+
     public articuloProveedorLista1: ArticuloProveedor[] = [];
 
+
+    public proveedorLista: Proveedor[] = [];
     public proveedorListaSelect1: Proveedor[] = [];
     public proveedorListaSelect2: Proveedor[] = [];
     public proveedorListaSelect3: Proveedor[] = [];
     public proveedorListaSelect4: Proveedor[] = [];
 
+
+    public controlProveedor
 
     public idProveedores = [];
 
@@ -141,6 +147,10 @@ export class CrudArticuloComponent implements OnInit {
     displayedColumns: string[] = ['id', 'nombre', 'logo', 'precioproduccion', 'precioventa', 'stockminimo', 'documento'];
     dataSource: MatTableDataSource<Sucursal>;
 
+
+    displayedColumns1: string[] = ['position', 'name', 'weight'];
+    dataSource1: MatTableDataSource<ArticuloControl>;
+
     @ViewChild(MatPaginator) paginator: MatPaginator;
     @ViewChild(MatSort) sort: MatSort;
 
@@ -205,15 +215,23 @@ export class CrudArticuloComponent implements OnInit {
     }
 
     public botonCancelarRegistro() {
+
         this.mostrarLista();
         this.vaciarFormulario();
         this.botonParaGuardar = true;
         this.botonParaEditar = false;
         this.numeroControl = 1;
 
+
+        if (this.idProveedores.length != 0) {
+            this.guardarProveedores();
+        }
+
+
     }
 
     vaciarFormulario() {
+
 
         this.formGrupos.setValue({
 
@@ -267,6 +285,7 @@ export class CrudArticuloComponent implements OnInit {
         this.proveedor3 = false;
         this.proveedor4 = false;
 
+        this.articuloProveedorLista1 = [];
 
     }
 
@@ -287,10 +306,14 @@ export class CrudArticuloComponent implements OnInit {
         })
 
 
+
+
+
     }
 
     public listarCategorias() {
-        this.categoriaService.getCategoriaAll().subscribe(value => {
+        this.categoriaService.getCategoriaAllEstado(true).subscribe(value => {
+        //this.categoriaService.getCategoriaAll().subscribe(value => {
             this.categoriaLista = value;
         })
 
@@ -298,8 +321,8 @@ export class CrudArticuloComponent implements OnInit {
     }
 
     public listarCatalogos() {
-
-        this.catalogoService.getCatalogoAll().subscribe(value => {
+        this.catalogoService.getCatalogoAllEstado(true).subscribe(value => {
+       // this.catalogoService.getCatalogoAll().subscribe(value => {
             this.catalogoLista = value;
 
         })
@@ -311,6 +334,7 @@ export class CrudArticuloComponent implements OnInit {
 
         this.proveedorService.getProveedoresAll().subscribe(value => {
             this.proveedorListaSelect1 = value;
+            this.proveedorLista = value;
 
         })
 
@@ -390,7 +414,7 @@ export class CrudArticuloComponent implements OnInit {
 
             this.articuloListaGuardar.codigoBarra = Object.values(this.forGrupoCodigoBarra.getRawValue())[0];
 
-            console.info(this.articuloListaGuardar);
+
 
             this.articuloService.createArticulo(this.articuloListaGuardar).subscribe(value => {
                 this._snackBar.open('Articulo Creado', 'ACEPTAR');
@@ -455,11 +479,6 @@ export class CrudArticuloComponent implements OnInit {
 
         console.info(this.idProveedores);
 
-        /*
-        for (let i = 0; i < this.idProveedores.length; i++) {
-
-            console.info(this.idProveedores[i]);
-        }*/
 
 
     }
@@ -467,6 +486,29 @@ export class CrudArticuloComponent implements OnInit {
 
     ///Proveedores seleccionr
 
+    activarProveedor1() {
+        /*
+        this.proveedorListaSelect1 = [];
+        this.articuloProveedorLista1
+        this.proveedorLista;
+
+
+        for (let i = 0; i < this.articuloProveedorLista1.length; i++) {
+
+            for (let j = 0; j < this.proveedorLista.length; j++) {
+
+                if (this.proveedorLista[i].idProveedor != this.articuloProveedorLista1[i].idProveedor) {
+
+                    this.proveedorListaSelect1.push(this.proveedorLista[i]);
+                }
+            }
+
+
+        }
+*/
+
+
+    }
 
     activarProveedor2() {
 
@@ -554,6 +596,81 @@ export class CrudArticuloComponent implements OnInit {
 
 
     }
+
+
+
+    cargarInfoProveedor1() {
+
+        this.articuloService.getArticuloProveedorId(this.idArticulo).subscribe(value2 => {
+
+
+            this.articuloProveedorLista1 = value2;
+
+
+
+            this.dataSource1 = new MatTableDataSource(value2);
+            this.dataSource1.sort = this.sort;
+
+            console.info("Informacion cargada de ArticuloProveedor");
+
+            this. activarProveedor1();
+
+        })
+    }
+
+
+    GuardarParaEliminarArticuloProveedor(idArtiPro: any, idProve: any) {
+
+        Swal.fire({
+            title: 'Estas seguro?',
+            text: "No podrás revertir esto.!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, borrar !'
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+
+
+
+                this.idProveedores.push(idProve);
+
+
+
+
+
+                this.articuloService.deleteProveedorDeArticulo(idArtiPro).subscribe(value => {
+                    this._snackBar.open('Proveedor eliminado', 'ACEPTAR');
+
+                    this.cargarInfoProveedor1();
+                })
+
+
+                /*
+                for (let i = 0; i < this.articuloProveedorLista1.length; i++) {
+
+
+                    if (this.articuloProveedorLista1[i].id != idArtiPro) {
+                        this.articuloProveedorFiltro.push({ "id": this.articuloProveedorLista1[i].id, "idArticulo": this.articuloProveedorLista1[i].idArticulo, "idProveedor": this.articuloProveedorLista1[i].idProveedor, "nombreProveedor": this.articuloProveedorLista1[i].nombreProveedor })
+                    }
+
+                }
+
+                this.articuloProveedorLista1 = [];
+                this.articuloProveedorLista1 = this.articuloProveedorFiltro;*/
+
+            }
+
+        })
+
+
+
+
+    }
+
+
     //Generar Código
 
     generaCodigo() {
@@ -586,8 +703,11 @@ export class CrudArticuloComponent implements OnInit {
         this.botonParaGuardar = false;
         this.botonParaEditar = true;
 
+        this.idProveedores = [];
+
+
         this.articuloService.getArticuloId(id).subscribe(value1 => {
-            console.info(value1);
+            console.info("Informacion articulo cargado con exito");
 
 
 
@@ -605,7 +725,7 @@ export class CrudArticuloComponent implements OnInit {
             this.mostrarImagenBase();
 
 
-            console.info(value1.estadoWeb);
+
             if (value1.estadoWeb == true) {
                 this.articuloListaGuardar.estadoWeb = 1;
 
@@ -665,6 +785,10 @@ export class CrudArticuloComponent implements OnInit {
             this.numeroControl = 3;
             this.articuloListaGuardar.id = this.idArticulo;
 
+
+            this.cargarInfoProveedor1();
+
+
         })
 
         this.mostrarNuevo();
@@ -679,14 +803,13 @@ export class CrudArticuloComponent implements OnInit {
 
     public guardarEditarInformacion() {
 
+        this.asiganarValorAProveedor();
         this.articuloListaGuardar.nombre = Object.values(this.formGrupos.getRawValue())[0];
         //this.articuloListaGuardar.codigoBarra = Object.values(this.formGrupos.getRawValue())[1];
         this.articuloListaGuardar.descripcion = Object.values(this.formGrupos.getRawValue())[1];
         this.articuloListaGuardar.codigoCompra = Object.values(this.formGrupos.getRawValue())[2];
         this.articuloListaGuardar.idCategoria = Object.values(this.formGrupos.getRawValue())[3];
         this.articuloListaGuardar.idCatalogo = Object.values(this.formGrupos.getRawValue())[4];
-
-        console.info(this.articuloListaGuardar.codigoBarra);
 
         var s = JSON.stringify(Object.values(this.formGrupos.getRawValue())[5]);
         var d = parseInt(s);
@@ -726,10 +849,15 @@ export class CrudArticuloComponent implements OnInit {
 
         this.articuloListaGuardar.codigoBarra = Object.values(this.forGrupoCodigoBarra.getRawValue())[0];
 
-        console.info(this.articuloListaGuardar);
 
         this.articuloService.putArticulo(this.articuloListaGuardar).subscribe(value => {
             this._snackBar.open('Artículo Actualizado', 'ACEPTAR');
+
+
+
+            this.guardarProveedores();
+
+
             this.vaciarFormulario();
             this.botonParaGuardar = true;
             this.botonParaEditar = false;
@@ -745,6 +873,24 @@ export class CrudArticuloComponent implements OnInit {
 
     }
 
+    guardarProveedores() {
+        this.articuloProveedorListaGuardar.idArticulo = this.idArticulo;
+        for (let i = 0; i < this.idProveedores.length; i++) {
+
+            if (this.idProveedores[i] != 0) {
+                this.articuloProveedorListaGuardar.idProveedor = this.idProveedores[i];
+
+                this.articuloService.createArticuloProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
+                }, error => {
+                    this._snackBar.open(error.error.message + ' OCURRIO UN ERROR AL AGREGAR PROVEEDOR', 'ACEPTAR');
+
+                })
+
+            }
+
+        }
+    }
+
     //Convertir a base 64
 
     onFileSelected(event) {
@@ -754,7 +900,7 @@ export class CrudArticuloComponent implements OnInit {
             this.base64Output = base64;
             this.articuloListaGuardar.foto = base64;
             console.info("Convertido a base 64");
-            console.info(base64);
+
             this.mostrarImagenBase();
         });
 
@@ -984,7 +1130,7 @@ export class CrudArticuloComponent implements OnInit {
         this.loaderActualizar = true
         var pipe: DatePipe = new DatePipe('es')
         var dia: String = new Date().toISOString();
-    
+
 
 
         this.articuloService.getArticuloId(id).subscribe(value => {
@@ -1366,14 +1512,14 @@ export class CrudArticuloComponent implements OnInit {
 
                                                                                                     { text: 'PROVEEDORES', bold: 'true', alignment: 'center' },
 
-                                                                                                  
+
 
                                                                                                     {
                                                                                                         layout: 'noBorders',
                                                                                                         table: {
 
                                                                                                             body: [
-                                                                                                                
+
                                                                                                                 [valuec.map(function (item) {
                                                                                                                     return { text: item.nombreProveedor }
                                                                                                                 }),
@@ -1617,4 +1763,10 @@ export class CrudArticuloComponent implements OnInit {
 
 
 
+
+
+
 }
+
+
+

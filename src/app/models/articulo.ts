@@ -52,3 +52,9 @@ export class ArticuloProveedor{
   idProveedor?: any;
   nombreProveedor?:any;
 }
+
+
+export class ArticuloControl{
+  id?:any;
+  idProveedor?:any;
+}

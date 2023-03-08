@@ -56,6 +56,9 @@ export class ArticuloService {
     }
 
 
-   
+    deleteProveedorDeArticulo(idproar: any) {
+        return this.http.delete(environment.URL_APP + "/articulo/deleteProveedorArticulo/" + idproar, { headers: this.httpHeaders });
+    }
+
 
 }

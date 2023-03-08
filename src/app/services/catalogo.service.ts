@@ -30,6 +30,10 @@ export class CatalogoService {
     return this.http.get(environment.URL_APP + "/catalogo/allCatalogo", {headers: this.httpHeaders}).pipe(map(Response => Response as Catalogo[]))
   }
 
+  getCatalogoAllEstado(estado:boolean): Observable<Catalogo[]> {
+    return this.http.get(environment.URL_APP + "/catalogo/allCatalogoEstado/"+estado, {headers: this.httpHeaders}).pipe(map(Response => Response as Catalogo[]))
+  }
+
   putCatalogo(catalogo: Catalogo): Observable<Catalogo> {
     return this.http.put(environment.URL_APP + "/catalogo/updateCatalogo", catalogo, {headers: this.httpHeaders})
   }

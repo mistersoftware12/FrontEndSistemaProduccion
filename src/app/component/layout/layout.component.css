@@ -10,8 +10,10 @@
   flex-direction: column;
   height: 100%;
   background-color: #f2f8df;
-  background-position: center; /* Center the image */
-  background-size: cover; /* Resize the background image to cover the entire container */
+  background-position: center;
+  /* Center the image */
+  background-size: cover;
+  /* Resize the background image to cover the entire container */
   position: absolute;
   width: 100%;
   overflow: scroll;
@@ -24,22 +26,25 @@
   background-color: #a01b20;
 
 }
-.botones{
+
+.botones {
   text-align: left;
   margin-left: 5%;
   margin-right: 5%;
   width: 90%;
   margin-bottom: 10px;
 }
-mat-toolbar{
-padding: 0;
-padding-bottom: 0;
+
+mat-toolbar {
+  padding: 0;
+  padding-bottom: 0;
 }
-mat-expansion-panel-header{
+
+mat-expansion-panel-header {
   padding-left: 0;
 }
 
-.botonmenu{
+.botonmenu {
   padding: 6px;
   border-color: transparent;
   ;
@@ -52,5 +57,8 @@ mat-grid-tile {
 
 table {
   width: 100%;
-  
+
 }
+
+
+

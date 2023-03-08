@@ -31,6 +31,10 @@ export class CategoriaService {
         return this.http.get(environment.URL_APP + "/categoria/allCategoria", { headers: this.httpHeaders }).pipe(map(Response => Response as Categoria[]))
     }
 
+    getCategoriaAllEstado(estado : boolean): Observable<Categoria[]> {
+        return this.http.get(environment.URL_APP + "/categoria/allCategoriaEstado/"+estado, { headers: this.httpHeaders }).pipe(map(Response => Response as Categoria[]))
+    }
+
     putCategoria(categoria: Categoria): Observable<Categoria> {
         return this.http.put(environment.URL_APP + "/categoria/updateCategoria", categoria, { headers: this.httpHeaders })
     }
