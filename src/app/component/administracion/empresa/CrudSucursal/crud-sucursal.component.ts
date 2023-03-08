@@ -141,7 +141,7 @@ export class CrudSucursalComponent implements OnInit {
   //LISTAR
 
   public listarInformacion() {
-
+    this.loaderActualizar = true;
 
 
     this.empresaService.getSucursalAll().subscribe(value => {
@@ -152,7 +152,7 @@ export class CrudSucursalComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 

@@ -138,7 +138,7 @@ export class CrudBodegaComponent implements OnInit {
 
   public listarInformacion() {
 
-
+    this.loaderActualizar = true;
 
     this.empresaService.getBodegaAll().subscribe(value => {
 
@@ -147,7 +147,7 @@ export class CrudBodegaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 

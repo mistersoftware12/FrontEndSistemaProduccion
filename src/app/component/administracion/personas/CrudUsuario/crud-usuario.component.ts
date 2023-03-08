@@ -146,6 +146,7 @@ export class CrudUsuariosComponent implements OnInit {
   //LISTAR
 
   public listarInformacion() {
+    this.loaderActualizar = true;
     this.usuarioService.getAllUsuarios().subscribe(value => {
 
       this.UsuarioLista = value;
@@ -153,7 +154,7 @@ export class CrudUsuariosComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 

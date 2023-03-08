@@ -139,7 +139,7 @@ export class CrudAlmacenComponent implements OnInit {
 
   public listarInformacion() {
 
-
+    this.loaderActualizar = true;
 
     this.empresaService.getAlmacenAll().subscribe(value => {
       
@@ -150,7 +150,7 @@ export class CrudAlmacenComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 

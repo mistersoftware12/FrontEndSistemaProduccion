@@ -147,6 +147,7 @@ export class CrudProveedorComponent implements OnInit {
   //LISTAR
 
   public listarInformacion() {
+    this.loaderActualizar = true;
 
     this.proveedorService.getProveedoresAll().subscribe(value => {
       console.info(value);
@@ -155,7 +156,7 @@ export class CrudProveedorComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 

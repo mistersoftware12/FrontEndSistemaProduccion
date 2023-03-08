@@ -136,7 +136,7 @@ export class CrudCatalogoComponent implements OnInit {
 
   public listarInformacion() {
 
-
+    this.loaderActualizar = true;
 
     this.catalogoService.getCatalogoAll().subscribe(value => {
 
@@ -146,6 +146,7 @@ export class CrudCatalogoComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
+      this.loaderActualizar = false;
 
     })
 

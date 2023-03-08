@@ -59,6 +59,7 @@ export class CrudArticuloComponent implements OnInit {
     public numeroControl: number = 1;
 
     loaderActualizar: boolean;
+    loaderActualizarEliminar: boolean;
 
 
     base64Output: string;
@@ -294,7 +295,7 @@ export class CrudArticuloComponent implements OnInit {
     //LISTAR
 
     public listarInformacion() {
-
+        this.loaderActualizar = true;
         this.articuloService.getArticuloAll().subscribe(value => {
 
             this.articuloLista = value;
@@ -302,9 +303,9 @@ export class CrudArticuloComponent implements OnInit {
             this.dataSource = new MatTableDataSource(value);
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
-
+            this.loaderActualizar = false;
         })
-
+       
 
 
 
@@ -601,6 +602,7 @@ export class CrudArticuloComponent implements OnInit {
 
     cargarInfoProveedor1() {
 
+      
         this.articuloService.getArticuloProveedorId(this.idArticulo).subscribe(value2 => {
 
 
@@ -614,7 +616,7 @@ export class CrudArticuloComponent implements OnInit {
             console.info("Informacion cargada de ArticuloProveedor");
 
             this. activarProveedor1();
-
+            this.loaderActualizarEliminar = false;
         })
     }
 
@@ -633,7 +635,7 @@ export class CrudArticuloComponent implements OnInit {
             if (result.isConfirmed) {
 
 
-
+                this.loaderActualizarEliminar = true;
 
                 this.idProveedores.push(idProve);
 
@@ -698,6 +700,7 @@ export class CrudArticuloComponent implements OnInit {
     ////Editar
 
     editarInformacion(id: any) {
+        this.loaderActualizar = true
 
         this.idArticulo = id;
         this.botonParaGuardar = false;
@@ -787,11 +790,12 @@ export class CrudArticuloComponent implements OnInit {
 
 
             this.cargarInfoProveedor1();
-
-
+            this.loaderActualizar = false
+           
         })
 
         this.mostrarNuevo();
+       
 
 
 

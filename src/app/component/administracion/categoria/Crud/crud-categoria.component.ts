@@ -141,7 +141,7 @@ export class CrudCategoriaComponent implements OnInit {
   //LISTAR
 
   public listarInformacion() {
-
+    this.loaderActualizar = true;
 
     this.categoriaService.getCategoriaAll().subscribe(value => {
 
@@ -151,7 +151,7 @@ export class CrudCategoriaComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 

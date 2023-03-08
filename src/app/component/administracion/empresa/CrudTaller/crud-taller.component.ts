@@ -137,7 +137,7 @@ export class CrudTallerComponent implements OnInit {
   //LISTAR
 
   public listarInformacion() {
-
+    this.loaderActualizar = true;
 
 
     this.empresaService.getTallerAll().subscribe(value => {
@@ -147,7 +147,7 @@ export class CrudTallerComponent implements OnInit {
       this.dataSource = new MatTableDataSource(value);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-
+      this.loaderActualizar = false;
     })
 
 
