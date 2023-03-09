@@ -16,7 +16,7 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 import { DatePipe } from "@angular/common";
 import { cedula } from 'src/environments/environment';
 import { UsuarioService } from 'src/app/services/usuario.service';
-import { ArticuloService } from 'src/app/services/articulo.service';
+
 
 @Component({
   selector: 'app-crud-sucursal',

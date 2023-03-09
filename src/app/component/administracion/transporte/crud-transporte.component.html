@@ -1,0 +1,202 @@
+<br>
+<section>
+    <div *ngIf="sectionCrudDatos==true">
+        <mat-card class="example-card" style="background: #F2F1E9">
+            <form [formGroup]="formGrupos">
+                <mat-card-content style="background: #F2F1E9">
+
+                    <mat-grid-list cols="2" rowHeight="5:0.9">
+
+
+                        <div>
+                            <div class="opcion1fd">
+                                <h3> <strong>TRANSPORTE</strong></h3>
+                            </div>
+                        </div>
+
+                        <h4>DATOS DEL TRANSPORTE</h4>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Nombre</mat-label>
+                                    <input matInput formControlName="nombres">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                        </div>
+
+                        <div>
+                            <mat-grid-tile>
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Descripción</mat-label>
+                                    <input matInput formControlName="inicial">
+                                </mat-form-field>
+                            </mat-grid-tile>
+
+                        </div>
+
+
+                        <div>
+                            <mat-grid-tile>
+
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Seleccione Estado</mat-label>
+                                    <mat-select formControlName="estado">
+                                        <mat-option *ngFor="let option2 of estadoLista"
+                                            [value]="option2.id">{{option2.nombres}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+
+                            </mat-grid-tile>
+                        </div>
+
+
+
+
+                    </mat-grid-list>
+
+
+
+
+
+                </mat-card-content>
+
+                <div>
+                    <div>
+                        <div class="opcion1fd">
+
+
+                            <button *ngIf="botonParaGuardar==true" mat-flat-button color="primary"
+                                style="color: #FFFFFF;" [disabled]="formGrupos.invalid" (click)="guardarInformacion()"
+                                class=".buttonguardar"> <mat-icon>save</mat-icon> REGISTRAR
+                            </button>
+
+                            <button *ngIf="botonParaEditar==true" mat-flat-button color="primary"
+                                style="color: #FFFFFF;" [disabled]="formGrupos.invalid"
+                                (click)="guardarEditarInformacion()" class="buttonguardar"> <mat-icon>save</mat-icon>
+                                ACTUALIZAR
+                            </button>
+
+
+                            <button mat-raised-button mat-flat-button color="warn" class="buttonprincipales"
+                                (click)="botonCancelarRegistro()" class="buttonguardar">
+                                <mat-icon>close</mat-icon> CANCELAR
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </form>
+
+        </mat-card>
+    </div>
+</section>
+
+
+<!---------------------------------------LISTAR----------------------------------------->
+
+<section *ngIf="sectionTablaLista==true">
+    <mat-card class="borde2">
+
+        <div class="tituloSeccion">
+            <strong>TRANSPORTES</strong>
+        </div>
+
+        <mat-progress-bar *ngIf="loaderActualizar" mode="indeterminate"></mat-progress-bar>
+        <mat-card-content>
+
+            <div>
+                <button mat-raised-button color="primary" style="color: #FFFFFF;" class="buttonprincipales"
+                    (click)="mostrarNuevo()">
+                    <mat-icon>add_circle_outline</mat-icon>
+                    Nuevo
+                </button>
+                <button mat-raised-button style="background-color: #FBC02D; color: #FFFFFF;" class="buttonprincipales"
+                    (click)="generatePDF()">
+                    <mat-icon>save_alt</mat-icon>
+                    PDF
+                </button>
+
+                <button mat-raised-button style="background-color: #217346; color: #FFFFFF;" class="buttonprincipales"
+                    (click)="exportToExcel()">
+                    <mat-icon>save_alt</mat-icon>
+                    EXCEL
+                </button>
+
+            </div>
+            <br>
+
+            <div style="width: 340px;">
+                <mat-form-field appearance="outline" class="bordeFiltro">
+                    <mat-label>Buscar Transporte</mat-label>
+                    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Taxi" #input>
+                    <mat-icon matSuffix>find_in_page</mat-icon>
+                </mat-form-field>
+            </div>
+
+
+
+            <div class="mat-elevation-z8">
+                <table mat-table [dataSource]="dataSource" matSort id="table" style="background-color: #F2F1E9">
+
+
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+                        <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+                    </ng-container>
+
+
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="nombre">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> NOMBRE</th>
+                        <td mat-cell *matCellDef="let row"> {{row.nombre}} </td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="logo">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>DESCRIPCIÓN</th>
+                        <td mat-cell *matCellDef="let row"> {{row.descripcion}}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="estado">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> ESTADO</th>
+                        <td mat-cell *matCellDef="let row">
+                            {{row.nombreEstado}}
+                    </ng-container>
+
+
+                    <ng-container matColumnDef="documento">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>ACCIÓN</th>
+                        <td mat-cell *matCellDef="let row">
+                            <button mat-flat-button color="primary" style="color: #FFFFFF;"
+                                (click)="editarInformacion(row.id , row.nombre ,row.descripcion , row.estado )">EDITAR</button>
+                        </td>
+                    </ng-container>
+
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                    <!-- Row shown when there is no matching data. -->
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell" colspan="4">No hay datos que coincidan con el filtro"{{input.value}}"</td>
+                    </tr>
+                </table>
+
+                <mat-paginator style="background-color: #F2F1E9;" [pageSizeOptions]="[5, 10, 25, 100]"
+                    aria-label="Select page of users"></mat-paginator>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</section>
