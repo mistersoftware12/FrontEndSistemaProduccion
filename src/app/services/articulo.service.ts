@@ -55,6 +55,10 @@ export class ArticuloService {
         return this.http.put(environment.URL_APP + "/articulo/updateArticulo", articulo, { headers: this.httpHeaders })
     }
 
+    putPrecioProveedor(articuloprove: ArticuloProveedor): Observable<ArticuloProveedor> {
+        return this.http.put(environment.URL_APP + "/articulo/updatePrecioArticuloProveedor", articuloprove, { headers: this.httpHeaders })
+    }
+
 
     deleteProveedorDeArticulo(idproar: any) {
         return this.http.delete(environment.URL_APP + "/articulo/deleteProveedorArticulo/" + idproar, { headers: this.httpHeaders });

@@ -85,11 +85,20 @@ export class CrudArticuloComponent implements OnInit {
     public controlProveedor
 
     public idProveedores = [];
+    public precioProveedores = [];
 
     public proveedor2: Boolean = false;
     public proveedor3: Boolean = false;
     public proveedor4: Boolean = false;
 
+    public precioproveedor1: Boolean = false;
+    public precioproveedor2: Boolean = false;
+    public precioproveedor3: Boolean = false;
+    public precioproveedor4: Boolean = false;
+
+
+
+    public dialogoEditarPrecioProveedor: boolean;
 
 
     public estadoLista: EstadoFD[] = [{ id: 1, nombres: 'Activo', value: 'true' }, { id: 2, nombres: 'Inactivo', value: 'false' }];
@@ -141,6 +150,17 @@ export class CrudArticuloComponent implements OnInit {
         proveedor2: new FormControl<String>('', []),
         proveedor3: new FormControl<String>('', []),
         proveedor4: new FormControl<String>('', []),
+        precioproveedor1: new FormControl<String>('', [Validators.required]),
+        precioproveedor2: new FormControl<String>('', []),
+        precioproveedor3: new FormControl<String>('', []),
+        precioproveedor4: new FormControl<String>('', []),
+
+    })
+
+
+    formGroupPrecioProveedor = new FormGroup({
+        proveedor: new FormControl<any>('', [Validators.required]),
+        precio: new FormControl<any>('', [Validators.required, Validators.max(500)]),
     })
 
 
@@ -149,7 +169,7 @@ export class CrudArticuloComponent implements OnInit {
     dataSource: MatTableDataSource<Sucursal>;
 
 
-    displayedColumns1: string[] = ['position', 'name', 'weight'];
+    displayedColumns1: string[] = ['position', 'name', 'precio', 'weight'];
     dataSource1: MatTableDataSource<ArticuloControl>;
 
     @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -229,6 +249,7 @@ export class CrudArticuloComponent implements OnInit {
         }
 
 
+
     }
 
     vaciarFormulario() {
@@ -279,12 +300,22 @@ export class CrudArticuloComponent implements OnInit {
             proveedor2: "",
             proveedor3: "",
             proveedor4: "",
+            precioproveedor1: "",
+            precioproveedor2: "",
+            precioproveedor3: "",
+            precioproveedor4: "",
 
         })
 
         this.proveedor2 = false;
         this.proveedor3 = false;
         this.proveedor4 = false;
+
+
+        this.precioproveedor1 = false;
+        this.precioproveedor2 = false;
+        this.precioproveedor3 = false;
+        this.precioproveedor4 = false;
 
         this.articuloProveedorLista1 = [];
 
@@ -305,7 +336,7 @@ export class CrudArticuloComponent implements OnInit {
             this.dataSource.sort = this.sort;
             this.loaderActualizar = false;
         })
-       
+
 
 
 
@@ -314,7 +345,7 @@ export class CrudArticuloComponent implements OnInit {
 
     public listarCategorias() {
         this.categoriaService.getCategoriaAllEstado(true).subscribe(value => {
-        //this.categoriaService.getCategoriaAll().subscribe(value => {
+            //this.categoriaService.getCategoriaAll().subscribe(value => {
             this.categoriaLista = value;
         })
 
@@ -323,7 +354,7 @@ export class CrudArticuloComponent implements OnInit {
 
     public listarCatalogos() {
         this.catalogoService.getCatalogoAllEstado(true).subscribe(value => {
-       // this.catalogoService.getCatalogoAll().subscribe(value => {
+            // this.catalogoService.getCatalogoAll().subscribe(value => {
             this.catalogoLista = value;
 
         })
@@ -467,22 +498,36 @@ export class CrudArticuloComponent implements OnInit {
     asiganarValorAProveedor() {
 
         this.idProveedores = [];
+        this.precioProveedores = [];
 
         for (let i = 0; i <= 3; i++) {
 
             if (Object.values(this.forGrupoProveedores.getRawValue())[i].length != 0) {
                 this.idProveedores.push(Object.values(this.forGrupoProveedores.getRawValue())[i]);
+                this.precioProveedores.push(Object.values(this.forGrupoProveedores.getRawValue())[i + 4]);
             } else {
                 this.idProveedores.push(0);
+                this.precioProveedores.push(0);
             }
 
         }
 
-        console.info(this.idProveedores);
-
 
 
     }
+
+
+    //editar
+    abrirEditarPrecio(id: any, nombrePro: any) {
+        this.dialogoEditarPrecioProveedor = true;
+        this.articuloProveedorListaGuardar.id = id;
+        this.formGroupPrecioProveedor.setValue({
+            proveedor: nombrePro,
+            precio: "",
+
+        })
+    }
+
 
 
     ///Proveedores seleccionr
@@ -515,6 +560,7 @@ export class CrudArticuloComponent implements OnInit {
 
         this.proveedorListaSelect2 = [];
         this.proveedor2 = true;
+        this.precioproveedor1 = true;
 
         for (let i = 0; i < this.proveedorListaSelect1.length; i++) {
 
@@ -532,17 +578,25 @@ export class CrudArticuloComponent implements OnInit {
             proveedor2: "0",
             proveedor3: "0",
             proveedor4: "0",
+            precioproveedor1: Object.values(this.forGrupoProveedores.getRawValue())[4],
+            precioproveedor2: "",
+            precioproveedor3: "",
+            precioproveedor4: "",
 
         })
 
         this.proveedor3 = false;
         this.proveedor4 = false;
+        this.precioproveedor2 = false;
+        this.precioproveedor3 = false;
+        this.precioproveedor4 = false;
 
 
     }
 
     activarProveedor3() {
         this.proveedor3 = true;
+        this.precioproveedor2 = true;
 
         this.proveedorListaSelect3 = [];
 
@@ -562,18 +616,24 @@ export class CrudArticuloComponent implements OnInit {
             proveedor2: Object.values(this.forGrupoProveedores.getRawValue())[1],
             proveedor3: "0",
             proveedor4: "0",
+            precioproveedor1: Object.values(this.forGrupoProveedores.getRawValue())[4],
+            precioproveedor2: Object.values(this.forGrupoProveedores.getRawValue())[5],
+            precioproveedor3: "",
+            precioproveedor4: "",
 
         })
 
 
         this.proveedor4 = false;
-
+        this.precioproveedor3 = false;
+        this.precioproveedor4 = false;
 
     }
 
     activarProveedor4() {
         this.proveedor4 = true;
         this.proveedorListaSelect4 = [];
+        this.precioproveedor3 = true;
 
         for (let i = 0; i < this.proveedorListaSelect3.length; i++) {
 
@@ -590,19 +650,27 @@ export class CrudArticuloComponent implements OnInit {
             proveedor1: Object.values(this.forGrupoProveedores.getRawValue())[0],
             proveedor2: Object.values(this.forGrupoProveedores.getRawValue())[1],
             proveedor3: Object.values(this.forGrupoProveedores.getRawValue())[2],
-            proveedor4: "0",
+            proveedor4: "",
+            precioproveedor1: Object.values(this.forGrupoProveedores.getRawValue())[4],
+            precioproveedor2: Object.values(this.forGrupoProveedores.getRawValue())[5],
+            precioproveedor3: Object.values(this.forGrupoProveedores.getRawValue())[6],
+            precioproveedor4: "",
 
         })
 
+        this.precioproveedor4 = false;
 
+    }
 
+    activarProveedor5() {
+        this.precioproveedor4 = true;
     }
 
 
 
     cargarInfoProveedor1() {
 
-      
+
         this.articuloService.getArticuloProveedorId(this.idArticulo).subscribe(value2 => {
 
 
@@ -615,9 +683,51 @@ export class CrudArticuloComponent implements OnInit {
 
             console.info("Informacion cargada de ArticuloProveedor");
 
-            this. activarProveedor1();
+            this.activarProveedor1();
             this.loaderActualizarEliminar = false;
         })
+    }
+
+    guardarEditar() {
+
+        this.articuloProveedorListaGuardar.precioCompra = Number(Object.values(this.formGroupPrecioProveedor.getRawValue())[1]);
+
+        console.info(this.articuloProveedorListaGuardar);
+
+
+        this.articuloService.putPrecioProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
+            this._snackBar.open('Precio Modidicado', 'ACEPTAR');
+            //this.vaciarFormulario();
+
+            this.dialogoEditarPrecioProveedor = false;
+            //this.cardCliente = false;
+            this.cargarInfoProveedor1();
+            //this.mostrarLista();
+            //this.cargaDatoTotal(0, 0);
+      
+          }, error => {
+            this._snackBar.open(error.error.message+' OCURRIO UN ERROR', 'ACEPTAR');
+            //this.loaderGuardar=false
+          })
+        /*
+        this.cargaDatosParaService();
+        this.impresionListaGuardar.idCopia = this.idPrestamoCI;
+        this.impresionListaGuardar.id = this.idPrestamoCI;
+    
+        this.impresion_copiaService.putImpresionCopia(this.impresionListaGuardar).subscribe(value => {
+          this._snackBar.open('Impresión Copia Actualizado', 'ACEPTAR');
+          this.vaciarFormulario();
+          this.dialogoEditarImpresion = false;
+          //this.cardCliente = false;
+          this.listarClientesImpresion();
+          //this.mostrarLista();
+          //this.cargaDatoTotal(0, 0);
+    
+        }, error => {
+          this._snackBar.open(error.error.message+' OCURRIO UN ERROR', 'ACEPTAR');
+          //this.loaderGuardar=false
+        })
+    */
     }
 
 
@@ -791,11 +901,11 @@ export class CrudArticuloComponent implements OnInit {
 
             this.cargarInfoProveedor1();
             this.loaderActualizar = false
-           
+
         })
 
         this.mostrarNuevo();
-       
+
 
 
 
@@ -878,11 +988,13 @@ export class CrudArticuloComponent implements OnInit {
     }
 
     guardarProveedores() {
+
         this.articuloProveedorListaGuardar.idArticulo = this.idArticulo;
         for (let i = 0; i < this.idProveedores.length; i++) {
 
             if (this.idProveedores[i] != 0) {
                 this.articuloProveedorListaGuardar.idProveedor = this.idProveedores[i];
+                this.articuloProveedorListaGuardar.precioCompra = Number(this.precioProveedores[i]);
 
                 this.articuloService.createArticuloProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
                 }, error => {
