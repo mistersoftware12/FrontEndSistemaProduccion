@@ -52,6 +52,12 @@ export class ArticuloProveedor {
   idProveedor?: any;
   precioCompra?: any;
   nombreProveedor?: any;
+
+
+  codigoBarra?:any;
+  nombreArticulo?:any;
+  descripcion?:any;
+  foto?:any;
 }
 
 

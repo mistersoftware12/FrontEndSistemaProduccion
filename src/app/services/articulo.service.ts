@@ -41,10 +41,13 @@ export class ArticuloService {
         return this.http.get(environment.URL_APP + "/articulo/allBylistaArticulo/" + id, { headers: this.httpHeaders }).pipe(map(Response => Response as Articulo))
     }
 
-    getArticuloProveedorId(id: any): Observable<ArticuloProveedor[]> {
-        return this.http.get(environment.URL_APP + "/articulo/allArticuloProveedor/" + id, { headers: this.httpHeaders }).pipe(map(Response => Response as ArticuloProveedor[]))
+    getArticuloProveedorByArticuloId(id: any): Observable<ArticuloProveedor[]> {
+        return this.http.get(environment.URL_APP + "/articulo/allArticuloProveedorByArticuloid/" + id, { headers: this.httpHeaders }).pipe(map(Response => Response as ArticuloProveedor[]))
     }
 
+    getArticuloProveedorByProveedorId(id: any): Observable<ArticuloProveedor[]> {
+        return this.http.get(environment.URL_APP + "/articulo/allArticuloProveedorByProveedorid/" + id, { headers: this.httpHeaders }).pipe(map(Response => Response as ArticuloProveedor[]))
+    }
 
 
     getMaximoRegistroCodigo(id: any): Observable<MaximoDadoCaptura> {

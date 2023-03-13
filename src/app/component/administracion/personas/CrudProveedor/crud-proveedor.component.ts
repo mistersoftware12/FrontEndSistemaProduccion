@@ -18,6 +18,8 @@ import { Cuidad } from 'src/app/models/cuidad';
 import Swal from 'sweetalert2';
 import { ProveedorService } from 'src/app/services/proveedorService';
 import { Proveedor } from 'src/app/models/persona';
+import { ArticuloService } from 'src/app/services/articulo.service';
+import { Articulo, ArticuloProveedor } from 'src/app/models/articulo';
 
 @Component({
   selector: 'app-crud-proveedor',
@@ -32,13 +34,20 @@ export class CrudProveedorComponent implements OnInit {
   //Control de pantallas
   public sectionTablaLista: Boolean = true;
   public sectionCrudDatos: Boolean = false;
+  public sectionCrudDatosArticulo: Boolean = false;
+  public sectionTablaArticulos: Boolean = false;
 
 
   public idPersona: any;
+  public idProveedor: any;
   public botonParaGuardar: Boolean = true;
   public botonParaEditar: Boolean = false;
 
+  public nombreProveedor: String = "";
+  public apellidoProveedor: String = "";
 
+
+  public dialogoEditarPrecioProveedor: boolean;
 
   public numeroControl: number = 1;
 
@@ -46,7 +55,9 @@ export class CrudProveedorComponent implements OnInit {
 
 
   public proveedorListaGuardar: Proveedor = new Proveedor();
+  public articuloProveedorListaGuardar: ArticuloProveedor = new ArticuloProveedor();
   public proveedorLista: Proveedor[] = [];
+  public articuloLista: Articulo[] = [];
   public paisLista: Cuidad[] = [];
 
 
@@ -65,8 +76,23 @@ export class CrudProveedorComponent implements OnInit {
   })
 
 
+  formGrupoArticulo = new FormGroup({
+    idArticulo: new FormControl<String>('', [Validators.required]),
+    precio: new FormControl<String>('', [Validators.required]),
+  })
+
+
+  formGroupPrecioProveedor = new FormGroup({
+    proveedor: new FormControl<any>('', [Validators.required]),
+    precio: new FormControl<any>('', [Validators.required, Validators.max(500)]),
+  })
+
+
   displayedColumns: string[] = ['id', 'cedula', 'nombre', 'apellidos', 'telefono', 'nacimiento', 'correo', 'documento'];
   dataSource: MatTableDataSource<Cliente>;
+
+  displayedColumns2: string[] = ['id', 'cedula', 'apellidos', 'nombre', 'descripcion', 'preciocosto', 'documento'];
+  dataSource2: MatTableDataSource<ArticuloProveedor>;
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
@@ -76,10 +102,10 @@ export class CrudProveedorComponent implements OnInit {
 
   constructor(
     private _snackBar: MatSnackBar,
-    private clienteService: ClienteService,
     private usuarioService: UsuarioService,
     private cuidadService: CuidadService,
     private proveedorService: ProveedorService,
+    private articuloService: ArticuloService,
   ) {
 
   }
@@ -106,6 +132,17 @@ export class CrudProveedorComponent implements OnInit {
 
   }
 
+
+  public mostrarNuevoArticulo() {
+
+    this.listarArticulos();
+    this.sectionTablaLista = false;
+    this.sectionTablaArticulos = false;
+    this.sectionCrudDatosArticulo = true;
+
+  }
+
+
   public mostrarLista() {
     this.numeroControl = 1;
     this.listarInformacion();
@@ -120,6 +157,22 @@ export class CrudProveedorComponent implements OnInit {
     this.botonParaGuardar = true;
     this.botonParaEditar = false;
     this.numeroControl = 1;
+
+  }
+
+  public botonCancelarRegistroArticulo() {
+
+    this.sectionTablaArticulos = true;
+    this.sectionCrudDatosArticulo = false;
+    this.mostrarTablaProducto(this.idProveedor, this.nombreProveedor, this.apellidoProveedor);
+
+  }
+
+
+
+  public botonCancelarArticulos() {
+    this.sectionTablaArticulos = false;
+    this.sectionTablaLista = true;
 
   }
 
@@ -150,7 +203,7 @@ export class CrudProveedorComponent implements OnInit {
     this.loaderActualizar = true;
 
     this.proveedorService.getProveedoresAll().subscribe(value => {
-      console.info(value);
+
       this.proveedorLista = value;
 
       this.dataSource = new MatTableDataSource(value);
@@ -170,11 +223,50 @@ export class CrudProveedorComponent implements OnInit {
 
       this.paisLista = value;
     })
+  }
 
 
+  public listarProductos() {
+    this.loaderActualizar = true;
+    this.articuloService.getArticuloProveedorByProveedorId(this.idProveedor).subscribe(value2 => {
+      console.info(value2);
+
+      this.dataSource2 = new MatTableDataSource(value2);
+      this.dataSource2.paginator = this.paginator;
+      this.dataSource2.sort = this.sort;
+      this.loaderActualizar = false;
+
+    })
 
 
   }
+
+
+  public listarArticulos() {
+
+    this.articuloService.getArticuloAll().subscribe(value3 => {
+      this.articuloLista = value3;
+
+    })
+
+
+  }
+
+
+  public mostrarTablaProducto(idProve: any, nombres: any, apellidos: any) {
+
+    this.idProveedor = idProve;
+    this.listarProductos();
+    this.nombreProveedor = nombres;
+    this.apellidoProveedor = apellidos;
+
+    this.sectionTablaLista = false;
+    this.sectionTablaArticulos = true;
+
+
+  }
+
+
 
   applyFilter(event: Event) {
 
@@ -184,6 +276,18 @@ export class CrudProveedorComponent implements OnInit {
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
+    }
+
+  }
+
+  applyFilter1(event: Event) {
+
+
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource2.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource2.paginator) {
+      this.dataSource2.paginator.firstPage();
     }
 
   }
@@ -219,6 +323,26 @@ export class CrudProveedorComponent implements OnInit {
   }
 
 
+  public guardarInformacionArticulo() {
+    this.articuloProveedorListaGuardar.idProveedor = this.idProveedor;
+    this.articuloProveedorListaGuardar.idArticulo = Object.values(this.formGrupoArticulo.getRawValue())[0];
+    this.articuloProveedorListaGuardar.precioCompra = Object.values(this.formGrupoArticulo.getRawValue())[1];
+
+
+    this.articuloService.createArticuloProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
+      this._snackBar.open('Articulo añadido al Proveedor', 'ACEPTAR');
+
+    }, error => {
+      this._snackBar.open(error.error.message + ' OCURRIO UN ERROR AL AGREGAR PROVEEDOR', 'ACEPTAR');
+
+    })
+    this.listarProductos();
+    this.botonCancelarRegistroArticulo();
+    this.mostrarTablaProducto(this.idProveedor, this.nombreProveedor, this.apellidoProveedor);
+
+
+  }
+
   public agregarCuidad() {
     Swal.fire({
       title: "Ingrese el nombre del pais",
@@ -246,20 +370,33 @@ export class CrudProveedorComponent implements OnInit {
   }
 
 
+  abrirEditarPrecio(id: any, nombrePro: any) {
+    this.dialogoEditarPrecioProveedor = true;
+    this.articuloProveedorListaGuardar.id = id;
+    this.formGroupPrecioProveedor.setValue({
+      proveedor: nombrePro,
+      precio: "",
+
+    })
+
+    this.listarProductos();
+  }
+
+
   ////Editar
 
   editarInformacion(cedula: any) {
 
 
     this.proveedorService.getProveedorId(cedula).subscribe(value => {
-     
+
       console.info("Dato cargado en consulta editar");
 
       this.formGrupos.setValue({
         cedula: value.cedula,
         fecha: value.fechaNacimiento,
-        nombres:value.nombres,
-        apellidos:value.apellidos,
+        nombres: value.nombres,
+        apellidos: value.apellidos,
         telefono: value.telefono,
         email: value.email,
         nombrebanco: value.nombreBanco,
@@ -315,18 +452,50 @@ export class CrudProveedorComponent implements OnInit {
 
   }
 
+  guardarEditar() {
+
+    this.articuloProveedorListaGuardar.precioCompra = Number(Object.values(this.formGroupPrecioProveedor.getRawValue())[1]);
+
+    console.info(this.articuloProveedorListaGuardar);
+
+
+    this.articuloService.putPrecioProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
+      this._snackBar.open('Precio Modidicado', 'ACEPTAR');
+
+
+      this.dialogoEditarPrecioProveedor = false;
+
+      this.listarProductos();
+
+
+    }, error => {
+      this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+      //this.loaderGuardar=false
+    })
+
+  }
 
 
 
   //Exportaciones de documento
 
-  exportToExcel(): void {
+  exportToExcel(condicion: any): void {
     let element = document.getElementById('table');
     const worksheet: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
     const book: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(book, worksheet, 'Sheet1');
 
-    XLSX.writeFile(book, 'Lista de Proveedores.xlsx');
+
+    //XLSX.writeFile(book, 'Lista de ' + nombre + ' ' + this.nombreProveedor + '.xlsx');
+
+
+    if (Number(condicion) == 1) {
+      XLSX.writeFile(book, 'Lista de proveedores.xlsx');
+    }
+
+    if (Number(condicion) == 2) {
+      XLSX.writeFile(book, 'Lista de artículos ' + this.nombreProveedor + '.xlsx');
+    }
   }
 
 
@@ -441,6 +610,118 @@ export class CrudProveedorComponent implements OnInit {
             },
             { text: '    ' },
             { text: '    ' },
+
+
+            {
+              table: {
+                headerRows: 1,
+                widths: ['100%'],
+                heights: 20,
+                body: [
+                  ['USUARIO/A: ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().nombres + ' ' + valueb.filter(value1 => value1.cedula == cedula.getCedula).pop().apellidos],
+
+                ]
+              },
+            },
+
+          ],
+
+          pageOrientation: 'landscape',
+        }
+
+
+        this.loaderActualizar = false
+        const pdf = pdfMake.createPdf(pdfDefinition);
+        pdf.open();
+      })
+    })
+  }
+
+  generatePDFArticulos() {
+    this.loaderActualizar = true
+    var pipe: DatePipe = new DatePipe('es')
+    var dia: String = new Date().toISOString();
+
+    this.articuloService.getArticuloProveedorByProveedorId(this.idProveedor).subscribe(value => {
+
+      console.info(value)
+      this.usuarioService.getAllUsuarios().subscribe(async valueb => {
+        console.info(valueb)
+
+        const pdfDefinition: any = {
+
+          footer: function (currentPage, pageCount) { return '.   Pagina ' + currentPage.toString() + ' de ' + pageCount; },
+          header: function (currentPage, pageCount, pageSize) {
+            // you can apply any logic and return any valid pdfmake element
+
+            /*
+            return [
+              { text: 'simple text', alignment: (currentPage % 2) ? 'left' : 'right' },
+              { canvas: [ { type: 'rect', x: 170, y: 32, w: pageSize.width - 170, h: 40 } ] }
+            ]*/
+          },
+
+          content: [
+            { image: await this.getBase64ImageFromURL('assets/images/kadapaLogo.png'), width: 100 },
+            {
+              text: '_________________________________________________________________________________________',
+              alignment: 'center'
+            },
+            // @ts-ignore
+            { text: pipe.transform(dia, ' d  MMMM  y'), alignment: 'right' },
+            { text: 'PROVEEDOR: ' + this.nombreProveedor + ' ' + this.apellidoProveedor, fontSize: 15, bold: true, alignment: 'center' },
+            //{ text: 'Clientes registrados en la Empresa  ', fontSize: 15, margin: [0, 0, 20, 0] },
+            { text: '    ' },
+            {
+              table: {
+                headerRows: 1,
+                widths: ['5%', '10%', '10%', '17%', '48%', '7%'],
+
+                body: [
+                  ['ID', 'FOTO', 'C. BARRA', 'NOMBRE', 'DESCRIPCIÓN', 'COSTO'],
+                  [value.map(function (item) {
+                    return { text: item.id + '', fontSize: 11, lineHeight: 2.9 }
+                  }),
+                  value.map(function (item) {
+                    return {
+
+                      image: 'data:image/jpeg;base64,' + item.foto + '',
+                      width: 32, alignment: 'center',
+
+                    }
+                  }),
+                  value.map(function (item) {
+                    return { text: item.codigoBarra + '', fontSize: 11, lineHeight: 2.9 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: item.nombreArticulo + '', fontSize: 11, lineHeight: 2.9 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: item.descripcion + '', fontSize: 11, lineHeight: 2.9 }
+
+                  }),
+                  value.map(function (item) {
+                    return { text: '$' + item.precioCompra.toFixed(2) + '', fontSize: 11, lineHeight: 2.9 }
+                  }),
+
+
+                  ],
+
+                ]
+              }
+
+            },
+            { text: '    ' },
+            { text: '    ' },
+
+            {
+
+
+
+            },
+
 
 
             {

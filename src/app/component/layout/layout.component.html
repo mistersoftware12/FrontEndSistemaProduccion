@@ -39,16 +39,17 @@
       <button mat-button [matMenuTriggerFor]="articulo"> <mat-icon>dialpad</mat-icon><br>ARTICULO</button>
 
       <mat-menu #articulo="matMenu">
-        <button mat-menu-item [matMenuTriggerFor]="art">Articulo</button>
-
-      </mat-menu>
-
-      <mat-menu #art="matMenu">
+       
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCategoria'">Categoria</button>
+        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionCatalogo'">Catálogo</button>
         <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionArticulo'">Articulos</button>
         <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionServicio'">Servicios</button>
         <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionTransporte'">Transporte</button>
-        <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionProducto'">Producto</button>
       </mat-menu>
+
+      <!--
+         <button mat-menu-item [routerLink]="'/panel/biblioteca/administracionProducto'">Producto</button>
+      -->
 
      
 

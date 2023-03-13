@@ -470,12 +470,6 @@ export class CrudArticuloComponent implements OnInit {
 
                 }
 
-
-
-
-
-
-
                 this.vaciarFormulario();
                 this.mostrarLista();
                 this.listarInformacion();
@@ -671,7 +665,7 @@ export class CrudArticuloComponent implements OnInit {
     cargarInfoProveedor1() {
 
 
-        this.articuloService.getArticuloProveedorId(this.idArticulo).subscribe(value2 => {
+        this.articuloService.getArticuloProveedorByArticuloId(this.idArticulo).subscribe(value2 => {
 
 
             this.articuloProveedorLista1 = value2;
@@ -697,37 +691,18 @@ export class CrudArticuloComponent implements OnInit {
 
         this.articuloService.putPrecioProveedor(this.articuloProveedorListaGuardar).subscribe(value => {
             this._snackBar.open('Precio Modidicado', 'ACEPTAR');
-            //this.vaciarFormulario();
+
 
             this.dialogoEditarPrecioProveedor = false;
-            //this.cardCliente = false;
+
             this.cargarInfoProveedor1();
-            //this.mostrarLista();
-            //this.cargaDatoTotal(0, 0);
-      
-          }, error => {
-            this._snackBar.open(error.error.message+' OCURRIO UN ERROR', 'ACEPTAR');
-            //this.loaderGuardar=false
-          })
-        /*
-        this.cargaDatosParaService();
-        this.impresionListaGuardar.idCopia = this.idPrestamoCI;
-        this.impresionListaGuardar.id = this.idPrestamoCI;
-    
-        this.impresion_copiaService.putImpresionCopia(this.impresionListaGuardar).subscribe(value => {
-          this._snackBar.open('Impresión Copia Actualizado', 'ACEPTAR');
-          this.vaciarFormulario();
-          this.dialogoEditarImpresion = false;
-          //this.cardCliente = false;
-          this.listarClientesImpresion();
-          //this.mostrarLista();
-          //this.cargaDatoTotal(0, 0);
-    
+
+
         }, error => {
-          this._snackBar.open(error.error.message+' OCURRIO UN ERROR', 'ACEPTAR');
-          //this.loaderGuardar=false
+            this._snackBar.open(error.error.message + ' OCURRIO UN ERROR', 'ACEPTAR');
+            //this.loaderGuardar=false
         })
-    */
+    
     }
 
 
@@ -760,18 +735,6 @@ export class CrudArticuloComponent implements OnInit {
                 })
 
 
-                /*
-                for (let i = 0; i < this.articuloProveedorLista1.length; i++) {
-
-
-                    if (this.articuloProveedorLista1[i].id != idArtiPro) {
-                        this.articuloProveedorFiltro.push({ "id": this.articuloProveedorLista1[i].id, "idArticulo": this.articuloProveedorLista1[i].idArticulo, "idProveedor": this.articuloProveedorLista1[i].idProveedor, "nombreProveedor": this.articuloProveedorLista1[i].nombreProveedor })
-                    }
-
-                }
-
-                this.articuloProveedorLista1 = [];
-                this.articuloProveedorLista1 = this.articuloProveedorFiltro;*/
 
             }
 
@@ -1253,7 +1216,7 @@ export class CrudArticuloComponent implements OnInit {
 
 
 
-            this.articuloService.getArticuloProveedorId(id).subscribe(valuec => {
+            this.articuloService.getArticuloProveedorByArticuloId(id).subscribe(valuec => {
 
 
 

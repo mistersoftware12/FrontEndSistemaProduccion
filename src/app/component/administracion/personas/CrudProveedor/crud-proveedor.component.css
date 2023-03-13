@@ -141,3 +141,15 @@ th {
     text-align: center;
 
 }
+
+.botontabla {
+    color: #FFFFFF;
+    margin-left: 1vh;
+}
+
+.imgtabla {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1px;
+    width: 100px;
+}
